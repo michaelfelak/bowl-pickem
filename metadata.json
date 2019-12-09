@@ -12,11 +12,11 @@
 		"fallback": "SKY_PAGES_READY_POLLYFILL_13F51AC5510178970D34_CHUNK"
 	},
 	{
-		"name": "app.d86364f25cdaeeebe4ac.js",
-		"fallback": "SKY_PAGES_READY_APP_D86364F25CDAEEEBE4AC"
+		"name": "app.3ccb3e3bde2d942e15cf.js",
+		"fallback": "SKY_PAGES_READY_APP_3CCB3E3BDE2D942E15CF"
 	},
 	{
-		"name": "vendor.16329b8a97ee90f4d327.chunk.js",
-		"fallback": "SKY_PAGES_READY_VENDOR_16329B8A97EE90F4D327_CHUNK"
+		"name": "vendor.c0616ba53477bab98410.chunk.js",
+		"fallback": "SKY_PAGES_READY_VENDOR_C0616BA53477BAB98410_CHUNK"
 	}
 ]
