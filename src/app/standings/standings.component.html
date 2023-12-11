@@ -1,0 +1,135 @@
+<main>
+  <!-- <sky-wait></sky-wait> -->
+  <!-- <sky-dropdown style="float: left">
+    <sky-dropdown-button>
+      {{ currentYear }}
+    </sky-dropdown-button>
+    <sky-dropdown-menu>
+      <sky-dropdown-item *ngFor="let year of years">
+        <button type="button" (click)="updateYear(year)">
+          {{ year }}
+        </button>
+      </sky-dropdown-item>
+    </sky-dropdown-menu>
+  </sky-dropdown> -->
+  <div>
+    <h1 style="text-align: center">Standings</h1>
+  </div>
+  <div style="margin-left: 10%; margin-right: 10%">
+    <table class="center">
+      <tr>
+        <!-- <th class="team-check">Verified</th> -->
+        <th class="team-check">Rank</th>
+        <th class="team-name">Entry Name</th>
+        <th
+          *ngIf="!sortCurrentPoints"
+          class="team-check"
+          (click)="sortByCurrentPoints()"
+        >
+          <a>Current<br />Points</a>
+        </th>
+        <th
+          *ngIf="sortCurrentPoints && currentPointsDesc"
+          class="team-check"
+          (click)="sortByCurrentPoints()"
+        >
+          &darr;<a>Current<br />Points</a>
+        </th>
+        <th
+          *ngIf="sortCurrentPoints && !currentPointsDesc"
+          class="team-check"
+          (click)="sortByCurrentPoints()"
+        >
+          &uarr;<a>Current<br />Points</a>
+        </th>
+        <th
+          *ngIf="!sortCorrectPicks"
+          class="team-check"
+          (click)="sortByCorrectPicks()"
+        >
+          <a>Correct<br />Picks</a>
+        </th>
+        <th
+          *ngIf="sortCorrectPicks && correctPicksDesc"
+          class="team-check"
+          (click)="sortByCorrectPicks()"
+        >
+          &darr;<a>Correct<br />Picks</a>
+        </th>
+        <th
+          *ngIf="sortCorrectPicks && !correctPicksDesc"
+          class="team-check"
+          (click)="sortByCorrectPicks()"
+        >
+          &uarr;<a>Correct<br />Picks</a>
+        </th>
+        <th
+          *ngIf="!sortRemainingPoints"
+          class="team-check"
+          (click)="sortByRemainingPoints()"
+        >
+          <a>Remaining<br />Points</a>
+        </th>
+        <th
+          *ngIf="sortRemainingPoints && remainingPointsDesc"
+          class="team-check"
+          (click)="sortByRemainingPoints()"
+        >
+          &darr;<a>Remaining<br />Points</a>
+        </th>
+        <th
+          *ngIf="sortRemainingPoints && !remainingPointsDesc"
+          class="team-check"
+          (click)="sortByRemainingPoints()"
+        >
+          &uarr;<a>Remaining<br />Points</a>
+        </th>
+        <th
+          *ngIf="!sortPossiblePoints"
+          class="team-check"
+          (click)="sortByPossiblePoints()"
+        >
+          <a>Possible<br />Points</a>
+        </th>
+        <th
+          *ngIf="sortPossiblePoints && possiblePointsDesc"
+          class="team-check"
+          (click)="sortByPossiblePoints()"
+        >
+          &darr;<a>Possible<br />Points</a>
+        </th>
+        <th
+          *ngIf="sortPossiblePoints && !possiblePointsDesc"
+          class="team-check"
+          (click)="sortByPossiblePoints()"
+        >
+          &uarr;<a>Possible<br />Points</a>
+        </th>
+      </tr>
+      <tr *ngFor="let pick of standings">
+        <!-- <td class="team-check">
+                    <sky-icon style="color: green" *ngIf="pick.is_paid" icon="check-circle"></sky-icon>
+                    <sky-icon style="color: red" *ngIf="!pick.is_paid" icon="times"></sky-icon>
+                </td> -->
+        <td class="team-check">{{ pick.rank }}</td>
+        <td *ngIf="showStandingsLink" class="team-name">
+          <button
+            class="sky-btn sky-btn-link-inline"
+            type="button"
+            (click)="onNameClick(pick.entry_id)"
+          >
+            {{ pick.entry_name }}
+          </button>
+        </td>
+        <td *ngIf="!showStandingsLink" class="team-name">
+          {{ pick.entry_name }}
+        </td>
+        <td class="team-check">{{ pick.current_points }}</td>
+        <td class="team-check">{{ pick.correct_picks }}</td>
+        <td class="team-check">{{ pick.remaining_points }}</td>
+        <td class="team-check">{{ pick.possible_points }}</td>
+      </tr>
+    </table>
+  </div>
+  <!-- <app-footer></app-footer> -->
+</main>
