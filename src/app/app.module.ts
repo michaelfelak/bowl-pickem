@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { BowlService } from './shared/services/bowl.service';
 import { HttpClientModule } from '@angular/common/http';
 import { StandingsModule } from './standings/standings.module';
+import { AdminModule } from './admin/admin.module';
+import { PicksModule } from './picks/picks.module';
 
 @NgModule({
   declarations: [
@@ -15,7 +17,9 @@ import { StandingsModule } from './standings/standings.module';
     AppRoutingModule,
     BrowserModule,
     HttpClientModule,
-    StandingsModule
+    StandingsModule,
+    AdminModule,
+    PicksModule
   ],
   providers: [BowlService],
   bootstrap: [AppComponent]

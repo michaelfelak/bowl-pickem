@@ -1,0 +1,52 @@
+<sky-repeater >
+  <sky-repeater-item>
+    <sky-repeater-item-title> Update Scores </sky-repeater-item-title>
+    <sky-repeater-item-content>
+      <table class="center">
+        <tr>
+          <th class="team-check">Game</th>
+          <th class="team-check">Bowl Game</th>
+          <th class="team-name">Date/Time</th>
+          <th class="team-name">Team 1</th>
+          <th class="team-check">Team 1 Score</th>
+          <th class="team-name">Team 2</th>
+          <th class="team-check">Team 2 Score</th>
+          <th>Points</th>
+        </tr>
+        <tr *ngFor="let bowl of gameResults">
+          <td class="team-check">
+            {{ bowl.game_id }}
+          </td>
+          <td class="team-name">
+            {{ bowl.bowl_name }}
+          </td>
+          <td class="team-name">
+            {{ bowl.game_time | date: "short" }}
+          </td>
+          <td class="team-name">
+            {{ bowl.team_1_name }}
+          </td>
+          <td class="team-check">
+            <!-- <input type="number" min="0" [(ngModel)]="bowl.score_1" /> -->
+          </td>
+          <td class="team-name">
+            {{ bowl.team_2_name }}
+          </td>
+          <td class="team-check">
+            <!-- <input type="number" min="0" [(ngModel)]="bowl.score_2" /> -->
+          </td>
+          <td class="team-check">
+            <button
+              type="button"
+              (click)="
+                updateBowlScore(bowl.game_id, bowl.score_1, bowl.score_2)
+              "
+            >
+              Update
+            </button>
+          </td>
+        </tr>
+      </table>
+    </sky-repeater-item-content>
+  </sky-repeater-item>
+</sky-repeater>

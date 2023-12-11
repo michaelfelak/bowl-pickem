@@ -59,6 +59,7 @@
     flex-direction: column;
     align-items: center;
   }
+
   a,
   a:visited,
   a:hover {
@@ -70,26 +71,15 @@
 
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
-  <img
-    width="40"
-    alt="Angular Logo"
-    src="https://imgs.search.brave.com/YWQLue13k0kRwWgI8ZrwHDvqDf6F9Rq-A4eyJK9iDgw/rs:fit:860:0:0/g:ce/aHR0cDovL2ltYWdl/cy5jbGlwYXJ0cGFu/ZGEuY29tL2Zvb3Ri/YWxsLWNsaXBhcnQt/Zm9vdGJhbGwtY2xp/cGFydC01LWRyLW9k/ZDEucG5n"
-  />
+  <img width="40" alt="Angular Logo"
+    src="https://imgs.search.brave.com/YWQLue13k0kRwWgI8ZrwHDvqDf6F9Rq-A4eyJK9iDgw/rs:fit:860:0:0/g:ce/aHR0cDovL2ltYWdl/cy5jbGlwYXJ0cGFu/ZGEuY29tL2Zvb3Ri/YWxsLWNsaXBhcnQt/Zm9vdGJhbGwtY2xp/cGFydC01LWRyLW9k/ZDEucG5n" />
   <a>Bowl Pick'em</a>
   <a routerLink="">Home</a>
+  <a routerLink="picks">Submit Entry</a>
   <a routerLink="standings">Standings</a>
   <a routerLink="about">About</a>
-  <a routerLink="admin">Admin</a>
-    
+  <a *ngIf="showAdmin" routerLink="admin">Admin</a>
+
 </div>
 <!-- <div class="contentXX"> -->
-  <router-outlet></router-outlet>
-
-<!-- </div> -->
-<!-- <h1>Angular Router App</h1> -->
-<!-- <nav>
-  <ul>
-    <li><a routerLink="about" routerLinkActive="active" ariaCurrentWhenActive="page">First Component</a></li>
-    <li><a routerLink="standings" routerLinkActive="active" ariaCurrentWhenActive="page">Standigns</a></li>
-  </ul>
-</nav> -->
+<router-outlet></router-outlet>

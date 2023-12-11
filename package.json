@@ -20,8 +20,13 @@
     "@angular/router": "^16.2.0",
     "@skyux/config": "9.17.0",
     "@skyux/flyout": "9.17.0",
+    "@skyux/forms": "9.17.0",
     "@skyux/indicators": "9.17.0",
+    "@skyux/layout": "9.17.0",
+    "@skyux/lists": "9.17.0",
+    "@skyux/modals": "9.17.0",
     "@skyux/popovers": "9.17.0",
+    "ag-grid-angular": "^31.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
