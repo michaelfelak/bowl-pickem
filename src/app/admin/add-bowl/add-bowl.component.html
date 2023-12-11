@@ -1,0 +1,30 @@
+<sky-repeater>
+    <sky-repeater-item [isExpanded]="false">
+        <sky-repeater-item-title> Add Bowl </sky-repeater-item-title>
+        <sky-repeater-item-content>
+            <sky-alert *ngIf="hasError" alertType="danger">
+                {{ errorMsg }}
+            </sky-alert>
+            <sky-alert *ngIf="added" alertType="success">
+                {{ addedMsg }}
+            </sky-alert>
+            <label>
+                Bowl Name
+                <!-- <input style="display: inline-block" [(ngModel)]="bowlName" /> -->
+            </label>
+            <label>
+                City
+                <!-- <input style="display: inline-block" [(ngModel)]="city" /> -->
+            </label>
+            <label>
+                State
+                <!-- <input style="display: inline-block" [(ngModel)]="state" /> -->
+            </label>
+            <label style="display: inline-block">
+                Stadium
+                <!-- <input style="display: inline-block" [(ngModel)]="stadium" /> -->
+            </label>
+            <button (click)="addBowl()">Add Bowl</button>
+        </sky-repeater-item-content>
+    </sky-repeater-item>
+</sky-repeater>

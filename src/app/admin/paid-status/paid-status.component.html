@@ -1,0 +1,62 @@
+<sky-repeater >
+  <sky-repeater-item [isExpanded]="false">
+    <sky-repeater-item-title>
+      <div class="pull-left">
+        <span class="label"> Update Paid Status </span>
+      </div>
+      <div class="pull-right">
+        <span class="label">
+          {{ this.numUnpaidEntries }} Unpaid - {{ this.numPaidEntries }} Paid -
+          {{ this.numPaidEntries + this.numUnpaidEntries }} Total
+        </span>
+      </div>
+    </sky-repeater-item-title>
+    <sky-repeater-item-content>
+      <table class="center">
+        <tr>
+          <th class="team-check">Entry ID</th>
+          <th class="team-check">Submission Time</th>
+          <th class="team-check">Mark as Paid</th>
+          <th class="team-check">Paid</th>
+          <th class="team-name">Entry</th>
+          <th class="team-name">Email</th>
+          <th class="team-check">Delete Entry</th>
+        </tr>
+        <tr *ngFor="let entry of entries">
+          <td class="team-check">
+            {{ entry.id }}
+          </td>
+          <td class="team-name">
+            {{ entry.created_date | date: "short" }}
+          </td>
+          <td class="team-check">
+            <button type="button" (click)="togglePaid(entry.id)">Mark</button>
+          </td>
+          <td class="team-check">
+            <sky-icon
+              style="color: green"
+              *ngIf="entry.paid"
+              icon="check-circle"
+            ></sky-icon>
+            <sky-icon
+              style="color: red"
+              *ngIf="!entry.paid"
+              icon="times"
+            ></sky-icon>
+          </td>
+          <td class="team-name">
+            {{ entry.name }}
+          </td>
+          <td class="team-name">
+            {{ entry.email }}
+          </td>
+          <td class="team-name">
+            <button type="button" (click)="deleteEntry(entry.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </table>
+    </sky-repeater-item-content>
+  </sky-repeater-item>
+</sky-repeater>

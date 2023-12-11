@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css?family=Titillium+Web&display=swap");
+main {
+  margin-left: 10%;
+  margin-right: 10%;
+  height: 100%;
+  font-family: "Titillium Web", sans-serif;
+}
+
+.delete-button {
+  background-color: maroon;
+  border-color: maroon;
+  color: white;
+}
+
+.create-button {
+  padding-left: 35px;
+  padding-top: 30px;
+}
+
+.navbar {
+  font-size: 14pt;
+}
+
+//  /deep/ .sky-section-heading {
+//    font-family: 'Titillium Web', // sans-serif;
+//  }
+
+//  /deep/ .sky-emphasized {
+//    font-weight: bold;
+//    font-family: 'Titillium Web', // sans-serif;
+//  }
+
+.event-options {
+  width: 60%;
+}
+
+.current-totals {
+  width: 40%;
+  text-align: right;
+}
+
+.team-check {
+  width: 12%;
+}
+
+.team-name {
+  width: 20%;
+  vertical-align: middle;
+}
+
+.team-score {
+  width: 5%;
+  vertical-align: middle;
+}
+
+table {
+  width: 95%;
+}
+table.center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header {
+  text-align: center;
+}
+
+th,
+td {
+  vertical-align: middle;
+  border: none;
+  text-align: center;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+  background-color: lightsteelblue;
+}

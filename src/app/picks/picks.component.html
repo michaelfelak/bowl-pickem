@@ -1,0 +1,248 @@
+<main>
+  <sky-alert *ngIf="showError" alertType="danger">
+    {{ errorMsg }}
+  </sky-alert>
+  <div *ngIf="!submitted">
+    <h1 class="header">Submit Entry</h1>
+    <pick-summary [name]="name" [threePointGames]="threePointGames" [fivePointGames]="fivePointGames"
+      [tenPointGames]="tenPointGames" [email]="email" [possiblePoints]="calculateTotalPoints()"
+      [threePointError]="threePointError" [fivePointError]="fivePointError" [tenPointError]="tenPointError">
+    </pick-summary>
+    <!-- <sky-row>
+      <sky-column screenSmall="3"></sky-column>
+      <sky-column screenSmall="3">
+        <label> Entry Name: </label>
+      </sky-column>
+      <sky-column screenSmall="3">
+        <label> E-mail Address: </label>
+      </sky-column>
+    </sky-row>
+    <sky-row>
+      <sky-column screenSmall="3"></sky-column>
+      <sky-column screenSmall="3">
+        <input class="sky-form-control" type="text" ngModel="name" />
+      </sky-column>
+      <sky-column screenSmall="3">
+        <input class="sky-form-control" type="email" ngModel="email" />
+      </sky-column>
+    </sky-row>
+    <br /> -->
+    <table class="center">
+      <tr>
+        <th class="team-date">Date</th>
+        <th class="team-name" style="border-left: 1px solid black">
+          Bowl Game
+        </th>
+        <th class="team-check" style="border-left: 1px solid black"></th>
+        <th class="team-name">Team 1</th>
+        <th class="team-check" style="border-left: 1px solid black"></th>
+        <th class="team-name" style="border-right: 1px solid black">Team 2</th>
+        <th class="team-points">Points</th>
+      </tr>
+      <tr *ngFor="let pick of picks">
+        <td class="team-date">
+          {{ pick.game_time | date }}
+        </td>
+        <td class="team-name" style="border-left: 1px solid black">
+          {{ pick.bowl_name }}
+        </td>
+        <td class="team-check" style="border-left: 1px solid black">
+          <sky-checkbox ngModel="pick.team_1" (change)="updateSelection(pick.game_id, 1, 0)">
+          </sky-checkbox>
+        </td>
+        <td class="team-name" style="border-right: 1px solid black">
+          {{ pick.team_1_name }}
+        </td>
+        <td class="team-check" style="border-left: 1px solid black">
+          <sky-checkbox ngModel="pick.team_2" (change)="updateSelection(pick.game_id, 2, 0)">
+          </sky-checkbox>
+        </td>
+        <td class="team-name" style="border-right: 1px solid black">
+          {{ pick.team_2_name }}
+        </td>
+        <td *ngIf="!pick.is_new_years_day">
+          <sky-dropdown>
+            <sky-dropdown-button>{{ pick.points }}</sky-dropdown-button>
+            <sky-dropdown-menu>
+              <sky-dropdown-item *ngFor="let item of pointValues">
+                <button type="button"
+                  (click)="updatePoints(pick.game_id, item, 0)">
+                  {{ item }}
+                </button>
+              </sky-dropdown-item>
+            </sky-dropdown-menu>
+          </sky-dropdown>
+        </td>
+        <td *ngIf="pick.is_new_years_day">
+          <sky-dropdown>
+            <sky-dropdown-button>{{ pick.points }}</sky-dropdown-button>
+            <sky-dropdown-menu>
+              <sky-dropdown-item *ngFor="let item of newYearsPointValues">
+                <button type="button"
+                  (click)="updatePoints(pick.game_id, item, 0)">
+                  {{ item }}
+                </button>
+              </sky-dropdown-item>
+            </sky-dropdown-menu>
+          </sky-dropdown>
+        </td>
+      </tr>
+    </table>
+    <br />
+    <h2 class="header">College Football Playoff</h2>
+    <table class="center">
+      <tr>
+        <th class="team-date">Date</th>
+        <th class="team-name" style="border-left: 1px solid black">
+          Bowl Game
+        </th>
+        <th class="team-check" style="border-left: 1px solid black"></th>
+        <th class="team-name">Team 1</th>
+        <th class="team-check" style="border-left: 1px solid black"></th>
+        <th class="team-name" style="border-right: 1px solid black">Team 2</th>
+        <th class="team-points">Points</th>
+      </tr>
+      <tr *ngFor="let playoffPick of playoffPicks">
+        <td class="team-date">
+          {{ playoffPick.game_time | date }}
+        </td>
+        <td class="team-name" style="border-left: 1px solid black">
+          {{ playoffPick.bowl_name }}
+        </td>
+        <td class="team-check" style="border-left: 1px solid black">
+          <sky-checkbox ngModel="playoffPick.team_1" [disabled]="false"
+            (change)="updateSelection(playoffPick.game_id, 1, 1)">
+          </sky-checkbox>
+        </td>
+        <td class="team-name" style="border-right: 1px solid black">
+          {{ playoffPick.team_1_name }}
+        </td>
+        <td class="team-check" style="border-left: 1px solid black">
+          <sky-checkbox ngModel="playoffPick.team_2" (change)="updateSelection(playoffPick.game_id, 2, 1)">
+          </sky-checkbox>
+        </td>
+        <td class="team-name" style="border-right: 1px solid black">
+          {{ playoffPick.team_2_name }}
+        </td>
+        <td>
+          <sky-dropdown>
+            <sky-dropdown-button>{{ playoffPick.points }}</sky-dropdown-button>
+            <sky-dropdown-menu>
+              <sky-dropdown-item *ngFor="let item of pointValues">
+                <button type="button"
+                  (click)="updatePoints(playoffPick.game_id, item, 1)">
+                  {{ item }}
+                </button>
+              </sky-dropdown-item>
+            </sky-dropdown-menu>
+          </sky-dropdown>
+        </td>
+      </tr>
+    </table>
+    <div class="center">
+      <br />
+    </div>
+    <h2 class="header">College Football Championship Game</h2>
+    <div class="header" *ngIf="!showChampionship">
+      Select the winners of the playoff games to compete in the championship
+      game.
+    </div>
+    <div *ngIf="showChampionship">
+      <br />
+      <table class="center">
+        <tr>
+          <th class="team-date">Date</th>
+          <th class="team-name" style="border-left: 1px solid black">
+            Bowl Game
+          </th>
+          <th class="team-check" style="border-left: 1px solid black"></th>
+          <th class="team-name">Team 1</th>
+          <th class="team-check" style="border-left: 1px solid black"></th>
+          <th class="team-name" style="border-right: 1px solid black">
+            Team 2
+          </th>
+          <th class="team-points">Points</th>
+        </tr>
+        <tr *ngFor="let pick of championshipPicks">
+          <td class="team-date">
+            {{ pick.game_time | date }}
+          </td>
+          <td class="team-name" style="border-left: 1px solid black">
+            {{ pick.bowl_name }}
+          </td>
+          <td class="team-check" style="border-left: 1px solid black">
+            <sky-checkbox ngModel="pick.team_1" [disabled]="false" (change)="updateSelection(pick.game_id, 1, 2)">
+            </sky-checkbox>
+          </td>
+          <td class="team-name" style="border-right: 1px solid black">
+            {{ pick.team_1_name }}
+          </td>
+          <td class="team-check" style="border-left: 1px solid black">
+            <sky-checkbox ngModel="pick.team_2" [disabled]="false" (change)="updateSelection(pick.game_id, 2, 2)">
+            </sky-checkbox>
+          </td>
+          <td class="team-name" style="border-right: 1px solid black">
+            {{ pick.team_2_name }}
+          </td>
+          <td>
+            <sky-dropdown>
+              <sky-dropdown-button>{{ pick.points }}</sky-dropdown-button>
+              <sky-dropdown-menu>
+                <sky-dropdown-item *ngFor="let item of pointValues">
+                  <button type="button"
+                    (click)="updatePoints(pick.game_id, item, 2)">
+                    {{ item }}
+                  </button>
+                </sky-dropdown-item>
+              </sky-dropdown-menu>
+            </sky-dropdown>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class="center">
+      <br />
+    </div>
+    <h2 class="header">Tiebreakers</h2>
+    <div class="header" style="text-align: center">
+      Select the game that will have the
+      <span style="font-weight: bold"> most points scored.</span>
+      <sky-dropdown>
+        <sky-dropdown-button>
+          {{ tiebreaker1 }}
+        </sky-dropdown-button>
+        <sky-dropdown-menu>
+          <sky-dropdown-item *ngFor="let pick of tiebreakerPicks">
+            <button type="button" (click)="selectTiebreaker1(pick.game_id)">
+              {{ pick.team_1_name }} vs. {{ pick.team_2_name }}
+            </button>
+          </sky-dropdown-item>
+        </sky-dropdown-menu>
+      </sky-dropdown>
+    </div>
+    <div class="header" style="text-align: center; padding-top: 20px">
+      Enter the total number of points scored in the highest scoring bowl game.
+      <br />
+      <input class="sky-form-control" style="width: 10%" type="number" ngModel="tiebreaker2" min="1" max="500" />
+    </div>
+    <sky-alert *ngIf="showSubmitError" alertType="danger">
+      <br />
+      {{ submitErrorMsg }}
+    </sky-alert>
+    <div style="text-align: center; padding-top: 20px">
+      <button class="sky-btn sky-btn-primary sky-margin-inline-compact" (click)="submit()" [disabled]="false">
+        Submit
+      </button>
+      <button class="sky-btn sky-margin-inline-compact" (click)="clear()">
+        Clear
+      </button>
+      <div *ngIf="submitted">Success! Thank you for submitting your entry.</div>
+    </div>
+    <br />
+  </div>
+  <div *ngIf="submitted">
+    <picks-completed [picks]="allPicks" [name]="name" [email]="email">
+    </picks-completed>
+    <br />
+  </div>
+</main>

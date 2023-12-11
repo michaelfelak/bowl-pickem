@@ -1,0 +1,95 @@
+<sky-repeater >
+    <sky-repeater-item [isExpanded]="false">
+        <sky-repeater-item-title> Add Bowl Game </sky-repeater-item-title>
+        <sky-repeater-item-content>
+            <label> Bowl </label>
+            <sky-dropdown style="display: inline-block; width: 150px">
+                <sky-dropdown-button>{{
+                    selectedBowl.name
+                }}</sky-dropdown-button>
+                <sky-dropdown-menu>
+                    <sky-dropdown-item *ngFor="let bowl of bowls">
+                        <button
+                            type="button"
+                            class="sky-btn sky-btn-primary sky-margin-inline-compact"
+                            (click)="setBowlGame(bowl.id)"
+                        >
+                            {{ bowl.name }} (ID: {{ bowl.id }})
+                        </button>
+                    </sky-dropdown-item>
+                </sky-dropdown-menu>
+            </sky-dropdown>
+            <label> School 1 </label>
+            <sky-dropdown style="display: inline-block">
+                <sky-dropdown-button>{{
+                    selectedSchool1.Name
+                }}</sky-dropdown-button>
+                <sky-dropdown-menu>
+                    <sky-dropdown-item *ngFor="let school of schools">
+                        <button type="button" (click)="setSchool(school.ID, 1)">
+                            {{ school.Name }} (ID: {{ school.ID }})
+                        </button>
+                    </sky-dropdown-item>
+                </sky-dropdown-menu>
+            </sky-dropdown>
+            <label> School 2 </label>
+            <sky-dropdown style="display: inline-block">
+                <sky-dropdown-button>{{
+                    selectedSchool2.Name
+                }}</sky-dropdown-button>
+                <sky-dropdown-menu>
+                    <sky-dropdown-item *ngFor="let school of schools">
+                        <button type="button" (click)="setSchool(school.ID, 2)">
+                            {{ school.Name }} (ID: {{ school.ID }})
+                        </button>
+                    </sky-dropdown-item>
+                </sky-dropdown-menu>
+            </sky-dropdown>
+            <label style="display: inline-block"> Date<br /> </label>
+            <input
+                style="display: inline-block"
+                type="date"
+                value="2023-12-15"
+                min="2023-12-15"
+                max="2024-01-15"
+            />
+            <label>
+                <input type="number" min="0" max="23" />
+            </label>
+            <label style="display: inline-block">
+                :
+                <input
+                    style="display: inline-block"
+                    type="number"
+                    step="5"
+                    min="0"
+                    max="55"
+                />
+            </label>
+            <label
+                >TV Station
+                <sky-dropdown style="display: inline-block">
+                    <sky-dropdown-button>{{
+                        selectedStation
+                    }}</sky-dropdown-button>
+                    <sky-dropdown-menu>
+                        <sky-dropdown-item *ngFor="let station of stations">
+                            <button
+                                type="button"
+                                (click)="updateStation(station)"
+                            >
+                                {{ station }}
+                            </button>
+                        </sky-dropdown-item>
+                    </sky-dropdown-menu>
+                </sky-dropdown>
+            </label>
+            Playoff?
+            <!-- <sky-checkbox [(ngModel)]="isPlayoff"></sky-checkbox> -->
+            Championship?
+            <!-- <sky-checkbox [(ngModel)]="isChampionship"></sky-checkbox> -->
+            <button (click)="addBowlGame()">Add Bowl Game</button>
+            {{ addMessage }}
+        </sky-repeater-item-content>
+    </sky-repeater-item>
+</sky-repeater>

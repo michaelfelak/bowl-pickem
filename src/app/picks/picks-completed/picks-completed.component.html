@@ -1,0 +1,45 @@
+<main>
+  <h2 class="header">
+    Thank you for submitting! You may print out for your records.
+  </h2>
+  <div>
+    <h3 class="header">Entry Name: {{ name }}</h3>
+    <h3 class="header">E-mail Address: {{ email }}</h3>
+    <table class="center">
+      <tr>
+        <th class="team-date">Date</th>
+        <th class="team-name" style="border-left: 1px solid black">
+          Bowl Game
+        </th>
+        <th class="team-check" style="border-left: 1px solid black"></th>
+        <th class="team-name">Team 1</th>
+        <th class="team-check" style="border-left: 1px solid black"></th>
+        <th class="team-name" style="border-right: 1px solid black">Team 2</th>
+        <th class="team-points">Points</th>
+      </tr>
+      <tr *ngFor="let pick of picks">
+        <td class="team-date">
+          {{ pick.game_time | date }}
+        </td>
+        <td class="team-name" style="border-left: 1px solid black">
+          {{ pick.bowl_name }}
+        </td>
+        <td class="team-check" style="border-left: 1px solid black">
+          <sky-icon icon="check-circle" *ngIf="pick.team_1"></sky-icon>
+        </td>
+        <td class="team-name" style="border-right: 1px solid black">
+          {{ pick.team_1_name }}
+        </td>
+        <td class="team-check" style="border-left: 1px solid black">
+          <sky-icon icon="check-circle" *ngIf="pick.team_2"></sky-icon>
+        </td>
+        <td class="team-name" style="border-right: 1px solid black">
+          {{ pick.team_2_name }}
+        </td>
+        <td>
+          {{ pick.points }}
+        </td>
+      </tr>
+    </table>
+  </div>
+</main>
