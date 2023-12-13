@@ -8,6 +8,6 @@ import { PickModel } from '../../shared/services/bowl.model';
 })
 export class PicksCompletedComponent {
   @Input() public picks: PickModel[] = [];
-  @Input() public name!: string;
-  @Input() public email!: string;
+  @Input() public name: string = '';
+  @Input() public email: string = '';
 }

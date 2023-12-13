@@ -27,6 +27,7 @@
     "@skyux/modals": "9.17.0",
     "@skyux/popovers": "9.17.0",
     "ag-grid-angular": "^31.0.1",
+    "dayjs": "^1.11.10",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
