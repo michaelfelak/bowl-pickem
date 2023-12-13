@@ -10,6 +10,7 @@ import {
 } from '../../shared/services/bowl.model';
 import { SkyAppConfig } from '@skyux/config';
 import { mergeMap } from 'rxjs/operators';
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'update-scores',
@@ -83,7 +84,7 @@ export class UpdateScoresComponent implements OnInit {
         // p.team_1 = false;
         // p.team_2 = false;
         p.bowl_name = bowl.name;
-        // p.game_time = moment(game.GameTime).format('MM/DD/YYYY');
+        p.game_time = dayjs(game.GameTime).format('MM/DD/YYYY');
         // p.points = 1;
         this.picks.push(p);
       });
@@ -110,8 +111,6 @@ export class UpdateScoresComponent implements OnInit {
       r.winning_school_id = game.School2ID;
     }
     this.svc.addGameResult(r).subscribe();
-    console.log('score updated');
-    console.log(r);
   }
 
   private getGameFromID(id: string): Game {

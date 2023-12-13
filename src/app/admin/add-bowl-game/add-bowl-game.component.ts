@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { BowlService } from '../../shared/services/bowl.service';
 import {
   Bowl,
@@ -6,8 +6,9 @@ import {
   Game,
   GameResultModel
 } from '../../shared/services/bowl.model';
-// import * as moment from 'moment';
 import { mergeMap } from 'rxjs/operators';
+import * as dayjs from 'dayjs';
+import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 
 @Component({
   selector: 'add-bowl-game',
@@ -38,7 +39,26 @@ export class AddBowlGameComponent implements OnInit {
   public bowls: Bowl[] = [];
   public schools: School[] = [];
   public addMessage!: string;
-  constructor(private svc: BowlService) {}
+
+  protected formGroup: FormGroup<{
+    hour: FormControl<number | null>;
+    minute: FormControl<number | null>;
+    year: FormControl<number | null>;
+    month: FormControl<number | null>;
+    day: FormControl<number | null>;
+  }>;
+
+  constructor(private svc: BowlService) {
+
+    this.formGroup = inject(FormBuilder).group({
+      hour: new FormControl(12),
+      minute: new FormControl(0),
+      year: new FormControl(2023),
+      month: new FormControl(12),
+      day: new FormControl(16),
+    });
+  }
+
 
   public ngOnInit() {
     this.refresh();
@@ -81,19 +101,12 @@ export class AddBowlGameComponent implements OnInit {
 
   public addBowlGame() {
     this.addMessage = '';
-    // let year = Number(moment(this.gameDate).format('YYYY'));
-    // let month = Number(moment(this.gameDate).format('MM')) - 1;
-    // let day = Number(moment(this.gameDate).format('DD'));
-    let year = 1;
-    let month = 1;
-    let day = 1;
-
     let game = new Game();
     game.BowlID = this.selectedBowl.id;
     game.School1ID = this.selectedSchool1.ID;
     game.School2ID = this.selectedSchool2.ID;
     game.Year = this.year;
-    game.GameTime = new Date(year, month, day, this.hour, this.minute);
+    game.GameTime = new Date(this.formGroup.value.year as number, (this.formGroup.value.month as number) - 1, this.formGroup.value.day as number, this.formGroup.value.hour as number, this.formGroup.value.minute as number);
     game.IsPlayoff = this.isPlayoff;
     game.IsChampionship = this.isChampionship;
     this.svc.addGame(game).subscribe(() => {

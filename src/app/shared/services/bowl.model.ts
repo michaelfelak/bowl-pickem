@@ -19,7 +19,7 @@ export class PickModel {
   public is_playoff!: boolean;
   public is_championship!: boolean;
   public picked_school_id!: string;
-  public is_new_years_day!: boolean;
+  public is_new_years_game!: boolean;
 }
 
 export class PickResponse {
@@ -57,11 +57,11 @@ export class PersonRequest {
 }
 
 export class EntryRequest {
-  public Name!: string;
-  public Email!: string;
-  public Tiebreaker1!: number;
-  public Tiebreaker2!: number;
-  public IsTesting!: boolean;
+  public Name: string = '';
+  public Email: string = '';
+  public Tiebreaker1: number = 0;
+  public Tiebreaker2: number = 0;
+  public IsTesting: boolean = false;
   public Year!: number;
 }
 

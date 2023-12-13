@@ -8,6 +8,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { StandingsModule } from './standings/standings.module';
 import { AdminModule } from './admin/admin.module';
 import { PicksModule } from './picks/picks.module';
+import { FooterComponent } from './shared/footer/footer.component';
 
 @NgModule({
   declarations: [

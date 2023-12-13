@@ -41,7 +41,6 @@ export class AddBowlComponent {
       };
 
       this.svc.addBowl(b).subscribe();
-      console.log('Bowl game added:' + b);
 
       // reset form
       this.bowlName = this.city = this.stadium = this.state = '';

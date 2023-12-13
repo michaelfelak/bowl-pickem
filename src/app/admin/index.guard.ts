@@ -8,7 +8,6 @@ export class AdminRouteGuard implements CanActivate {
         route: ActivatedRouteSnapshot
     ): Observable<boolean> {
         let id = route.queryParams['id'];
-        console.log(id);
 
         if (id === '89310bc3-d828-ae83-11bb-7bc89ea3ab21') {
             return of(true);

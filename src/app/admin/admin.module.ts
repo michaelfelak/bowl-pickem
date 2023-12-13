@@ -14,6 +14,8 @@ import { SkyRepeaterModule } from '@skyux/lists';
 import { AddBowlGameComponent } from './add-bowl-game/add-bowl-game.component';
 import { PaidStatusComponent } from './paid-status/paid-status.component';
 import { UpdateScoresComponent } from './update-scores/update-scores.component';
+import { SkyInputBoxModule } from '@skyux/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -21,7 +23,7 @@ import { UpdateScoresComponent } from './update-scores/update-scores.component';
         AddBowlGameComponent,
         PaidStatusComponent,
         UpdateScoresComponent,
-        AdminComponent
+        AdminComponent,
     ],
     imports: [
         BrowserModule,
@@ -29,7 +31,11 @@ import { UpdateScoresComponent } from './update-scores/update-scores.component';
         SkyDropdownModule,
         SkyRepeaterModule,
         SkyAlertModule,
-        SkyIconModule
+        SkyIconModule,
+        SkyInputBoxModule,
+
+        FormsModule,
+        ReactiveFormsModule,
     ],
     providers: [
         BowlService,
