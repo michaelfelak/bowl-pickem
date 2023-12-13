@@ -11,6 +11,7 @@ import {
 import { SkyAppConfig } from '@skyux/config';
 import { mergeMap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
+import { FormArray, FormBuilder, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'update-scores',
@@ -24,7 +25,16 @@ export class UpdateScoresComponent implements OnInit {
   public bowls: Bowl[] = [];
   public schools: School[] = [];
   public entries: Entry[] = [];
-  constructor(private svc: BowlService, private config: SkyAppConfig) { }
+
+  scoresForm = this.formBuilder.group({
+    games: new FormArray([]),
+  });
+
+  get gamesFormArray(): FormArray {
+    return this.scoresForm.get('games') as FormArray;
+  }
+
+  constructor(private svc: BowlService, private formBuilder: FormBuilder) { }
 
   public ngOnInit() {
     this.refresh();
@@ -50,6 +60,20 @@ export class UpdateScoresComponent implements OnInit {
         }),
         mergeMap((result: GameResultModel[]) => {
           this.gameResults = result;
+
+          this.gameResults.forEach((result) => {
+
+            this.gamesFormArray.push(this.formBuilder.group({
+              gameId: new FormControl(result.game_id),
+              team1name: new FormControl(result.team_1_name),
+              team2name: new FormControl(result.team_2_name),
+              bowlName: new FormControl(result.bowl_name),
+              gameTime: new FormControl(result.game_time),
+              score1: new FormControl(result.score_1),
+              score2: new FormControl(result.score_2),
+            }))
+          })
+
           return this.svc.getBowlList();
         })
       )
@@ -87,11 +111,20 @@ export class UpdateScoresComponent implements OnInit {
         p.game_time = dayjs(game.GameTime).format('MM/DD/YYYY');
         // p.points = 1;
         this.picks.push(p);
+
+
       });
     }
   }
 
-  public updateBowlScore(id: string, score1: number, score2: number) {
+  public updateBowlScore(id: string) {
+    console.log(id);
+    let gameA = this.gamesFormArray.value.find((game: any) => {
+      return game.gameId === id;
+    })
+    let score1 = gameA.score1;
+    let score2 = gameA.score2;
+
     let r = new GameResultModel();
     r.game_id = id;
     if (!score1) {
