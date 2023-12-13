@@ -6,6 +6,7 @@ import { AdminComponent } from './admin/admin.component';
 import { AdminRouteGuard } from './admin/index.guard';
 import { PicksComponent } from './picks/picks.component';
 import { HomeComponent } from './home.component';
+import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
 
 const routes: Routes = [
   {
@@ -19,6 +20,10 @@ const routes: Routes = [
   {
     path: 'picks',
     component: PicksComponent
+  },
+  {
+    path: 'scores',
+    component: BowlScoresComponent
   },
   {
     path: 'admin',

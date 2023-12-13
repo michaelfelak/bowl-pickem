@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +8,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public showAdmin: boolean = false;
-  title = 'bowl-pickem-spa';
 
-  constructor() {
+  constructor(private titleService: Title) {
+    this.titleService.setTitle("Bowl Pick'em - Home");
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
