@@ -204,30 +204,19 @@
       <div>
         Select the game that will have the
         <span style="font-weight: bold"> most points scored.</span>
-
-
+      </div>
+      <div>
         <select formControlName="tiebreaker1Id">
           <option *ngFor="let pick of tiebreakerPicks" [ngValue]="pick.game_id">
             {{pick.team_1_name}} vs. {{pick.team_2_name}}
           </option>
         </select>
-        <!-- <sky-dropdown>
-        <sky-dropdown-button>
-          {{ tiebreaker1 }}
-        </sky-dropdown-button>
-        <sky-dropdown-menu>
-          <sky-dropdown-item *ngFor="let pick of tiebreakerPicks">
-            <button type="button" (click)="selectTiebreaker1(pick.game_id)">
-              {{ pick.team_1_name }} vs. {{ pick.team_2_name }}
-            </button>
-          </sky-dropdown-item>
-        </sky-dropdown-menu>
-      </sky-dropdown> -->
       </div>
       <div class="header" style="text-align: center; padding-top: 20px">
         Enter the total number of points scored in the highest scoring bowl game.
         <br />
-        <input formControlName="tiebreaker2" class="sky-form-control" style="width: 10%" type="number" min="1" max="500" />
+        <input formControlName="tiebreaker2" class="sky-form-control" style="width: 100px" type="number" min="1"
+          max="500" />
       </div>
     </div>
     <sky-alert *ngIf="showSubmitError" alertType="danger">
