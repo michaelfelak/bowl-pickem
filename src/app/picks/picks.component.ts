@@ -331,8 +331,8 @@ export class PicksComponent implements OnInit {
             newPick.is_playoff = true;
             newPick.team_1_name = pick.team1name;
             newPick.team_2_name = pick.team2name;
-            newPick.game_time = pick.game_time;
-            newPick.bowl_name = pick.bowl_name;
+            newPick.game_time = pick.gameTime;
+            newPick.bowl_name = pick.bowlName;
 
             if (pick.team1picked) {
               newPick.picked_school_id = this.getSchoolFromName(
@@ -345,32 +345,29 @@ export class PicksComponent implements OnInit {
             }
             allPicks.push(newPick);
           });
-          this.championshipPickForm.value.championshipPicks!.forEach((pick: any) => {
-            let newPick: PickModel = new PickModel();
-            newPick.entry_id = returnEntryId;
-            newPick.game_id = pick.gameId;
-            newPick.team_1 = pick.team1picked;
-            newPick.team_2 = pick.team2picked;
-            newPick.points = pick.points;
-            newPick.is_championship = true;
-            newPick.team_1_name = pick.team1name;
-            newPick.team_2_name = pick.team2name;
-            newPick.game_time = pick.game_time;
-            newPick.bowl_name = pick.bowl_name;
 
-            if (pick.team1picked) {
-              newPick.picked_school_id = this.getSchoolFromName(
-                pick.team1name
-              ).ID;
-            } else {
-              newPick.picked_school_id = this.getSchoolFromName(
-                pick.team2name
-              ).ID;
-            }
-            allPicks.push(newPick);
-          });
+          let champPick = this.championshipPickForm.value.championshipPicks![0] as any;
+          let newPick = this.championshipPicks[0];
+
+          newPick.entry_id = returnEntryId;
+          newPick.team_1 = champPick.team1picked;
+          newPick.team_2 = champPick.team2picked;
+          newPick.points = champPick.points;
+          newPick.is_championship = true;
+
+          if (newPick.team_1) {
+            newPick.picked_school_id = this.getSchoolFromName(
+              newPick.team_1_name
+            ).ID;
+          } else {
+            newPick.picked_school_id = this.getSchoolFromName(
+              newPick.team_2_name
+            ).ID;
+          }
+          allPicks.push(newPick);
 
           pickRequest.picks = allPicks;
+
           this.allPicks = allPicks;
           return this.svc.submit(pickRequest);
         })
