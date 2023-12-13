@@ -61,9 +61,19 @@
   }
 
   a,
-  a:visited,
-  a:hover {
+  a:visited {
     color: #ebebeb;
+    padding: 10px;
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: #eeff00;
+    padding: 10px;
+    text-decoration: none;
+  }
+
+  p {
     padding: 10px;
     text-decoration: none;
   }
@@ -71,11 +81,12 @@
 
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
-  <img width="40" alt="Angular Logo"
+  <img width="40"
     src="https://imgs.search.brave.com/YWQLue13k0kRwWgI8ZrwHDvqDf6F9Rq-A4eyJK9iDgw/rs:fit:860:0:0/g:ce/aHR0cDovL2ltYWdl/cy5jbGlwYXJ0cGFu/ZGEuY29tL2Zvb3Ri/YWxsLWNsaXBhcnQt/Zm9vdGJhbGwtY2xp/cGFydC01LWRyLW9k/ZDEucG5n" />
-  <a>Bowl Pick'em</a>
+  <p>Bowl Pick'em</p>
   <a routerLink="">Home</a>
   <a routerLink="picks">Submit Entry</a>
+  <a routerLink="scores">Scores</a>
   <a routerLink="standings">Standings</a>
   <a routerLink="about">About</a>
   <a *ngIf="showAdmin" routerLink="admin">Admin</a>

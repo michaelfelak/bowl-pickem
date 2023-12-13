@@ -9,10 +9,14 @@ import { StandingsModule } from './standings/standings.module';
 import { AdminModule } from './admin/admin.module';
 import { PicksModule } from './picks/picks.module';
 import { FooterComponent } from './shared/footer/footer.component';
+import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
+import { HomeComponent } from './home.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    BowlScoresComponent,
+    HomeComponent
   ],
   imports: [
     AppRoutingModule,

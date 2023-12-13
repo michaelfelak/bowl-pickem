@@ -1,0 +1,40 @@
+.winning-team {
+  background-color: lightgreen;
+}
+.winning-score {
+  background-color: lightgreen;
+}
+.today {
+  background-color: lightyellow;
+}
+
+.header {
+  background-color: lightskyblue;
+  font-weight: bold
+}
+
+.bowl {
+  width: 20%;
+  vertical-align: middle;
+}
+.team-name {
+  width: 20%;
+  vertical-align: middle;
+}
+.team-date {
+  width: 25%;
+  vertical-align: middle;
+}
+table {
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+th,
+td {
+  vertical-align: middle;
+  border: none;
+  text-align: center;
+  border: 1px solid black;
+}
