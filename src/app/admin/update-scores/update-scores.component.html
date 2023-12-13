@@ -1,5 +1,5 @@
-<sky-repeater >
-  <sky-repeater-item>
+<sky-repeater expandMode="single">
+  <sky-repeater-item [isExpanded]="true">
     <sky-repeater-item-title> Update Scores </sky-repeater-item-title>
     <sky-repeater-item-content>
       <table class="center">
@@ -13,39 +13,42 @@
           <th class="team-check">Team 2 Score</th>
           <th>Points</th>
         </tr>
-        <tr *ngFor="let bowl of gameResults">
-          <td class="team-check">
-            {{ bowl.game_id }}
-          </td>
-          <td class="team-name">
-            {{ bowl.bowl_name }}
-          </td>
-          <td class="team-name">
-            {{ bowl.game_time | date: "short" }}
-          </td>
-          <td class="team-name">
-            {{ bowl.team_1_name }}
-          </td>
-          <td class="team-check">
-            <!-- <input type="number" min="0" [(ngModel)]="bowl.score_1" /> -->
-          </td>
-          <td class="team-name">
-            {{ bowl.team_2_name }}
-          </td>
-          <td class="team-check">
-            <!-- <input type="number" min="0" [(ngModel)]="bowl.score_2" /> -->
-          </td>
-          <td class="team-check">
-            <button
-              type="button"
-              (click)="
-                updateBowlScore(bowl.game_id, bowl.score_1, bowl.score_2)
-              "
-            >
-              Update
-            </button>
-          </td>
-        </tr>
+        <ng-container [formGroup]="scoresForm">
+          <ng-container formArrayName="games">
+            <tr [formGroupName]="i" *ngFor="let bowl of gameResults; let i=index">
+              <td class="team-check">
+                {{ bowl.game_id }}
+              </td>
+              <td class="team-name">
+                {{ bowl.bowl_name }}
+              </td>
+              <td class="team-name">
+                {{ bowl.game_time | date: "short" }}
+              </td>
+              <td class="team-name">
+                {{ bowl.team_1_name }}
+              </td>
+              <td class="team-check">
+                <!-- <input type="number" min="0" [(ngModel)]="bowl.score_1" /> -->
+                <input formControlName="score1" class="sky-form-control" style="width: 50px" type="number" min="0"/>
+              </td>
+              <td class="team-name">
+                {{ bowl.team_2_name }}
+              </td>
+              <td class="team-check">
+                <!-- <input type="number" min="0" [(ngModel)]="bowl.score_2" /> -->
+                <input formControlName="score2" class="sky-form-control" style="width: 50px" type="number" min="0"/>
+              </td>
+              <td class="team-check">
+                <button type="button" (click)="
+                updateBowlScore(bowl.game_id)
+              ">
+                  Update
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </ng-container>
       </table>
     </sky-repeater-item-content>
   </sky-repeater-item>

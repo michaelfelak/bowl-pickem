@@ -20,6 +20,11 @@ main {
 .navbar {
   font-size: 14pt;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
 //  /deep/ .sky-section-heading {
 //    font-family: 'Titillium Web', // sans-serif;
