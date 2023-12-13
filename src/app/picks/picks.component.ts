@@ -163,6 +163,8 @@ export class PicksComponent implements OnInit {
               team1name: new FormControl(pick.team_1_name),
               team2name: new FormControl(pick.team_2_name),
               gameId: new FormControl(pick.game_id),
+              gameTime: new FormControl(pick.game_time),
+              bowlName: new FormControl(pick.bowl_name)
             }))
           });
 
@@ -175,6 +177,8 @@ export class PicksComponent implements OnInit {
               team2name: new FormControl(pick.team_2_name),
               gameId: new FormControl(pick.game_id),
               isPlayoff: new FormControl(true),
+              gameTime: new FormControl(pick.game_time),
+              bowlName: new FormControl(pick.bowl_name)
             }))
           });
 
@@ -188,6 +192,8 @@ export class PicksComponent implements OnInit {
               team2name: new FormControl(pick.team_2_name),
               gameId: new FormControl(pick.game_id),
               isChampionship: new FormControl(true),
+              gameTime: new FormControl(pick.game_time),
+              bowlName: new FormControl(pick.bowl_name)
             }))
           });
 
@@ -204,17 +210,25 @@ export class PicksComponent implements OnInit {
       );
   }
 
+  public selectAllTeam2() {
+    this.pickFormArray.value.forEach((pick: any) => {
+      pick.team2picked = true;
+    });
+  }
+
   public submit() {
     let isTesting = this.pickForm.value.name === 'test' && this.pickForm.value.name === 'test';
 
+    this.showSubmitError = false;
+    this.submitErrorMsg = '';
     if (!isTesting) {
-      if (this.pickForm.value.name === undefined) {
+      if (!this.pickForm.value.name) {
         this.submitErrorMsg = 'You must enter an entry name.';
         this.showSubmitError = true;
         return;
       }
-      if (this.pickForm.value.email === undefined) {
-        this.submitErrorMsg = 'You must enter an e-mail address.';
+      if (!this.pickForm.value.email || this.pickForm.value.email.indexOf('@') === -1) {
+        this.submitErrorMsg = 'You must enter a valid e-mail address.';
         this.showSubmitError = true;
         return;
       }
@@ -267,8 +281,6 @@ export class PicksComponent implements OnInit {
       }
     }
 
-    this.showSubmitError = false;
-    this.submitErrorMsg = '';
     this.disableSubmit = true;
     let r: EntryRequest = {
       Email: this.pickForm.value.email as string,
@@ -294,8 +306,8 @@ export class PicksComponent implements OnInit {
             newPick.points = pick.points;
             newPick.team_1_name = pick.team1name;
             newPick.team_2_name = pick.team2name;
-            newPick.game_time = pick.game_time;
-            newPick.bowl_name = pick.bowl_name;
+            newPick.game_time = pick.gameTime;
+            newPick.bowl_name = pick.bowlName;
 
             if (pick.team1picked) {
               newPick.picked_school_id = this.getSchoolFromName(
@@ -369,6 +381,7 @@ export class PicksComponent implements OnInit {
         this.submitted = true;
         this.name = this.pickForm.value.name as string;
         this.email = this.pickForm.value.email as string;
+        this.picks = this.allPicks;
       });
   }
 
@@ -468,19 +481,19 @@ export class PicksComponent implements OnInit {
       return true;
     }
     let isValid: boolean = true;
-    this.picks.forEach((pick: PickModel) => {
-      if (pick.team_1 === pick.team_2) {
+    this.pickFormArray.value.forEach((pick: any) => {
+      if (pick.team1picked === pick.team2picked) {
         isValid = false;
       }
     });
-    this.playoffPicks.forEach((pick: PickModel) => {
-      if (pick.team_1 === pick.team_2) {
+    this.playoffPickFormArray.value.forEach((pick: any) => {
+      if (pick.team1picked === pick.team2picked) {
         isValid = false;
       }
     });
     let gamesPicked = 0;
-    this.allChampionshipPicks.forEach((pick: PickModel) => {
-      if (pick.team_1 !== pick.team_2) {
+    this.championshipPickFormArray.value.forEach((pick: any) => {
+      if (pick.team1picked !== pick.team2picked) {
         gamesPicked += 1;
       }
     });
