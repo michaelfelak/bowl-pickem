@@ -18,10 +18,6 @@ const routes: Routes = [
     component: AboutComponent
   },
   {
-    path: 'picks',
-    component: PicksComponent
-  },
-  {
     path: 'scores',
     component: BowlScoresComponent
   },
