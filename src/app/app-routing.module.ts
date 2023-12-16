@@ -17,6 +17,10 @@ const routes: Routes = [
     path: 'about',
     component: AboutComponent
   },
+  // {
+  //   path: 'picks',
+  //   component: PicksComponent
+  // },
   {
     path: 'scores',
     component: BowlScoresComponent
