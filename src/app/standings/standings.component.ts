@@ -20,7 +20,7 @@ import { SkyAppConfig } from '@skyux/config';
 export class StandingsComponent implements OnInit {
   public standings: StandingsEntry[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
-  public showStandingsLink: boolean = false; // this shows the flyout links, only enable after bowls start
+  public showStandingsLink: boolean = true; // this shows the flyout links, only enable after bowls start
   public currentYear!: number;
   public years: number[] = [2023, 2022, 2021, 2020, 2019];
 
