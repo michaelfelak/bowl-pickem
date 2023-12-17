@@ -13,13 +13,15 @@ import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
 import { HomeComponent } from './home.component';
 import { BowlScoresModule } from './bowl-scores/bowl-scores.module';
 import { SkyRepeaterModule } from '@skyux/lists';
+import { DailyBlogComponent } from './blog/daily-blog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     BowlScoresComponent,
-    FooterComponent
+    FooterComponent,
+    DailyBlogComponent
   ],
   imports: [
     AppRoutingModule,
