@@ -36,7 +36,7 @@ export class Game {
   public ID!: string;
   public School1ID!: string;
   public School2ID!: string;
-  public BowlID!: string | undefined;
+  public BowlID: string = '';
   public GameTime!: Date;
   public Year!: number;
   public IsPlayoff!: boolean;
@@ -44,7 +44,7 @@ export class Game {
 }
 
 export class Bowl {
-  public id?: string;
+  public id: string = '';
   public name!: string;
   public city!: string;
   public state!: string;
@@ -163,4 +163,5 @@ export class BowlPick {
   public totalPoints!: number;
   public team_1_won?: boolean;
   public team_2_won?: boolean;
+  public earned_points: number = 0;
 }

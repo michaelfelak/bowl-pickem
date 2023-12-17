@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BowlService } from '../shared/services/bowl.service';
 import {
   Bowl,
@@ -14,6 +14,8 @@ import {
   SkyFlyoutInstance,
   SkyFlyoutService
 } from '@skyux/flyout';
+import { BowlPicksFlyoutComponent } from './bowl-picks-flyout/bowl-picks-flyout.component';
+import { BowlPicksFlyoutContext } from './bowl-picks-flyout/bowl-picks-flyout.context';
 
 @Component({
   selector: 'bowl-scores',
@@ -26,14 +28,15 @@ export class BowlScoresComponent implements OnInit {
   public todaysGames: TodaysGame[] = [];
   public bowls: Bowl[] = [];
   public schools: School[] = [];
-  public todaysDate: string='';
-  public flyout!: SkyFlyoutInstance<any>;
+  public todaysDate: string = '';
+  public flyout: SkyFlyoutInstance<any> | undefined;
+  @Input() public hideAllScores: boolean = false;
 
   constructor(
     private svc: BowlService,
     private config: SkyAppConfig,
     private flyoutService: SkyFlyoutService
-  ) {}
+  ) { }
 
   public ngOnInit() {
     this.refresh();
@@ -97,5 +100,27 @@ export class BowlScoresComponent implements OnInit {
       return gameResult.score_1 > gameResult.score_2;
     }
     return gameResult.score_2 > gameResult.score_1;
+  }
+
+  public onNameClick(id: string) {
+    let record: BowlPicksFlyoutContext = new BowlPicksFlyoutContext();
+    record.gameId = id;
+    const flyoutConfig: SkyFlyoutConfig = {
+      providers: [
+        {
+          provide: BowlPicksFlyoutContext,
+          useValue: record
+        }
+      ],
+      defaultWidth: 500
+    };
+    this.flyout = this.flyoutService.open(
+      BowlPicksFlyoutComponent,
+      flyoutConfig
+    );
+
+    this.flyout.closed.subscribe(() => {
+      this.flyout = undefined;
+    });
   }
 }
