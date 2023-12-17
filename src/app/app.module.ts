@@ -11,12 +11,15 @@ import { PicksModule } from './picks/picks.module';
 import { FooterComponent } from './shared/footer/footer.component';
 import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
 import { HomeComponent } from './home.component';
+import { BowlScoresModule } from './bowl-scores/bowl-scores.module';
+import { SkyRepeaterModule } from '@skyux/lists';
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     BowlScoresComponent,
-    HomeComponent
+    FooterComponent
   ],
   imports: [
     AppRoutingModule,
@@ -24,7 +27,9 @@ import { HomeComponent } from './home.component';
     HttpClientModule,
     StandingsModule,
     AdminModule,
-    PicksModule
+    PicksModule,
+    BowlScoresModule,
+    SkyRepeaterModule
   ],
   providers: [BowlService],
   bootstrap: [AppComponent]

@@ -1,0 +1,51 @@
+<main>
+  <h3 class="header">
+    <p style="font-weight: bold;">{{ bowlName }} Bowl</p>
+    <p>{{ gameTime | date : 'short' }}</p>
+    <p style="font-weight: bold;">Selection Breakdown</p>
+    {{ team1name }}: {{team1picks}}, 
+    {{ team2name }}: {{team2picks}}
+    <div *ngIf="gameHasResult">
+      <p style="font-weight: bold;">Final Score</p>
+      {{ team1name }}: {{ team1score }}, {{ team2name }}: {{ team2score }}
+    </div>
+  </h3>
+  <table class="center">
+    <tr>
+      <th class="team-name">Entry</th>
+      <th class="team-name">Current Points</th>
+      <th class="team-name">{{ team1name }}</th>
+      <th class="team-name">{{ team2name }}</th>
+      <th class="team-points">Points</th>
+    </tr>
+    <tr *ngFor="let pick of picks">
+      <td class="team-name">
+        {{ pick.name }}
+        <!-- <b *ngIf="pick.not_played"><br />Canceled</b> -->
+      </td>
+      <td class="team-name">
+        {{ pick.totalPoints }}
+      </td>
+      <!-- team 1 check mark / X -->
+      <td class="team-check">
+        <sky-icon style="color: red" icon="times" *ngIf="pick.team_1_picked && pick.team_2_won"></sky-icon>
+        <sky-icon style="color: rgb(30, 31, 30)" icon="check-circle" *ngIf="pick.team_1_picked && pick.team_1_won">
+        </sky-icon>
+        <sky-icon icon="check" *ngIf="!pick.team_1_won && !pick.team_2_won && pick.team_1_picked"></sky-icon>
+      </td>
+      <!-- team 2 check mark / X -->
+      <td class="team-check">
+        <sky-icon style="color: red" icon="times" *ngIf="pick.team_2_picked && pick.team_1_won"></sky-icon>
+        <sky-icon style="color: green" icon="check-circle" *ngIf="pick.team_2_picked && pick.team_2_won">
+        </sky-icon>
+        <sky-icon icon="check" *ngIf="!pick.team_1_won && !pick.team_2_won && pick.team_2_picked"></sky-icon>
+      </td>
+      <td class="team-check">
+        <div *ngIf="!pick.earned_points">
+          <i>{{ pick.points }}</i>
+        </div>
+        <div *ngIf="pick.earned_points">{{ pick.earned_points }}</div>
+      </td>
+    </tr>
+  </table>
+</main>

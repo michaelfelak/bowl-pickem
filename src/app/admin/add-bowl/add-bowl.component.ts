@@ -33,7 +33,7 @@ export class AddBowlComponent {
       this.hasError = false;
       this.errorMsg = '';
       let b: Bowl = {
-        id: undefined,
+        id: '',
         name: this.bowlName,
         city: this.city,
         state: this.state,
