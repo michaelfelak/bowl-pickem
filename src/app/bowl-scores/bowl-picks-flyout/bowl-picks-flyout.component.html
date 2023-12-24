@@ -29,7 +29,7 @@
       <!-- team 1 check mark / X -->
       <td class="team-check">
         <sky-icon style="color: red" icon="times" *ngIf="pick.team_1_picked && pick.team_2_won"></sky-icon>
-        <sky-icon style="color: rgb(30, 31, 30)" icon="check-circle" *ngIf="pick.team_1_picked && pick.team_1_won">
+        <sky-icon style="color: green" icon="check-circle" *ngIf="pick.team_1_picked && pick.team_1_won">
         </sky-icon>
         <sky-icon icon="check" *ngIf="!pick.team_1_won && !pick.team_2_won && pick.team_1_picked"></sky-icon>
       </td>
