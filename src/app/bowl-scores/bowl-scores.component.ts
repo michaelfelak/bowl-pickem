@@ -25,7 +25,8 @@ import { BowlPicksFlyoutContext } from './bowl-picks-flyout/bowl-picks-flyout.co
 export class BowlScoresComponent implements OnInit {
   public games!: Game[];
   public gameResults: GameResultModel[] = [];
-  public todaysGames: TodaysGame[] = [];
+  public upcomingGames: GameResultModel[] = [];
+  public todaysGames: GameResultModel[] = [];
   public bowls: Bowl[] = [];
   public schools: School[] = [];
   public todaysDate: string = '';
@@ -54,7 +55,24 @@ export class BowlScoresComponent implements OnInit {
           );
         }),
         mergeMap((result: GameResultModel[]) => {
-          this.gameResults = result;
+          this.gameResults = result.filter((game) => {
+            return game.score_1 + game.score_2 > 0;
+          });
+          this.upcomingGames = result.filter((game) => {
+            return game.score_1 + game.score_2 === 0 && 
+            new Date(game.game_time).getDate() !== new Date().getDate();
+          });
+          console.log(new Date().getDate());
+            
+          result.forEach((game) => {
+            console.log(new Date(game.game_time).getDate());
+            
+          })
+          this.todaysGames = result.filter((game) => {
+            return new Date(game.game_time).getDate() === new Date().getDate();
+          })
+          console.log(result);
+          console.log(this.todaysGames);
           this.sortGamesResultsByDate();
           return this.svc.getBowlList();
         }),
@@ -63,10 +81,7 @@ export class BowlScoresComponent implements OnInit {
           return this.svc.getTodaysGames();
         })
       )
-      .subscribe((result: TodaysGame[]) => {
-        this.todaysDate = new Date().toDateString();
-        this.todaysGames = result;
-      });
+      .subscribe();
   }
 
   public getSchoolFromID(id: string): School {

@@ -1,75 +1,92 @@
-<div>
-  <h3 style="text-align: center">Bowl Games for {{ todaysDate }}</h3>
-  <div *ngIf="todaysGames && todaysGames.length > 0">
+<main>
+  <div *ngIf="!hideAllScores">
+    <h1 style="text-align: center">Upcoming Bowl Games</h1>
     <table class="center">
-      <tr>
-        <td class="header">Bowl</td>
-        <td class="header">Team 1</td>
-        <td class="header">Team 2</td>
+      <tr style="font-weight: bolder; background-color: burlywood">
+        <td>Date</td>
+        <td>Bowl</td>
+        <td>Team 1</td>
+        <td>Team 2</td>
       </tr>
-      <tr *ngFor="let game of todaysGames">
-        <td class="bowl">
-          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(game.game_id.toString())">
-            {{ game.bowl_name }}
+      <!-- Today's Games -->
+      <tr *ngFor="let bowl of todaysGames">
+        <td class="team-date" style="background-color: lightyellow;">
+          {{ bowl.game_time | date:"MMM dd - h:mm a"}}
+        </td>
+        <td class="team-name" style="background-color: lightyellow;">
+          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id)">
+            {{ bowl.bowl_name }}
           </button>
         </td>
-        <td class="team-name">
-          {{ game.school_1_name }}
+        <td style="background-color: lightyellow;">
+          {{ bowl.team_1_name }}
+        </td>
+        <td style="background-color: lightyellow;">
+          {{ bowl.team_2_name }}
+        </td>
+      </tr>
+      <!-- Future Games -->
+      <tr *ngFor="let bowl of upcomingGames">
+        <td class="team-date">
+          {{ bowl.game_time | date:"MMM dd - h:mm a"}}
         </td>
         <td class="team-name">
-          {{ game.school_2_name }}
+          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id)">
+            {{ bowl.bowl_name }}
+          </button>
+        </td>
+        <td>
+          {{ bowl.team_1_name }}
+        </td>
+        <td>
+          {{ bowl.team_2_name }}
+        </td>
+      </tr>
+    </table>
+    <h1 style="text-align: center">Bowl Scores</h1>
+    <table class="center">
+      <tr style="font-weight: bolder; background-color: burlywood">
+        <td>Date</td>
+        <td>Bowl</td>
+        <td>Team 1</td>
+        <td>Score</td>
+        <td>Team 2</td>
+        <td>Score</td>
+      </tr>
+      <tr *ngFor="let bowl of gameResults">
+        <td class="team-date">
+          {{ bowl.game_time | date:"MMM dd - h:mm a"}}
+        </td>
+        <td class="team-name">
+          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id)">
+            {{ bowl.bowl_name }}
+          </button>
+        </td>
+        <td class="winning-team" *ngIf="teamWon(1, bowl)">
+          {{ bowl.team_1_name }}
+        </td>
+        <td class="winning-team" *ngIf="teamWon(1, bowl)">
+          {{ bowl.score_1 }}
+        </td>
+        <td *ngIf="!teamWon(1, bowl)">
+          {{ bowl.team_1_name }}
+        </td>
+        <td *ngIf="!teamWon(1, bowl)">
+          {{ bowl.score_1 }}
+        </td>
+        <td class="winning-team" *ngIf="teamWon(2, bowl)">
+          {{ bowl.team_2_name }}
+        </td>
+        <td class="winning-team" *ngIf="teamWon(2, bowl)">
+          {{ bowl.score_2 }}
+        </td>
+        <td *ngIf="!teamWon(2, bowl)">
+          {{ bowl.team_2_name }}
+        </td>
+        <td *ngIf="!teamWon(2, bowl)">
+          {{ bowl.score_2 }}
         </td>
       </tr>
     </table>
   </div>
-  <div style="text-align: center" *ngIf="!todaysGames || todaysGames.length === 0">
-    No Games
-  </div>
-</div>
-<div *ngIf="!hideAllScores">
-  <h3 style="text-align: center">Bowl Scores</h3>
-  <table class="center">
-    <tr style="font-weight: bolder; background-color: burlywood">
-      <td>Date</td>
-      <td>Bowl</td>
-      <td>Team 1</td>
-      <td>Score</td>
-      <td>Team 2</td>
-      <td>Score</td>
-    </tr>
-    <tr *ngFor="let bowl of gameResults">
-      <td class="team-date">
-        {{ bowl.game_time | date:"MMM dd - h:mm a"}}
-      </td>
-      <td class="team-name">
-        <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id)">
-          {{ bowl.bowl_name }}
-        </button>
-      </td>
-      <td class="winning-team" *ngIf="teamWon(1, bowl)">
-        {{ bowl.team_1_name }}
-      </td>
-      <td class="winning-team" *ngIf="teamWon(1, bowl)">
-        {{ bowl.score_1 }}
-      </td>
-      <td *ngIf="!teamWon(1, bowl)">
-        {{ bowl.team_1_name }}
-      </td>
-      <td *ngIf="!teamWon(1, bowl)">
-        {{ bowl.score_1 }}
-      </td>
-      <td class="winning-team" *ngIf="teamWon(2, bowl)">
-        {{ bowl.team_2_name }}
-      </td>
-      <td class="winning-team" *ngIf="teamWon(2, bowl)">
-        {{ bowl.score_2 }}
-      </td>
-      <td *ngIf="!teamWon(2, bowl)">
-        {{ bowl.team_2_name }}
-      </td>
-      <td *ngIf="!teamWon(2, bowl)">
-        {{ bowl.score_2 }}
-      </td>
-    </tr>
-  </table>
-</div>
+</main>
