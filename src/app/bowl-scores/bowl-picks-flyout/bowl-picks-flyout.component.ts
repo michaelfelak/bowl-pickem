@@ -60,7 +60,6 @@ export class BowlPicksFlyoutComponent implements OnInit {
         }),
         mergeMap((gameResults: GameResultModel[]) => {
           this.gameResults = gameResults;
-          console.log(gameResults);
           return this.svc.getSchools();
         }),
         mergeMap((schoolList: any) => {
@@ -114,7 +113,6 @@ export class BowlPicksFlyoutComponent implements OnInit {
       return game;
     }
     return new Game();
-
   }
 
   private sortPicks() {

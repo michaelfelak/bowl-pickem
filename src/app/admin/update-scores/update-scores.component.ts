@@ -118,7 +118,6 @@ export class UpdateScoresComponent implements OnInit {
   }
 
   public updateBowlScore(id: string) {
-    console.log(id);
     let gameA = this.gamesFormArray.value.find((game: any) => {
       return game.gameId === id;
     })

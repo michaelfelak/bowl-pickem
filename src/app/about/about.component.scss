@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
+
+.delete-button {
+  background-color: maroon;
+  border-color: maroon;
+  color: white;
+}
+
+.create-button {
+  padding-left: 35px;
+  padding-top: 30px;
+}
+
+main {
+  margin-left: 5%;
+  margin-right: 5%;
+  height: 100%;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.navbar {
+  font-size: 14pt;
+}
+
+//  /deep/ .sky-section-heading {
+//    font-family: 'Titillium Web', // sans-serif;
+//  }
+
+//  /deep/ .sky-emphasized {
+//    font-weight: bold;
+//    font-family: 'Titillium Web', // sans-serif;
+//  }
+
+table {
+  width: 100%;
+}
+
+.event-options {
+  width: 60%;
+}
+
+.current-totals {
+  width: 40%;
+  text-align: right;
+}
+
+.footer {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 10pt;
+  font-family: 'Titillium Web', sans-serif;
+}

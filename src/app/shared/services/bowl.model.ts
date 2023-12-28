@@ -33,7 +33,7 @@ export class School {
 }
 
 export class Game {
-  public ID!: string;
+  public ID: string = '';
   public School1ID!: string;
   public School2ID!: string;
   public BowlID: string = '';
@@ -139,7 +139,7 @@ export class AnalysisModel {
 }
 
 export class TodaysGame {
-  public game_id!: number;
+  public game_id!: string;
   public bowl_name!: string;
   public game_time!: string;
   public school_1_name!: string;
