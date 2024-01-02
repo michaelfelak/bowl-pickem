@@ -14,7 +14,8 @@ import {
   AnalysisRecord,
   TodaysGame,
   BlogEntry,
-  BowlPick
+  BowlPick,
+  Tiebreaker
 } from './bowl.model';
 
 @Injectable()
@@ -85,6 +86,10 @@ export class BowlService {
 
   public getStandings(year: number): Observable<StandingsEntry[]> {
     return this.http.get<StandingsEntry[]>(this.baseUrl + 'standings/' + year);
+  }
+
+  public getTiebreakers(year: number): Observable<Tiebreaker[]> {
+    return this.http.get<Tiebreaker[]>(this.baseUrl + 'tiebreakers/' + year);
   }
 
   public getStandingsEntry(id: string | undefined): Observable<CompletedEntry> {

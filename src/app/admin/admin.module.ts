@@ -16,6 +16,7 @@ import { PaidStatusComponent } from './paid-status/paid-status.component';
 import { UpdateScoresComponent } from './update-scores/update-scores.component';
 import { SkyInputBoxModule } from '@skyux/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TiebreakersComponent } from './tiebreakers/tiebreakers.component';
 
 @NgModule({
     declarations: [
@@ -24,6 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         PaidStatusComponent,
         UpdateScoresComponent,
         AdminComponent,
+        TiebreakersComponent,
     ],
     imports: [
         BrowserModule,

@@ -4,8 +4,7 @@ import {
   Bowl,
   Game,
   GameResultModel,
-  School,
-  TodaysGame
+  School
 } from '../shared/services/bowl.model';
 import { SkyAppConfig } from '@skyux/config';
 import { mergeMap } from 'rxjs/operators';
@@ -59,14 +58,14 @@ export class BowlScoresComponent implements OnInit {
             return game.score_1 + game.score_2 > 0;
           });
           this.upcomingGames = result.filter((game) => {
-            return game.score_1 + game.score_2 === 0 && 
-            new Date(game.game_time).getDate() !== new Date().getDate();
+            return game.score_1 + game.score_2 === 0 &&
+              new Date(game.game_time).getDate() !== new Date().getDate();
           });
           console.log(new Date().getDate());
-            
+
           result.forEach((game) => {
             console.log(new Date(game.game_time).getDate());
-            
+
           })
           this.todaysGames = result.filter((game) => {
             return new Date(game.game_time).getDate() === new Date().getDate();
