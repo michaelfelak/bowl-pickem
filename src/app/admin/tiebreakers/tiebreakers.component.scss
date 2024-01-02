@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
+main {
+    margin-left: 5%;
+    margin-right: 5%;
+    height: 100%;
+    font-family: 'Titillium Web', sans-serif;
+}
+
+.team-name {
+    width: 20%;
+    vertical-align: middle;
+}
+
+table {
+    width: 95%;
+}
+table.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.header {
+    text-align: center;
+}
+
+th,
+td {
+    vertical-align: middle;
+    border: none;
+    text-align: center;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+    background-color: lightsteelblue;
+}

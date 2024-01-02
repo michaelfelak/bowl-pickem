@@ -7,6 +7,7 @@ import { AdminRouteGuard } from './admin/index.guard';
 import { PicksComponent } from './picks/picks.component';
 import { HomeComponent } from './home.component';
 import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
+import { ScenarioGeneratorComponent } from './scenario-generator/scenario-generator.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
   {
     path: 'standings',
     component: StandingsComponent
+  },
+  {
+    path: 'scenario-generator',
+    component: ScenarioGeneratorComponent
   }
 ];
 

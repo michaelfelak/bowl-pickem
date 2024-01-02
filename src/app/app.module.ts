@@ -14,6 +14,7 @@ import { HomeComponent } from './home.component';
 import { BowlScoresModule } from './bowl-scores/bowl-scores.module';
 import { SkyRepeaterModule } from '@skyux/lists';
 import { DailyBlogComponent } from './blog/daily-blog.component';
+import { ScenarioGeneratorComponent } from './scenario-generator/scenario-generator.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { DailyBlogComponent } from './blog/daily-blog.component';
     HomeComponent,
     BowlScoresComponent,
     FooterComponent,
-    DailyBlogComponent
+    DailyBlogComponent,
+    ScenarioGeneratorComponent
   ],
   imports: [
     AppRoutingModule,

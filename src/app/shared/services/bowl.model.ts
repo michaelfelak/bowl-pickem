@@ -165,3 +165,9 @@ export class BowlPick {
   public team_2_won?: boolean;
   public earned_points: number = 0;
 }
+
+export class Tiebreaker{
+  public entry_name: string = '';
+  public tiebreaker_1: string = ''; // bowl game
+  public tiebreaker_2: string = ''; // highest total
+}
