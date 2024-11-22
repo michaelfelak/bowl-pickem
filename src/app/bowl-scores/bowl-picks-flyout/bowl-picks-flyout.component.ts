@@ -37,7 +37,7 @@ export class BowlPicksFlyoutComponent implements OnInit {
   public team1picks: number = 0;
   public team2picks: number = 0;
 
-  private currentYear = '2023';
+  private currentYear = '2024';
 
   constructor(
     public context: BowlPicksFlyoutContext,
@@ -46,7 +46,7 @@ export class BowlPicksFlyoutComponent implements OnInit {
 
   public ngOnInit() {
     this.svc
-      .getStandings(2023)
+      .getStandings(2024)
       .pipe(
         mergeMap((standings: any) => {
           this.standings = standings;

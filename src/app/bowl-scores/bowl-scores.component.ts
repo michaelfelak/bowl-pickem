@@ -44,13 +44,13 @@ export class BowlScoresComponent implements OnInit {
 
   public refresh() {
     this.svc
-      .getGames('2023')
+      .getGames('2024')
       .pipe(
         mergeMap((result: Game[]) => {
           this.games = result;
           this.sortGamesByDate();
           return this.svc.getGameResults(
-            '2023'
+            '2024'
           );
         }),
         mergeMap((result: GameResultModel[]) => {

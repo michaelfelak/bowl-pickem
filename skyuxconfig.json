@@ -1,5 +1,4 @@
 {
-  "$schema": "./node_modules/@skyux/config/skyuxconfig-schema.json",
   "mode": "easy",
   "compileMode": "aot",
   "appSettings": {
@@ -7,6 +6,6 @@
     "localServiceUrl": "http://localhost:8081/api/v1/",
     "showAdmin": true,
     "showSubmitEntry": true,
-    "currentYear": 2023
+    "currentYear": 2024
   }
 }

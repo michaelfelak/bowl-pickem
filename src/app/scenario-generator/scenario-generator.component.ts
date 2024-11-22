@@ -11,7 +11,7 @@ export class ScenarioGeneratorComponent implements OnInit {
 
   }
   ngOnInit(): void {
-    this.bowlService.getStandings(2023).subscribe((result) => {
+    this.bowlService.getStandings(2024).subscribe((result) => {
       console.log(result);
     })
   }
