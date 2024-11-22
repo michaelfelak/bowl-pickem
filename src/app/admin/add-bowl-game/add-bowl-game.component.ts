@@ -53,7 +53,7 @@ export class AddBowlGameComponent implements OnInit {
     this.formGroup = inject(FormBuilder).group({
       hour: new FormControl(12),
       minute: new FormControl(0),
-      year: new FormControl(2023),
+      year: new FormControl(2024),
       month: new FormControl(12),
       day: new FormControl(16),
     });

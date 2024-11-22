@@ -46,7 +46,7 @@ export class UpdateScoresComponent implements OnInit {
       .pipe(
         mergeMap((result: School[]) => {
           this.schools = result;
-          return this.svc.getGames('2023');
+          return this.svc.getGames('2024');
         }),
         mergeMap((result: Game[]) => {
           this.games = result;
@@ -55,7 +55,7 @@ export class UpdateScoresComponent implements OnInit {
         mergeMap((result: Entry[]) => {
           this.entries = result;
           return this.svc.getGameResults(
-            '2023'
+            '2024'
           );
         }),
         mergeMap((result: GameResultModel[]) => {

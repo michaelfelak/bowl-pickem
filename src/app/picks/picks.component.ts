@@ -142,7 +142,7 @@ export class PicksComponent implements OnInit {
         mergeMap((result: School[]) => {
           this.schools = result;
           this.errorMsg = 'get schools';
-          return this.svc.getGames('2023');
+          return this.svc.getGames('2024');
         }),
         mergeMap((result: Game[]) => {
           this.games = result;
@@ -288,7 +288,7 @@ export class PicksComponent implements OnInit {
       Tiebreaker1: this.tiebreakerForm.value.tiebreaker1Id as number,
       Tiebreaker2: this.tiebreakerForm.value.tiebreaker2 as number,
       IsTesting: isTesting,
-      Year: 2023
+      Year: 2024
     };
     this.svc
       .addEntry(r)

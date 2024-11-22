@@ -24,8 +24,8 @@ export class BowlService {
   private currentYear: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = 'https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/api/v1/';
-    this.currentYear = '2023';
+    this.baseUrl = 'https://bowl-pickem-service-5a26054c7915.herokuapp.com/api/v1/';
+    this.currentYear = '2024';
   }
 
   public getUserList() {

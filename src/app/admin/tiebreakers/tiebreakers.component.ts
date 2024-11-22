@@ -14,7 +14,7 @@ export class TiebreakersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.bowlService.getTiebreakers(2023).subscribe((result) => {
+    this.bowlService.getTiebreakers(2024).subscribe((result) => {
       this.tiebreakers = result;
     })
   }
