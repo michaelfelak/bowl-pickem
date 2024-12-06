@@ -15,17 +15,19 @@ import {
   TodaysGame,
   BlogEntry,
   BowlPick,
-  Tiebreaker
+  Tiebreaker,
+  PlayoffPickRequest,
+  PlayoffSchoolRequest,
+  PlayoffSchool,
 } from './bowl.model';
 
 @Injectable()
 export class BowlService {
   private baseUrl: string;
-  private currentYear: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = 'https://bowl-pickem-service-5a26054c7915.herokuapp.com/api/v1/';
-    this.currentYear = '2024';
+    this.baseUrl = 'http://localhost:8081/api/v1/'; // local
+    // this.baseUrl = 'https://bowl-pickem-service-5a26054c7915.herokuapp.com/api/v1/'; // prod
   }
 
   public getUserList() {
@@ -48,11 +50,11 @@ export class BowlService {
     return this.http.post<string>(this.baseUrl + 'entry/add', request);
   }
 
-  public getGames(year: string): Observable<Game[]> {
+  public getGames(year: number): Observable<Game[]> {
     return this.http.get<Game[]>(this.baseUrl + 'game/list/' + year);
   }
 
-  public getGameResults(year: string): Observable<GameResultModel[]> {
+  public getGameResults(year: number): Observable<GameResultModel[]> {
     return this.http.get<GameResultModel[]>(
       this.baseUrl + 'gameresults/list/' + year
     );
@@ -70,14 +72,16 @@ export class BowlService {
     return this.http.post(this.baseUrl + 'picks/add', req);
   }
 
+  public addPlayoffPicks(req: PlayoffPickRequest): Observable<any> {
+    return this.http.post(this.baseUrl + 'playoffpicks/add', req);
+  }
+
   public togglePaid(id: string): Observable<any> {
     return this.http.get(this.baseUrl + 'entry/paid/' + id);
   }
 
-  public getEntries(): Observable<Entry[]> {
-    return this.http.get<Entry[]>(
-      this.baseUrl + 'entry/list/' + this.currentYear
-    );
+  public getEntries(year: number): Observable<Entry[]> {
+    return this.http.get<Entry[]>(this.baseUrl + 'entry/list/' + year);
   }
 
   public deleteEntry(id: string): Observable<any> {
@@ -104,13 +108,24 @@ export class BowlService {
     return this.http.get<TodaysGame[]>(this.baseUrl + 'todaysgames');
   }
 
-  public getBlogEntries(): Observable<BlogEntry[]> {
-    return this.http.get<BlogEntry[]>(
-      this.baseUrl + 'blogentry/list/' + this.currentYear
+  public getBlogEntries(year: number): Observable<BlogEntry[]> {
+    return this.http.get<BlogEntry[]>(this.baseUrl + 'blogentry/list/' + year);
+  }
+
+  public addPlayoffSchool(req: PlayoffSchoolRequest): Observable<any> {
+    return this.http.post<PlayoffPickRequest>(
+      this.baseUrl + 'playoffschool/add',
+      req
     );
   }
 
   public getBowlPicks(bowlId: string): Observable<BowlPick[]> {
     return this.http.get<BowlPick[]>(this.baseUrl + 'bowlpicks/' + bowlId);
+  }
+
+  public getPlayoffSchools(year: number) {
+    return this.http.get<PlayoffSchool[]>(
+      this.baseUrl + 'playoffschool/list/' + year
+    );
   }
 }

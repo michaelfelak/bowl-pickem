@@ -14,7 +14,7 @@
           {{ bowl.game_time | date:"MMM dd - h:mm a"}}
         </td>
         <td class="team-name" style="background-color: lightyellow;">
-          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id)">
+          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id!)">
             {{ bowl.bowl_name }}
           </button>
         </td>
@@ -31,7 +31,7 @@
           {{ bowl.game_time | date:"MMM dd - h:mm a"}}
         </td>
         <td class="team-name">
-          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id)">
+          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id!)">
             {{ bowl.bowl_name }}
           </button>
         </td>
@@ -58,7 +58,7 @@
           {{ bowl.game_time | date:"MMM dd - h:mm a"}}
         </td>
         <td class="team-name">
-          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id)">
+          <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id!)">
             {{ bowl.bowl_name }}
           </button>
         </td>
