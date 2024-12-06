@@ -6,17 +6,27 @@ import {
   Game,
   Entry,
   PickModel,
-  GameResultModel
+  GameResultModel,
 } from '../../shared/services/bowl.model';
-import { SkyAppConfig } from '@skyux/config';
 import { mergeMap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
-import { FormArray, FormBuilder, FormControl } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { SkyRepeaterModule } from '@skyux/lists';
+import { SettingsService } from 'src/app/shared/services/settings.service';
 
 @Component({
-  selector: 'update-scores',
+  standalone: true,
+  selector: 'app-update-scores',
+  imports: [CommonModule, ReactiveFormsModule, SkyRepeaterModule],
+  providers: [SettingsService],
   templateUrl: './update-scores.component.html',
-  styleUrls: ['./update-scores.component.scss']
+  styleUrls: ['./update-scores.component.scss'],
 })
 export class UpdateScoresComponent implements OnInit {
   public games: Game[] = [];
@@ -34,10 +44,15 @@ export class UpdateScoresComponent implements OnInit {
     return this.scoresForm.get('games') as FormArray;
   }
 
-  constructor(private svc: BowlService, private formBuilder: FormBuilder) { }
+  constructor(
+    private svc: BowlService,
+    private formBuilder: FormBuilder,
+    private settings: SettingsService
+  ) {}
 
   public ngOnInit() {
     this.refresh();
+    console.log(this.settings.currentYear);
   }
 
   public refresh() {
@@ -46,33 +61,32 @@ export class UpdateScoresComponent implements OnInit {
       .pipe(
         mergeMap((result: School[]) => {
           this.schools = result;
-          return this.svc.getGames('2024');
+          return this.svc.getGames(this.settings.currentYear);
         }),
         mergeMap((result: Game[]) => {
           this.games = result;
-          return this.svc.getEntries();
+          return this.svc.getEntries(this.settings.currentYear);
         }),
         mergeMap((result: Entry[]) => {
           this.entries = result;
-          return this.svc.getGameResults(
-            '2024'
-          );
+          return this.svc.getGameResults(this.settings.currentYear);
         }),
         mergeMap((result: GameResultModel[]) => {
           this.gameResults = result;
 
           this.gameResults.forEach((result) => {
-
-            this.gamesFormArray.push(this.formBuilder.group({
-              gameId: new FormControl(result.game_id),
-              team1name: new FormControl(result.team_1_name),
-              team2name: new FormControl(result.team_2_name),
-              bowlName: new FormControl(result.bowl_name),
-              gameTime: new FormControl(result.game_time),
-              score1: new FormControl(result.score_1),
-              score2: new FormControl(result.score_2),
-            }))
-          })
+            this.gamesFormArray.push(
+              this.formBuilder.group({
+                gameId: new FormControl(result.game_id),
+                team1name: new FormControl(result.team_1_name),
+                team2name: new FormControl(result.team_2_name),
+                bowlName: new FormControl(result.bowl_name),
+                gameTime: new FormControl(result.game_time),
+                score1: new FormControl(result.score_1),
+                score2: new FormControl(result.score_2),
+              })
+            );
+          });
 
           return this.svc.getBowlList();
         })
@@ -94,37 +108,35 @@ export class UpdateScoresComponent implements OnInit {
         return school.ID === id;
       })[0];
     }
-    return new School();
+    return {} as School;
   }
 
   public buildPicks() {
     if (this.games && this.bowls) {
       this.games.forEach((game: Game) => {
-        let p: PickModel = new PickModel();
+        const p = {} as PickModel;
         p.game_id = game.ID;
-        p.team_1_name = this.getSchoolFromID(game.School1ID).Name;
-        p.team_2_name = this.getSchoolFromID(game.School2ID).Name;
-        let bowl = this.getBowlFromID(game.BowlID);
+        p.team_1_name = this.getSchoolFromID(game.School1ID!).Name;
+        p.team_2_name = this.getSchoolFromID(game.School2ID!).Name;
+        const bowl = this.getBowlFromID(game.BowlID);
         // p.team_1 = false;
         // p.team_2 = false;
         p.bowl_name = bowl.name;
         p.game_time = dayjs(game.GameTime).format('MM/DD/YYYY');
         // p.points = 1;
         this.picks.push(p);
-
-
       });
     }
   }
 
   public updateBowlScore(id: string) {
-    let gameA = this.gamesFormArray.value.find((game: any) => {
+    const gameA = this.gamesFormArray.value.find((game: any) => {
       return game.gameId === id;
-    })
+    });
     let score1 = gameA.score1;
     let score2 = gameA.score2;
 
-    let r = new GameResultModel();
+    const r = {} as GameResultModel;
     r.game_id = id;
     if (!score1) {
       score1 = 0;
@@ -134,7 +146,7 @@ export class UpdateScoresComponent implements OnInit {
     }
     r.score_1 = score1;
     r.score_2 = score2;
-    let game = this.getGameFromID(id);
+    const game = this.getGameFromID(id);
     if (score1 > score2) {
       r.winning_school_id = game.School1ID;
       r.losing_school_id = game.School2ID;

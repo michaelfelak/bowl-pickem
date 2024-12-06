@@ -5,22 +5,27 @@ import { BowlService } from '../shared/services/bowl.service';
 import {
   SkyFlyoutService,
   SkyFlyoutInstance,
-  SkyFlyoutConfig
+  SkyFlyoutConfig,
 } from '@skyux/flyout';
 import { StandingsFlyoutComponent } from './standings-flyout/standings-flyout.component';
 import { StandingsFlyoutContext } from './standings-flyout/standings-flyout.context';
-import { SkyWaitService } from '@skyux/indicators';
-import { SkyAppConfig } from '@skyux/config';
+import { SkyIconModule, SkyWaitService } from '@skyux/indicators';
+import { SkyDropdownModule } from '@skyux/popovers';
+import { CommonModule } from '@angular/common';
+import { SettingsService } from '../shared/services/settings.service';
 
 @Component({
+  standalone: true,
   selector: 'app-standings',
+  imports: [CommonModule, SkyDropdownModule, SkyIconModule],
+  providers: [SettingsService],
   templateUrl: './standings.component.html',
-  styleUrls: ['./standings.component.scss']
+  styleUrls: ['./standings.component.scss'],
 })
 export class StandingsComponent implements OnInit {
   public standings: StandingsEntry[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
-  public showStandingsLink: boolean = true; // this shows the flyout links, only enable after bowls start
+  public showStandingsLink = true; // this shows the flyout links, only enable after bowls start
   public currentYear!: number;
   public years: number[] = [2024, 2023, 2022, 2021, 2020, 2019];
 
@@ -39,7 +44,7 @@ export class StandingsComponent implements OnInit {
     private svc: BowlService,
     private flyoutService: SkyFlyoutService,
     private waitSvc: SkyWaitService,
-    private config: SkyAppConfig
+    private settings: SettingsService
   ) {}
 
   public ngOnInit() {
@@ -63,11 +68,11 @@ export class StandingsComponent implements OnInit {
     if (this.standings) {
       this.standings = this.standings.sort(
         (a: StandingsEntry, b: StandingsEntry) => {
-          if (a.current_points > b.current_points) {
+          if (a.current_points! > b.current_points!) {
             return -1;
           }
 
-          if (a.current_points < b.current_points) {
+          if (a.current_points! < b.current_points!) {
             return 1;
           }
 
@@ -87,22 +92,22 @@ export class StandingsComponent implements OnInit {
           nextRank += 1;
           entry.rank = rank;
         }
-        lastPoints = entry.current_points;
+        lastPoints = entry.current_points!;
       });
     }
   }
 
   public onNameClick(id: number) {
-    let record: StandingsFlyoutContext = new StandingsFlyoutContext();
+    const record: StandingsFlyoutContext = new StandingsFlyoutContext();
     record.entryId = id.toString();
     const flyoutConfig: SkyFlyoutConfig = {
       providers: [
         {
           provide: StandingsFlyoutContext,
-          useValue: record
-        }
+          useValue: record,
+        },
       ],
-      defaultWidth: 500
+      defaultWidth: 500,
     };
     this.flyout = this.flyoutService.open(
       StandingsFlyoutComponent,
@@ -130,11 +135,11 @@ export class StandingsComponent implements OnInit {
     if (this.standings) {
       if (this.currentPointsDesc) {
         this.standings.sort((a: StandingsEntry, b: StandingsEntry) => {
-          return a.current_points > b.current_points ? -1 : 1;
+          return a.current_points! > b.current_points! ? -1 : 1;
         });
       } else {
         this.standings.sort((a: StandingsEntry, b: StandingsEntry) => {
-          return a.current_points < b.current_points ? -1 : 1;
+          return a.current_points! < b.current_points! ? -1 : 1;
         });
       }
     }
@@ -151,11 +156,11 @@ export class StandingsComponent implements OnInit {
     if (this.standings) {
       if (this.correctPicksDesc) {
         this.standings.sort((a: StandingsEntry, b: StandingsEntry) => {
-          return a.correct_picks > b.correct_picks ? -1 : 1;
+          return a.correct_picks! > b.correct_picks! ? -1 : 1;
         });
       } else {
         this.standings.sort((a: StandingsEntry, b: StandingsEntry) => {
-          return a.correct_picks < b.correct_picks ? -1 : 1;
+          return a.correct_picks! < b.correct_picks! ? -1 : 1;
         });
       }
     }
@@ -172,11 +177,11 @@ export class StandingsComponent implements OnInit {
     if (this.standings) {
       if (this.remainingPointsDesc) {
         this.standings.sort((a: StandingsEntry, b: StandingsEntry) => {
-          return a.remaining_points > b.remaining_points ? -1 : 1;
+          return a.remaining_points! > b.remaining_points! ? -1 : 1;
         });
       } else {
         this.standings.sort((a: StandingsEntry, b: StandingsEntry) => {
-          return a.remaining_points < b.remaining_points ? -1 : 1;
+          return a.remaining_points! < b.remaining_points! ? -1 : 1;
         });
       }
     }
@@ -192,11 +197,11 @@ export class StandingsComponent implements OnInit {
     if (this.standings) {
       if (this.possiblePointsDesc) {
         this.standings.sort((a: StandingsEntry, b: StandingsEntry) => {
-          return a.possible_points > b.possible_points ? -1 : 1;
+          return a.possible_points! > b.possible_points! ? -1 : 1;
         });
       } else {
         this.standings.sort((a: StandingsEntry, b: StandingsEntry) => {
-          return a.possible_points < b.possible_points ? -1 : 1;
+          return a.possible_points! < b.possible_points! ? -1 : 1;
         });
       }
     }

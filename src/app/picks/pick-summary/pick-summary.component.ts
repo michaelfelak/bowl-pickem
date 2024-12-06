@@ -1,7 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { SkyAlertModule, SkyKeyInfoModule } from '@skyux/indicators';
 
 @Component({
-  selector: 'pick-summary',
+  standalone: true,
+  selector: 'app-pick-summary',
+  imports: [CommonModule, SkyAlertModule, SkyKeyInfoModule],
   templateUrl: './pick-summary.component.html',
   styleUrls: ['./pick-summary.component.scss']
 })

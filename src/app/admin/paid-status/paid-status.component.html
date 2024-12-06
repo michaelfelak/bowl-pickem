@@ -30,7 +30,7 @@
             {{ entry.created_date | date: "short" }}
           </td>
           <td class="team-check">
-            <button type="button" (click)="togglePaid(entry.id)">Mark</button>
+            <button type="button" (click)="togglePaid(entry.id!)">Mark</button>
           </td>
           <td class="team-check">
             <sky-icon
@@ -51,7 +51,7 @@
             {{ entry.email }}
           </td>
           <td class="team-name">
-            <button type="button" (click)="deleteEntry(entry.id)">
+            <button type="button" (click)="deleteEntry(entry.id!)">
               Delete
             </button>
           </td>

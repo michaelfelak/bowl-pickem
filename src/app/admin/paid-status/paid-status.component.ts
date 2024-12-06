@@ -5,23 +5,31 @@ import { mergeMap } from 'rxjs/operators';
 import {
   SkyConfirmInstance,
   SkyConfirmService,
-  SkyConfirmType
+  SkyConfirmType,
 } from '@skyux/modals';
+import { CommonModule } from '@angular/common';
+import { SkyIconModule } from '@skyux/indicators';
+import { SkyRepeaterModule } from '@skyux/lists';
+import { SettingsService } from 'src/app/shared/services/settings.service';
 
 @Component({
-  selector: 'paid-status',
+  standalone: true,
+  selector: 'app-paid-status',
+  imports: [CommonModule, SkyIconModule, SkyRepeaterModule],
+  providers: [SettingsService],
   templateUrl: './paid-status.component.html',
-  styleUrls: ['./paid-status.component.scss']
+  styleUrls: ['./paid-status.component.scss'],
 })
 export class PaidStatusComponent implements OnInit {
   public entries: Entry[] = [];
-  public numUnpaidEntries: number = 0;
-  public numPaidEntries: number = 0;
+  public numUnpaidEntries = 0;
+  public numPaidEntries = 0;
   public selectedAction: any;
   public selectedText: any;
   constructor(
     private svc: BowlService,
-    private confirmService: SkyConfirmService
+    private confirmService: SkyConfirmService,
+    private settings: SettingsService
   ) {}
 
   public ngOnInit() {
@@ -29,16 +37,13 @@ export class PaidStatusComponent implements OnInit {
   }
 
   public refresh() {
-    this.svc.getEntries().subscribe(
-      (result: Entry[]) => {
+    this.svc
+      .getEntries(this.settings.currentYear)
+      .subscribe((result: Entry[]) => {
         this.entries = result;
         this.sortEntriesByPaidStatus();
         this.calculatePaidTotal();
-      },
-      (err: Error) => {
-        console.log('error reaching the web service: ', err);
-      }
-    );
+      });
   }
 
   // sorts entries by paid status, unpaid then paid
@@ -54,8 +59,8 @@ export class PaidStatusComponent implements OnInit {
     this.svc
       .togglePaid(id)
       .pipe(
-        mergeMap((result: any) => {
-          return this.svc.getEntries();
+        mergeMap(() => {
+          return this.svc.getEntries(this.settings.currentYear);
         })
       )
       .subscribe((result: Entry[]) => {
@@ -69,7 +74,7 @@ export class PaidStatusComponent implements OnInit {
     const dialog: SkyConfirmInstance = this.confirmService.open({
       message: 'Delete entry ' + id,
       body: 'Are you sure you want to delete this entry?',
-      type: SkyConfirmType.YesCancel
+      type: SkyConfirmType.YesCancel,
     });
 
     dialog.closed.subscribe((result: any) => {

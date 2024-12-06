@@ -1,139 +1,160 @@
-import { Component, OnInit, Input, inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BowlService } from '../shared/services/bowl.service';
 import {
   Game,
   School,
   PickModel,
   Bowl,
+  EntryRequest,
   PickRequest,
-  EntryRequest
+  PlayoffSchool,
 } from '../shared/services/bowl.model';
 import { Title } from '@angular/platform-browser';
-import { SkyWaitService } from '@skyux/indicators';
-import { SkyAppConfig } from '@skyux/config';
+import {
+  SkyAlertModule,
+  SkyIconModule,
+  SkyWaitService,
+} from '@skyux/indicators';
 import { mergeMap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
-import { FormGroup, FormControl, FormBuilder, FormArray, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormBuilder,
+  FormArray,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { PicksCompletedComponent } from './picks-completed/picks-completed.component';
+import { PickSummaryComponent } from './pick-summary/pick-summary.component';
+import { CommonModule } from '@angular/common';
+import { SkyCheckboxModule, SkyInputBoxModule } from '@skyux/forms';
+import { SettingsService } from '../shared/services/settings.service';
 
 @Component({
+  standalone: true,
   selector: 'app-picks',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PicksCompletedComponent,
+    PickSummaryComponent,
+    SkyAlertModule,
+    SkyCheckboxModule,
+    SkyIconModule,
+    SkyInputBoxModule,
+  ],
+  providers: [SettingsService],
   templateUrl: './picks.component.html',
-  styleUrls: ['./picks.component.scss']
+  styleUrls: ['./picks.component.scss'],
 })
 export class PicksComponent implements OnInit {
   public schools: School[] = [];
+  public playoffSchools: PlayoffSchool[] = [];
   private games: Game[] = [];
   private bowls: Bowl[] = [];
   @Input() public picks: PickModel[] = [];
   @Input() public allPicks: PickModel[] = [];
-  public playoffPicks: PickModel[] = [];
-  public championshipPicks: PickModel[] = [];
-  public allChampionshipPicks: PickModel[] = [];
+  // public playoffPicks: PickModel[] = [];
+  // public championshipPicks: PickModel[] = [];
+  // public allChampionshipPicks: PickModel[] = [];
   public pointValues: number[] = [1, 3, 5];
   public newYearsPointValues: number[] = [1, 3, 5, 10];
-  public threePointError: boolean = false;
-  public fivePointError: boolean = false;
-  public tenPointError: boolean = false;
-  public maxThreePointGames: number = 5;
-  public maxFivePointGames: number = 5;
-  public maxTenPointGames: number = 1;
-  public threePointGames: number = 0;
-  public fivePointGames: number = 0;
-  public tenPointGames: number = 0;
-  public submitted: boolean = false;
-  public ncGame1!: string;
-  public ncGame2!: string;
-  public disableSubmit: boolean = false;
-  public showChampionship: boolean = false;
-  @Input() public name: string = '';
-  @Input() public email: string = '';
+  public threePointError = false;
+  public fivePointError = false;
+  public tenPointError = false;
+  public maxThreePointGames = 5;
+  public maxFivePointGames = 5;
+  public maxTenPointGames = 1;
+  public threePointGames = 0;
+  public fivePointGames = 0;
+  public tenPointGames = 0;
+  public submitted = false;
+  // public ncGame1!: string;
+  // public ncGame2!: string;
+  public disableSubmit = false;
+  // public showChampionship = false;
+  @Input() public name = '';
+  @Input() public email = '';
 
-  public showError: boolean = false;
+  public showError = false;
   public errorMsg!: string;
 
-  public showSubmitError: boolean = false;
+  public showSubmitError = false;
   public submitErrorMsg!: string;
 
   public tiebreakerPicks: PickModel[] = [];
-  @Input() public tiebreaker1: string = 'Select a Game';
+  @Input() public tiebreaker1 = 'Select a Game';
   public tiebreaker1Id!: number;
-  @Input() public tiebreaker2: number = 0;
-  public isLoading: boolean = true;
+  @Input() public tiebreaker2 = 0;
+  public isLoading = true;
 
   pickForm = this.formBuilder.group({
     name: new FormControl(''),
     email: new FormControl(''),
     newpicks: new FormArray([]),
     tiebreaker1Id: new FormControl(0),
-    tiebreaker2: new FormControl(0)
+    tiebreaker2: new FormControl(0),
+    playoff1: new FormControl(''),
+    playoff2: new FormControl(''),
   });
 
-  playoffPickForm = this.formBuilder.group({
-    playoffPicks: new FormArray([])
-  })
+  // playoffPickForm = this.formBuilder.group({
+  //   playoffPicks: new FormArray([]),
+  // });
 
-  championshipPickForm = this.formBuilder.group({
-    championshipPicks: new FormArray([])
-  })
+  // championshipPickForm = this.formBuilder.group({
+  //   championshipPicks: new FormArray([]),
+  // });
 
   tiebreakerForm = this.formBuilder.group({
     tiebreaker1Id: new FormControl(0),
-    tiebreaker2: new FormControl(0)
-  })
+    tiebreaker2: new FormControl(0),
+  });
 
   get pickFormArray(): FormArray {
     return this.pickForm.get('newpicks') as FormArray;
   }
-  get playoffPickFormArray(): FormArray {
-    return this.playoffPickForm.get('playoffPicks') as FormArray;
-  }
-  get championshipPickFormArray(): FormArray {
-    return this.championshipPickForm.get('championshipPicks') as FormArray;
-  }
+  // get playoffPickFormArray(): FormArray {
+  //   return this.playoffPickForm.get('playoffPicks') as FormArray;
+  // }
+  // get championshipPickFormArray(): FormArray {
+  //   return this.championshipPickForm.get('championshipPicks') as FormArray;
+  // }
 
-  hasChange: boolean = false;
+  hasChange = false;
 
   constructor(
     private svc: BowlService,
     private waitSvc: SkyWaitService,
     private titleService: Title,
-    private formBuilder: FormBuilder
-  ) { }
+    private formBuilder: FormBuilder,
+    private settings: SettingsService
+  ) {}
 
   onChanges(): void {
-    this.pickForm.valueChanges.subscribe(val => {
+    this.pickForm.valueChanges.subscribe(() => {
       if (!this.isLoading) {
         this.validateBonusPoints();
         this.calculateTotalPoints();
       }
     });
-    this.playoffPickForm.valueChanges.subscribe(val => {
-      if (!this.isLoading) {
-        this.buildChampionshipGame();
-
-        this.validateBonusPoints();
-        this.calculateTotalPoints();
-      }
-    });
-    this.championshipPickForm.valueChanges.subscribe(val => {
+    this.tiebreakerForm.valueChanges.subscribe(() => {
       if (!this.isLoading) {
         this.validateBonusPoints();
         this.calculateTotalPoints();
       }
     });
-    this.tiebreakerForm.valueChanges.subscribe(val => {
-      if (!this.isLoading) {
-        this.validateBonusPoints();
-        this.calculateTotalPoints();
-      }
-    })
-
   }
 
   public ngOnInit() {
     this.onChanges();
     this.titleService.setTitle("Bowl Pick'em - Submit Entry");
     this.waitSvc.beginNonBlockingPageWait();
+
+    this.svc
+      .getPlayoffSchools(this.settings.currentYear)
+      .subscribe((result) => {
+        this.playoffSchools = result;
+      });
 
     // get schools, games, and bowls to make up the list
     this.svc
@@ -142,7 +163,7 @@ export class PicksComponent implements OnInit {
         mergeMap((result: School[]) => {
           this.schools = result;
           this.errorMsg = 'get schools';
-          return this.svc.getGames('2024');
+          return this.svc.getGames(this.settings.currentYear);
         }),
         mergeMap((result: Game[]) => {
           this.games = result;
@@ -156,52 +177,57 @@ export class PicksComponent implements OnInit {
           this.bowls = result;
           this.buildPicks();
           this.picks.forEach((pick) => {
-            this.pickFormArray.push(this.formBuilder.group({
-              team1picked: new FormControl(false),
-              team2picked: new FormControl(false),
-              points: new FormControl(1),
-              team1name: new FormControl(pick.team_1_name),
-              team2name: new FormControl(pick.team_2_name),
-              gameId: new FormControl(pick.game_id),
-              gameTime: new FormControl(pick.game_time),
-              bowlName: new FormControl(pick.bowl_name)
-            }))
+            this.pickFormArray.push(
+              this.formBuilder.group({
+                team1picked: new FormControl(false),
+                team2picked: new FormControl(false),
+                points: new FormControl(1),
+                team1name: new FormControl(pick.team_1_name),
+                team2name: new FormControl(pick.team_2_name),
+                gameId: new FormControl(pick.game_id),
+                gameTime: new FormControl(pick.game_time),
+                bowlName: new FormControl(pick.bowl_name),
+              })
+            );
           });
 
-          this.playoffPicks.forEach((pick) => {
-            this.playoffPickFormArray.push(this.formBuilder.group({
-              team1picked: new FormControl(false),
-              team2picked: new FormControl(false),
-              points: new FormControl(1),
-              team1name: new FormControl(pick.team_1_name),
-              team2name: new FormControl(pick.team_2_name),
-              gameId: new FormControl(pick.game_id),
-              isPlayoff: new FormControl(true),
-              gameTime: new FormControl(pick.game_time),
-              bowlName: new FormControl(pick.bowl_name)
-            }))
-          });
+          // this.playoffPicks.forEach((pick) => {
+          //   this.playoffPickFormArray.push(
+          //     this.formBuilder.group({
+          //       team1picked: new FormControl(false),
+          //       team2picked: new FormControl(false),
+          //       points: new FormControl(1),
+          //       team1name: new FormControl(pick.team_1_name),
+          //       team2name: new FormControl(pick.team_2_name),
+          //       gameId: new FormControl(pick.game_id),
+          //       isPlayoff: new FormControl(true),
+          //       gameTime: new FormControl(pick.game_time),
+          //       bowlName: new FormControl(pick.bowl_name),
+          //     })
+          //   );
+          // });
 
-
-          this.allChampionshipPicks.forEach((pick) => {
-            this.championshipPickFormArray.push(this.formBuilder.group({
-              team1picked: new FormControl(false),
-              team2picked: new FormControl(false),
-              points: new FormControl(1),
-              team1name: new FormControl(pick.team_1_name),
-              team2name: new FormControl(pick.team_2_name),
-              gameId: new FormControl(pick.game_id),
-              isChampionship: new FormControl(true),
-              gameTime: new FormControl(pick.game_time),
-              bowlName: new FormControl(pick.bowl_name)
-            }))
-          });
+          // this.allChampionshipPicks.forEach((pick) => {
+          //   this.championshipPickFormArray.push(
+          //     this.formBuilder.group({
+          //       team1picked: new FormControl(false),
+          //       team2picked: new FormControl(false),
+          //       points: new FormControl(1),
+          //       team1name: new FormControl(pick.team_1_name),
+          //       team2name: new FormControl(pick.team_2_name),
+          //       gameId: new FormControl(pick.game_id),
+          //       isChampionship: new FormControl(true),
+          //       gameTime: new FormControl(pick.game_time),
+          //       bowlName: new FormControl(pick.bowl_name),
+          //     })
+          //   );
+          // });
 
           this.errorMsg = 'get bowl list';
           this.waitSvc.endNonBlockingPageWait();
           this.isLoading = false;
         },
-        (err: Error) => {
+        () => {
           this.errorMsg =
             'An error occurred, please e-mail toastysolutions@gmail.com to inform us of the outage: ' +
             this.errorMsg;
@@ -217,7 +243,7 @@ export class PicksComponent implements OnInit {
   }
 
   public submit() {
-    let isTesting = this.pickForm.value.name === 'test' && this.pickForm.value.name === 'test';
+    const isTesting = this.pickForm.value.name === 'test';
 
     this.showSubmitError = false;
     this.submitErrorMsg = '';
@@ -227,17 +253,20 @@ export class PicksComponent implements OnInit {
         this.showSubmitError = true;
         return;
       }
-      if (!this.pickForm.value.email || this.pickForm.value.email.indexOf('@') === -1) {
+      if (
+        !this.pickForm.value.email ||
+        this.pickForm.value.email.indexOf('@') === -1
+      ) {
         this.submitErrorMsg = 'You must enter a valid e-mail address.';
         this.showSubmitError = true;
         return;
       }
-      if (this.allChampionshipPicks && !this.showChampionship) {
-        this.submitErrorMsg =
-          'You must select the winners of the championship game.';
-        this.showSubmitError = true;
-        return;
-      }
+      // if (this.allChampionshipPicks && !this.showChampionship) {
+      //   this.submitErrorMsg =
+      //     'You must select the winners of the championship game.';
+      //   this.showSubmitError = true;
+      //   return;
+      // }
       if (!this.validatePicks()) {
         this.submitErrorMsg = 'You must make a selection for each bowl game.';
         this.showSubmitError = true;
@@ -271,8 +300,9 @@ export class PicksComponent implements OnInit {
 
       this.pickFormArray.value.forEach((element: any) => {
         if (element.team1picked === element.team2picked) {
-          this.submitErrorMsg = 'Check your picks! You have either missed a game or checked both teams as the winner'
-          this.showSubmitError;
+          this.submitErrorMsg =
+            'Check your picks! You have either missed a game or checked both teams as the winner';
+          this.showSubmitError = true;
         }
       });
 
@@ -282,23 +312,26 @@ export class PicksComponent implements OnInit {
     }
 
     this.disableSubmit = true;
-    let r: EntryRequest = {
+    const r: EntryRequest = {
       Email: this.pickForm.value.email as string,
       Name: this.pickForm.value.name as string,
       Tiebreaker1: this.tiebreakerForm.value.tiebreaker1Id as number,
       Tiebreaker2: this.tiebreakerForm.value.tiebreaker2 as number,
       IsTesting: isTesting,
-      Year: 2024
+      Year: this.settings.currentYear,
     };
+
+    let entryId: string;
     this.svc
       .addEntry(r)
       .pipe(
         mergeMap((returnEntryId: string) => {
-          let pickRequest = new PickRequest();
-          let allPicks: PickModel[] = [];
+          entryId = returnEntryId;
+          const pickRequest = {} as PickRequest;
+          const allPicks: PickModel[] = [];
 
           this.pickForm.value.newpicks!.forEach((pick: any) => {
-            let newPick: PickModel = new PickModel();
+            const newPick: PickModel = {};
             newPick.entry_id = returnEntryId;
             newPick.game_id = pick.gameId;
             newPick.team_1 = pick.team1picked;
@@ -320,59 +353,23 @@ export class PicksComponent implements OnInit {
             }
             allPicks.push(newPick);
           });
-
-          this.playoffPickForm.value.playoffPicks!.forEach((pick: any) => {
-            let newPick: PickModel = new PickModel();
-            newPick.entry_id = returnEntryId;
-            newPick.game_id = pick.gameId;
-            newPick.team_1 = pick.team1picked;
-            newPick.team_2 = pick.team2picked;
-            newPick.points = pick.points;
-            newPick.is_playoff = true;
-            newPick.team_1_name = pick.team1name;
-            newPick.team_2_name = pick.team2name;
-            newPick.game_time = pick.gameTime;
-            newPick.bowl_name = pick.bowlName;
-
-            if (pick.team1picked) {
-              newPick.picked_school_id = this.getSchoolFromName(
-                pick.team1name
-              ).ID;
-            } else {
-              newPick.picked_school_id = this.getSchoolFromName(
-                pick.team2name
-              ).ID;
-            }
-            allPicks.push(newPick);
-          });
-
-          let champPick = this.championshipPickForm.value.championshipPicks![0] as any;
-          let newPick = this.championshipPicks[0];
-
-          newPick.entry_id = returnEntryId;
-          newPick.team_1 = champPick.team1picked;
-          newPick.team_2 = champPick.team2picked;
-          newPick.points = champPick.points;
-          newPick.is_championship = true;
-
-          if (newPick.team_1) {
-            newPick.picked_school_id = this.getSchoolFromName(
-              newPick.team_1_name
-            ).ID;
-          } else {
-            newPick.picked_school_id = this.getSchoolFromName(
-              newPick.team_2_name
-            ).ID;
-          }
-          allPicks.push(newPick);
 
           pickRequest.picks = allPicks;
 
           this.allPicks = allPicks;
           return this.svc.submit(pickRequest);
+        }),
+        mergeMap(() => {
+          // submit playoff picks
+          // console.log(result);
+          return this.svc.addPlayoffPicks({
+            playoff_picks: [
+              { entry_id: entryId.toString(), school1_id: 1, school2_id: 2 },
+            ],
+          });
         })
       )
-      .subscribe((pickresult: any) => {
+      .subscribe(() => {
         this.calculateTotalPoints();
         this.disableSubmit = false;
         this.submitted = true;
@@ -385,26 +382,26 @@ export class PicksComponent implements OnInit {
   public buildPicks() {
     if (this.games && this.bowls) {
       this.games.forEach((game: Game) => {
-        let p: PickModel = new PickModel();
+        const p: PickModel = {};
         p.game_id = game.ID;
-        p.team_1_name = this.getSchoolFromID(game.School1ID);
-        p.team_2_name = this.getSchoolFromID(game.School2ID);
-        let bowl = this.getBowlFromID(game.BowlID);
+        p.team_1_name = this.getSchoolFromID(game.School1ID!);
+        p.team_2_name = this.getSchoolFromID(game.School2ID!);
+        const bowl = this.getBowlFromID(game.BowlID);
         p.team_1 = false;
         p.team_2 = false;
         p.bowl_name = bowl.name;
         p.game_time = dayjs(game.GameTime).format('MM/DD/YYYY hh:mm:ss');
-        p.is_new_years_game = this.isBonusGame(game, bowl.name);
+        p.is_new_years_game = this.isBonusGame(game, bowl.name!);
         p.points = 1;
         p.is_playoff = game.IsPlayoff;
         p.is_championship = game.IsChampionship;
-        if (p.is_playoff) {
-          this.playoffPicks.push(p);
-        } else if (p.is_championship) {
-          this.allChampionshipPicks.push(p);
-        } else {
-          this.picks.push(p);
-        }
+        // if (p.is_playoff) {
+        //   this.playoffPicks.push(p);
+        // } else if (p.is_championship) {
+        //   this.allChampionshipPicks.push(p);
+        // } else {
+        this.picks.push(p);
+        // }
         this.tiebreakerPicks.push(p);
       });
     }
@@ -418,85 +415,101 @@ export class PicksComponent implements OnInit {
     });
   }
 
-  public sortChampionshipPicks() {
-    if (this.allChampionshipPicks) {
-      this.allChampionshipPicks.sort((a: PickModel, b: PickModel) => {
-        return +new Date(a.game_id) - +new Date(b.game_id);
-      });
-    }
-  }
+  // public sortChampionshipPicks() {
+  //   if (this.allChampionshipPicks) {
+  //     this.allChampionshipPicks.sort((a: PickModel, b: PickModel) => {
+  //       return +new Date(a.game_id!) - +new Date(b.game_id!);
+  //     });
+  //   }
+  // }
 
-  public buildChampionshipGame() {
-    this.championshipPicks = [];
-    this.sortChampionshipPicks();
+  // public buildChampionshipGame() {
+  //   this.championshipPicks = [];
+  //   this.sortChampionshipPicks();
 
-    if (this.playoffPickFormArray.value[0].team1picked && this.playoffPickFormArray.value[1].team1picked) {
-      this.championshipPicks.push(
-        this.getChampionshipGame(
-          this.playoffPickFormArray.value[0].team1name,
-          this.playoffPickFormArray.value[1].team1name
-        )
-      );
-      this.resetPicks(0, 2, 3);
-    } else if (this.playoffPickFormArray.value[0].team1picked && this.playoffPickFormArray.value[1].team2picked) {
-      this.championshipPicks.push(
-        this.getChampionshipGame(
-          this.playoffPickFormArray.value[0].team1name,
-          this.playoffPickFormArray.value[1].team2name
-        )
-      );
-      this.resetPicks(1, 2, 3);
-    } else if (this.playoffPickFormArray.value[0].team2picked && this.playoffPickFormArray.value[1].team2picked) {
-      this.championshipPicks.push(
-        this.getChampionshipGame(
-          this.playoffPickFormArray.value[0].team2name,
-          this.playoffPickFormArray.value[1].team2name
-        )
-      );
-      this.resetPicks(0, 1, 2);
-    } else if (this.playoffPickFormArray.value[0].team2picked && this.playoffPickFormArray.value[1].team1picked) {
-      this.championshipPicks.push(
-        this.getChampionshipGame(
-          this.playoffPickFormArray.value[0].team2name,
-          this.playoffPickFormArray.value[1].team1name
-        )
-      );
-      this.resetPicks(0, 1, 3);
-    } else {
-    }
+  //   if (
+  //     this.playoffPickFormArray.value[0].team1picked &&
+  //     this.playoffPickFormArray.value[1].team1picked
+  //   ) {
+  //     this.championshipPicks.push(
+  //       this.getChampionshipGame(
+  //         this.playoffPickFormArray.value[0].team1name,
+  //         this.playoffPickFormArray.value[1].team1name
+  //       )
+  //     );
+  //     this.resetPicks(0, 2, 3);
+  //   } else if (
+  //     this.playoffPickFormArray.value[0].team1picked &&
+  //     this.playoffPickFormArray.value[1].team2picked
+  //   ) {
+  //     this.championshipPicks.push(
+  //       this.getChampionshipGame(
+  //         this.playoffPickFormArray.value[0].team1name,
+  //         this.playoffPickFormArray.value[1].team2name
+  //       )
+  //     );
+  //     this.resetPicks(1, 2, 3);
+  //   } else if (
+  //     this.playoffPickFormArray.value[0].team2picked &&
+  //     this.playoffPickFormArray.value[1].team2picked
+  //   ) {
+  //     this.championshipPicks.push(
+  //       this.getChampionshipGame(
+  //         this.playoffPickFormArray.value[0].team2name,
+  //         this.playoffPickFormArray.value[1].team2name
+  //       )
+  //     );
+  //     this.resetPicks(0, 1, 2);
+  //   } else if (
+  //     this.playoffPickFormArray.value[0].team2picked &&
+  //     this.playoffPickFormArray.value[1].team1picked
+  //   ) {
+  //     this.championshipPicks.push(
+  //       this.getChampionshipGame(
+  //         this.playoffPickFormArray.value[0].team2name,
+  //         this.playoffPickFormArray.value[1].team1name
+  //       )
+  //     );
+  //     this.resetPicks(0, 1, 3);
+  //   }
 
-    let game1selected: boolean =
-      this.playoffPickFormArray.value[0].team1picked || this.playoffPickFormArray.value[0].team2picked;
-    let game2selected: boolean =
-      this.playoffPickFormArray.value[1].team1picked || this.playoffPickFormArray.value[1].team2picked;
+  //   const game1selected: boolean =
+  //     this.playoffPickFormArray.value[0].team1picked ||
+  //     this.playoffPickFormArray.value[0].team2picked;
+  //   const game2selected: boolean =
+  //     this.playoffPickFormArray.value[1].team1picked ||
+  //     this.playoffPickFormArray.value[1].team2picked;
 
-    this.showChampionship = game1selected && game2selected;
-  }
+  //   this.showChampionship = game1selected && game2selected;
+  // }
 
   public validatePicks(): boolean {
-    if (this.pickForm.value.name === 'test' && this.pickForm.value.email === 'test') {
+    if (
+      this.pickForm.value.name === 'test' &&
+      this.pickForm.value.email === 'test'
+    ) {
       return true;
     }
-    let isValid: boolean = true;
+    let isValid = true;
     this.pickFormArray.value.forEach((pick: any) => {
       if (pick.team1picked === pick.team2picked) {
         isValid = false;
       }
     });
-    this.playoffPickFormArray.value.forEach((pick: any) => {
-      if (pick.team1picked === pick.team2picked) {
-        isValid = false;
-      }
-    });
-    let gamesPicked = 0;
-    this.championshipPickFormArray.value.forEach((pick: any) => {
-      if (pick.team1picked !== pick.team2picked) {
-        gamesPicked += 1;
-      }
-    });
-    if (gamesPicked !== 1) {
-      isValid = false;
-    }
+    // this.playoffPickFormArray.value.forEach((pick: any) => {
+    //   if (pick.team1picked === pick.team2picked) {
+    //     isValid = false;
+    //   }
+    // });
+    // let gamesPicked = 0;
+    // this.championshipPickFormArray.value.forEach((pick: any) => {
+    //   if (pick.team1picked !== pick.team2picked) {
+    //     gamesPicked += 1;
+    //   }
+    // });
+    // if (gamesPicked !== 1) {
+    //   isValid = false;
+    // }
     return isValid;
   }
 
@@ -507,27 +520,27 @@ export class PicksComponent implements OnInit {
   }
 
   public getSchoolFromID(id: string): string {
-    let schools = this.schools.filter(function (school) {
+    const schools = this.schools.filter(function (school) {
       return school.ID === id;
     });
     if (schools) {
-      return schools[0].Name;
+      return schools[0]?.Name ?? '';
     }
-    return "";
+    return '';
   }
 
-  public getSchoolFromName(name: string): School {
-    let schools = this.schools.filter(function (school) {
+  public getSchoolFromName(name?: string): School {
+    const schools = this.schools.filter(function (school) {
       return school.Name === name;
     });
     if (schools) {
       return schools[0];
     }
-    return new School();
+    return {} as School;
   }
 
-  public updatePoints(id: string, points: number, type: number) {
-    let item = this.getPickFromId(id, type);
+  public updatePoints(id: string, points: number) {
+    const item = this.getPickFromId(id);
     item.points = points;
 
     // calculate total points
@@ -535,8 +548,8 @@ export class PicksComponent implements OnInit {
     this.calculateTotalPoints();
   }
 
-  public updateSelection(gameId: string, i: number, type: number) {
-    let pick = this.getPickFromId(gameId, type);
+  public updateSelection(gameId?: string, i?: number) {
+    const pick = this.getPickFromId(gameId!);
     if (i === 1) {
       if (pick.team_2) {
         pick.team_2 = false;
@@ -548,54 +561,60 @@ export class PicksComponent implements OnInit {
       }
     }
 
-    if (type === 1) {
-      this.buildChampionshipGame();
-    }
+    // if (type === 1) {
+    //   this.buildChampionshipGame();
+    // }
   }
 
   // only allow a certain amount of 3/5 point games
   public validateBonusPoints(): boolean {
-    let threePointGames = this.pickFormArray.value.filter(function (pick: any) {
-      return pick.points === 3;
-    });
-
-    let threePointPlayoffGames = this.playoffPickFormArray.value.filter(function (pick: any) {
-      return pick.points === 3;
-    });
-
-    let threePointChampionshipGames = this.championshipPickFormArray.value.filter(function (
+    const threePointGames = this.pickFormArray.value.filter(function (
       pick: any
     ) {
       return pick.points === 3;
     });
 
-    let fivePointGames = this.pickFormArray.value.filter(function (pick: any) {
+    // const threePointPlayoffGames = this.playoffPickFormArray.value.filter(
+    //   function (pick: any) {
+    //     return pick.points === 3;
+    //   }
+    // );
+
+    // const threePointChampionshipGames =
+    //   this.championshipPickFormArray.value.filter(function (pick: any) {
+    //     return pick.points === 3;
+    //   });
+
+    const fivePointGames = this.pickFormArray.value.filter(function (
+      pick: any
+    ) {
       return pick.points === 5;
     });
 
-    let tenPointGames = this.pickFormArray.value.filter(function (pick: any) {
+    const tenPointGames = this.pickFormArray.value.filter(function (pick: any) {
       return pick.points === 10;
     });
 
-    let fivePointPlayoffGames = this.playoffPickFormArray.value.filter(function (pick: any) {
-      return pick.points === 5;
-    });
+    // const fivePointPlayoffGames = this.playoffPickFormArray.value.filter(
+    //   function (pick: any) {
+    //     return pick.points === 5;
+    //   }
+    // );
 
-    let fivePointChampionshipGames = this.championshipPickFormArray.value.filter(function (
-      pick: any
-    ) {
-      return pick.points === 5;
-    });
+    // const fivePointChampionshipGames =
+    //   this.championshipPickFormArray.value.filter(function (pick: any) {
+    //     return pick.points === 5;
+    //   });
 
-    let allThreePointGamesLength =
-      threePointGames.length +
-      threePointPlayoffGames.length +
-      threePointChampionshipGames.length;
-    let allFivePointGamesLength =
-      fivePointGames.length +
-      fivePointPlayoffGames.length +
-      fivePointChampionshipGames.length;
-    let allTenPointGamesLength = tenPointGames.length;
+    const allThreePointGamesLength = threePointGames.length;
+    //  +
+    // threePointPlayoffGames.length +
+    // threePointChampionshipGames.length;
+    const allFivePointGamesLength = fivePointGames.length;
+    //  +
+    // fivePointPlayoffGames.length +
+    // fivePointChampionshipGames.length;
+    const allTenPointGamesLength = tenPointGames.length;
 
     if (allThreePointGamesLength > this.maxThreePointGames) {
       this.threePointError = true;
@@ -638,30 +657,31 @@ export class PicksComponent implements OnInit {
   public calculateTotalPoints(): number {
     let totalPoints = 0;
     this.pickFormArray.value.forEach((pick: any) => {
-      if (pick && pick.team1picked || pick.team2picked) {
+      if ((pick && pick.team1picked) || pick.team2picked) {
         totalPoints += pick.points;
       }
     });
-    this.championshipPickFormArray.value.forEach((pick: any) => {
-      if (pick && pick.team1picked || pick.team2picked) {
-        totalPoints += pick.points;
-      }
-    });
-    this.playoffPickFormArray.value.forEach((pick: any) => {
-      if (pick && pick.team1picked || pick.team2picked) {
-        totalPoints += pick.points;
-      }
-    });
+    // this.championshipPickFormArray.value.forEach((pick: any) => {
+    //   if ((pick && pick.team1picked) || pick.team2picked) {
+    //     totalPoints += pick.points;
+    //   }
+    // });
+    // this.playoffPickFormArray.value.forEach((pick: any) => {
+    //   if ((pick && pick.team1picked) || pick.team2picked) {
+    //     totalPoints += pick.points;
+    //   }
+    // });
     return totalPoints;
   }
 
   public selectTiebreaker1(gameId: string) {
-    let pick = this.getPickFromId(gameId, 0);
+    const pick = this.getPickFromId(gameId);
     this.tiebreaker1 = pick.team_1_name + ' vs. ' + pick.team_2_name;
     this.tiebreaker1Id = +gameId;
   }
 
-  private getPickFromId(gameId: string, type: number): PickModel {
+  private getPickFromId(gameId: string): PickModel {
+    // console.log(type);
     return this.tiebreakerPicks.filter(function (pick) {
       return pick.game_id === gameId;
     })[0];
@@ -670,39 +690,40 @@ export class PicksComponent implements OnInit {
   private sortByDate() {
     if (this.games) {
       this.games.sort((a: Game, b: Game) => {
-        return +new Date(a.GameTime) - +new Date(b.GameTime);
+        return +new Date(a.GameTime!) - +new Date(b.GameTime!);
       });
     }
   }
 
-  private resetPicks(id1: number, id2: number, id3: number) {
-    this.allChampionshipPicks[id1].team_1 = false;
-    this.allChampionshipPicks[id1].team_2 = false;
-    this.allChampionshipPicks[id1].points = 1;
-    this.allChampionshipPicks[id2].team_1 = false;
-    this.allChampionshipPicks[id2].team_2 = false;
-    this.allChampionshipPicks[id2].points = 1;
-    this.allChampionshipPicks[id3].team_1 = false;
-    this.allChampionshipPicks[id3].team_2 = false;
-    this.allChampionshipPicks[id3].points = 1;
-  }
+  // private resetPicks(id1: number, id2: number, id3: number) {
+  //   this.allChampionshipPicks[id1].team_1 = false;
+  //   this.allChampionshipPicks[id1].team_2 = false;
+  //   this.allChampionshipPicks[id1].points = 1;
+  //   this.allChampionshipPicks[id2].team_1 = false;
+  //   this.allChampionshipPicks[id2].team_2 = false;
+  //   this.allChampionshipPicks[id2].points = 1;
+  //   this.allChampionshipPicks[id3].team_1 = false;
+  //   this.allChampionshipPicks[id3].team_2 = false;
+  //   this.allChampionshipPicks[id3].points = 1;
+  // }
 
-  private getChampionshipGame(team1name: string, team2name: string): PickModel {
-    let picks = this.allChampionshipPicks.find((game) => {
-      return (
-        (game.team_1_name === team1name && game.team_2_name === team2name) ||
-        (game.team_1_name === team2name && game.team_2_name === team1name)
-      );
-    });
+  // private getChampionshipGame(team1name: string, team2name: string): PickModel {
+  //   const picks = this.allChampionshipPicks.find((game) => {
+  //     return (
+  //       (game.team_1_name === team1name && game.team_2_name === team2name) ||
+  //       (game.team_1_name === team2name && game.team_2_name === team1name)
+  //     );
+  //   });
 
-    if (picks) {
-      return picks;
-    }
-    else { return new PickModel }
-  }
+  //   if (picks) {
+  //     return picks;
+  //   } else {
+  //     return {} as PickModel;
+  //   }
+  // }
 
   private isBonusGame(game: Game, name: string): boolean {
-    let bonusGameNames = [
+    const bonusGameNames = [
       'Military',
       'Mayo',
       'Holiday',
@@ -710,7 +731,7 @@ export class PicksComponent implements OnInit {
       'Fenway',
       'Pinstripe',
       'Pop-Tarts',
-      'Alamo'
+      'Alamo',
     ];
 
     // this is if there are bowl games on new years day

@@ -1,173 +1,197 @@
-// tslint:disable variable-name
-export class PickRequest {
-  public picks!: PickModel[];
+// tslint?:disable variable-name
+export interface PickRequest {
+  picks?: PickModel[];
 }
 
-export class PickModel {
-  public id!: string;
-  public entry_id!: string;
-  public game_id!: string;
-  public points!: number;
-  public team_1!: boolean;
-  public team_2!: boolean;
-  public team_1_name!: string;
-  public team_2_name!: string;
-  public score_1!: number;
-  public score_2!: number;
-  public game_time!: string;
-  public bowl_name!: string;
-  public is_playoff!: boolean;
-  public is_championship!: boolean;
-  public picked_school_id!: string;
-  public is_new_years_game!: boolean;
+export interface PlayoffPickRequest {
+  playoff_picks?: PlayoffPick[];
 }
 
-export class PickResponse {
-  public name!: string;
-  public picks!: PickModel[];
+export interface PlayoffSchoolRequest {
+  year: number;
+  school_id: string;
+  school_name: string;
+  seed_number: number;
 }
 
-export class School {
-  public ID!: string;
-  public Name!: string;
+export interface PlayoffPick {
+  entry_id: string;
+  school1_id: number;
+  school2_id: number;
 }
 
-export class Game {
-  public ID: string = '';
-  public School1ID!: string;
-  public School2ID!: string;
-  public BowlID: string = '';
-  public GameTime!: Date;
-  public Year!: number;
-  public IsPlayoff!: boolean;
-  public IsChampionship!: boolean;
+export interface PickModel {
+  id?: string;
+  entry_id?: string;
+  game_id?: string;
+  points?: number;
+  team_1?: boolean;
+  team_2?: boolean;
+  team_1_name?: string;
+  team_2_name?: string;
+  score_1?: number;
+  score_2?: number;
+  game_time?: string;
+  bowl_name?: string;
+  is_playoff?: boolean;
+  is_championship?: boolean;
+  picked_school_id?: string;
+  is_new_years_game?: boolean;
 }
 
-export class Bowl {
-  public id: string = '';
-  public name!: string;
-  public city!: string;
-  public state!: string;
-  public stadium_name!: string;
+export interface PickResponse {
+  name?: string;
+  picks?: PickModel[];
 }
 
-export class PersonRequest {
-  public Name!: string;
-  public Email!: string;
+export interface School {
+  ID?: string;
+  Name?: string;
 }
 
-export class EntryRequest {
-  public Name: string = '';
-  public Email: string = '';
-  public Tiebreaker1: number = 0;
-  public Tiebreaker2: number = 0;
-  public IsTesting: boolean = false;
-  public Year!: number;
+export interface PlayoffSchool {
+  id?: string;
+  school_name: string;
+  school_id: string;
+  seed_number: string;
 }
 
-export class PersonResponse {
-  public id!: string;
-  public name!: string;
+export interface Game {
+  ID?: string;
+  School1ID?: string;
+  School2ID?: string;
+  BowlID?: string;
+  GameTime?: Date;
+  Year?: number;
+  IsPlayoff?: boolean;
+  IsChampionship?: boolean;
 }
 
-export class Entry {
-  public id!: string;
-  public name!: string;
-  public email!: string;
-  public paid!: boolean;
-  public created_date!: string;
+export interface Bowl {
+  id?: string;
+  name?: string;
+  city?: string;
+  state?: string;
+  stadium_name?: string;
 }
 
-export class GameResultModel {
-  public id!: string;
-  public bowl_name!: string;
-  public game_time!: Date;
-  public game_id!: string;
-  public team_1_name!: string;
-  public team_2_name!: string;
-  public score_1!: number;
-  public score_2!: number;
-  public winning_school_id!: string;
-  public losing_school_id!: string;
+export interface PersonRequest {
+  Name?: string;
+  Email?: string;
 }
 
-export class StandingsEntry {
-  public rank!: number;
-  public entry_id!: number;
-  public entry_name!: string;
-  public correct_picks!: number;
-  public current_points!: number;
-  public remaining_points!: number;
-  public possible_points!: number;
-  public is_paid!: boolean;
+export interface EntryRequest {
+  Name?: string;
+  Email?: string;
+  Tiebreaker1?: number;
+  Tiebreaker2?: number;
+  IsTesting?: boolean;
+  Year?: number;
 }
 
-export class CompletedEntry {
-  public entry_name!: string;
-  public picks!: CompletedPick[];
+export interface PersonResponse {
+  id?: string;
+  name?: string;
 }
 
-export class CompletedPick {
-  public bowl_name!: string;
-  public team_1!: boolean;
-  public team_1_won!: boolean;
-  public team_1_name!: string;
-  public team_2!: boolean;
-  public team_2_won!: boolean;
-  public team_2_name!: string;
-  public points!: number;
-  public earned_points!: number;
-  public correct!: boolean;
-  public not_played!: boolean;
+export interface Entry {
+  id?: string;
+  name?: string;
+  email?: string;
+  paid?: boolean;
+  created_date?: string;
 }
 
-export class AnalysisRecord {
-  public selected!: number;
-  public school_1_name!: string;
-  public school_2_name!: string;
-  public bowl_id!: number;
-  public game_id!: number;
-  public bowl_name!: string;
+export interface GameResultModel {
+  id?: string;
+  bowl_name?: string;
+  game_time?: Date;
+  game_id?: string;
+  team_1_name?: string;
+  team_2_name?: string;
+  score_1?: number;
+  score_2?: number;
+  winning_school_id?: string;
+  losing_school_id?: string;
 }
 
-export class AnalysisModel {
-  public Selected1!: number;
-  public Selected2!: number;
-  public School1Name!: string;
-  public School2Name!: string;
-  public BowlName!: string;
+export interface StandingsEntry {
+  rank?: number;
+  entry_id?: number;
+  entry_name?: string;
+  correct_picks?: number;
+  current_points?: number;
+  remaining_points?: number;
+  possible_points?: number;
+  is_paid?: boolean;
 }
 
-export class TodaysGame {
-  public game_id!: string;
-  public bowl_name!: string;
-  public game_time!: string;
-  public school_1_name!: string;
-  public school_2_name!: string;
+export interface CompletedEntry {
+  entry_name?: string;
+  picks?: CompletedPick[];
 }
 
-export class BlogEntry {
-  public Id!: string;
-  public Title!: string;
-  public Body!: string;
-  public CreatedDate!: string;
-  public PostedBy!: string;
+export interface CompletedPick {
+  bowl_name?: string;
+  team_1?: boolean;
+  team_1_won?: boolean;
+  team_1_name?: string;
+  team_2?: boolean;
+  team_2_won?: boolean;
+  team_2_name?: string;
+  points?: number;
+  earned_points?: number;
+  correct?: boolean;
+  not_played?: boolean;
 }
 
-export class BowlPick {
-  public game_id!: number;
-  public name!: string;
-  public team_1_picked!: boolean;
-  public team_2_picked!: boolean;
-  public points!: number;
-  public totalPoints!: number;
-  public team_1_won?: boolean;
-  public team_2_won?: boolean;
-  public earned_points: number = 0;
+export interface AnalysisRecord {
+  selected?: number;
+  school_1_name?: string;
+  school_2_name?: string;
+  bowl_id?: number;
+  game_id?: number;
+  bowl_name?: string;
 }
 
-export class Tiebreaker{
-  public entry_name: string = '';
-  public tiebreaker_1: string = ''; // bowl game
-  public tiebreaker_2: string = ''; // highest total
+export interface AnalysisModel {
+  Selected1?: number;
+  Selected2?: number;
+  School1Name?: string;
+  School2Name?: string;
+  BowlName?: string;
+}
+
+export interface TodaysGame {
+  game_id?: string;
+  bowl_name?: string;
+  game_time?: string;
+  school_1_name?: string;
+  school_2_name?: string;
+}
+
+export interface BlogEntry {
+  Id?: string;
+  Title?: string;
+  Body?: string;
+  CreatedDate?: string;
+  PostedBy?: string;
+}
+
+export interface BowlPick {
+  game_id?: number;
+  name?: string;
+  team_1_picked?: boolean;
+  team_2_picked?: boolean;
+  points?: number;
+  totalPoints?: number;
+  team_1_won?: boolean;
+  team_2_won?: boolean;
+  earned_points?: number;
+}
+
+export interface Tiebreaker {
+  entry_name?: string;
+  tiebreaker_1?: string; // bowl game
+  tiebreaker_2?: string; // highest total
 }

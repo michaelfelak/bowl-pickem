@@ -4,11 +4,22 @@
   </sky-alert>
   <div *ngIf="!submitted">
     <h1 class="header">Submit Entry</h1>
-    <pick-summary [name]="name" [threePointGames]="threePointGames" [fivePointGames]="fivePointGames"
-      [tenPointGames]="tenPointGames" [email]="email" [possiblePoints]="calculateTotalPoints()"
-      [threePointError]="threePointError" [fivePointError]="fivePointError" [tenPointError]="tenPointError">
-    </pick-summary>
-    <form [formGroup]="pickForm" style="width: 400px; margin-left: auto; margin-right: auto;">
+    <app-pick-summary
+      [name]="name"
+      [threePointGames]="threePointGames"
+      [fivePointGames]="fivePointGames"
+      [tenPointGames]="tenPointGames"
+      [email]="email"
+      [possiblePoints]="calculateTotalPoints()"
+      [threePointError]="threePointError"
+      [fivePointError]="fivePointError"
+      [tenPointError]="tenPointError"
+    >
+    </app-pick-summary>
+    <form
+      [formGroup]="pickForm"
+      style="width: 400px; margin-left: auto; margin-right: auto"
+    >
       <sky-input-box data-sky-id="input-box-first-name" labelText="Name">
         <input formControlName="name" spellcheck="false" type="text" />
       </sky-input-box>
@@ -32,7 +43,7 @@
       </tr>
       <ng-container [formGroup]="pickForm">
         <ng-container formArrayName="newpicks">
-          <tr [formGroupName]="i" *ngFor="let pick of picks; let i=index">
+          <tr [formGroupName]="i" *ngFor="let pick of picks; let i = index">
             <td class="team-date">
               {{ pick.game_time | date }}
             </td>
@@ -40,14 +51,20 @@
               {{ pick.bowl_name }}
             </td>
             <td class="team-check" style="border-left: 1px solid black">
-              <sky-checkbox formControlName="team1picked" (change)="updateSelection(pick.game_id, 1, 0)">
+              <sky-checkbox
+                formControlName="team1picked"
+                (change)="updateSelection(pick.game_id, 1)"
+              >
               </sky-checkbox>
             </td>
             <td class="team-name" style="border-right: 1px solid black">
               {{ pick.team_1_name }}
             </td>
             <td class="team-check" style="border-left: 1px solid black">
-              <sky-checkbox formControlName="team2picked" (change)="updateSelection(pick.game_id, 2, 0)">
+              <sky-checkbox
+                formControlName="team2picked"
+                (change)="updateSelection(pick.game_id, 2)"
+              >
               </sky-checkbox>
             </td>
             <td class="team-name" style="border-right: 1px solid black">
@@ -55,15 +72,21 @@
             </td>
             <td *ngIf="!pick.is_new_years_game">
               <select formControlName="points">
-                <option *ngFor="let pointValue of pointValues" [ngValue]="pointValue">
-                  {{pointValue}}
+                <option
+                  *ngFor="let pointValue of pointValues"
+                  [ngValue]="pointValue"
+                >
+                  {{ pointValue }}
                 </option>
               </select>
             </td>
             <td *ngIf="pick.is_new_years_game">
               <select formControlName="points">
-                <option *ngFor="let pointValue of newYearsPointValues" [ngValue]="pointValue">
-                  {{pointValue}}
+                <option
+                  *ngFor="let pointValue of newYearsPointValues"
+                  [ngValue]="pointValue"
+                >
+                  {{ pointValue }}
                 </option>
               </select>
             </td>
@@ -72,10 +95,45 @@
       </ng-container>
     </table>
     <br />
-    <!-- Playoff Picks -->
-    <h2 class="header">College Football Playoff</h2>
-    <table class="center">
-      <tr>
+    <!-- playoff section -->
+    <h2 class="header">Playoffs</h2>
+    <div class="sky-deemphasized">
+      Select 2 of the 12 schools that are in the College Football Playoff. You
+      will receive points based on wins earned by either school. A loss is zero
+      points. If your school wins and the seed of your school is the lower seed,
+      you will receive 1 point.If your school wins and the seed of your school
+      is the lower seed, you will receive 3 points. Example: You pick #3 Penn
+      State and #12 Arizona State. Penn State gets a bye in round 1, wins round
+      2 vs. the 6 seed, and wins round 3 vs. the 2 seed. They are awarded 4
+      total points (1 for the win vs. the 6 seed and 3 for the win vs. the 2
+      seed). Arizona State wins the play-in game vs. the #5 seed and the 2nd
+      round vs. the 4 seed. They are awarded 6 points.
+    </div>
+    <form [formGroup]="pickForm">
+      <div style="width: 400px; margin-left: auto; margin-right: auto">
+        Choose 1st team
+
+        <select formControlName="playoff1">
+          <option *ngFor="let school of playoffSchools">
+            #{{ school.seed_number }}. {{ school.school_name }}
+          </option>
+        </select>
+      </div>
+      <div style="width: 400px; margin-left: auto; margin-right: auto">
+        Choose 2nd team
+        <select formControlName="playoff2">
+          <option *ngFor="let school of playoffSchools">
+            #{{ school.seed_number }}. {{ school.school_name }}
+          </option>
+        </select>
+      </div>
+    </form>
+    <!-- not used anymore-->
+    <div>
+      <!-- Playoff Picks -->
+      <!-- <h2 class="header">College Football Playoff</h2>
+      <table class="center">
+        <tr>
         <th class="team-date">Date</th>
         <th class="team-name" style="border-left: 1px solid black">
           Bowl Game
@@ -88,7 +146,10 @@
       </tr>
       <ng-container [formGroup]="playoffPickForm">
         <ng-container formArrayName="playoffPicks">
-          <tr [formGroupName]="i" *ngFor="let pick of playoffPicks; let i=index">
+          <tr
+            [formGroupName]="i"
+            *ngFor="let pick of playoffPicks; let i = index"
+          >
             <td class="team-date">
               {{ pick.game_time | date }}
             </td>
@@ -96,14 +157,20 @@
               {{ pick.bowl_name }}
             </td>
             <td class="team-check" style="border-left: 1px solid black">
-              <sky-checkbox formControlName="team1picked" (click)="updateSelection(pick.game_id, 1, 0)">
+              <sky-checkbox
+                formControlName="team1picked"
+                (click)="updateSelection(pick.game_id, 1, 0)"
+              >
               </sky-checkbox>
             </td>
             <td class="team-name" style="border-right: 1px solid black">
               {{ pick.team_1_name }}
             </td>
             <td class="team-check" style="border-left: 1px solid black">
-              <sky-checkbox formControlName="team2picked" (click)="updateSelection(pick.game_id, 2, 0)">
+              <sky-checkbox
+                formControlName="team2picked"
+                (click)="updateSelection(pick.game_id, 2, 0)"
+              >
               </sky-checkbox>
             </td>
             <td class="team-name" style="border-right: 1px solid black">
@@ -111,33 +178,39 @@
             </td>
             <td *ngIf="!pick.is_new_years_game">
               <select formControlName="points">
-                <option *ngFor="let pointValue of pointValues" [ngValue]="pointValue">
-                  {{pointValue}}
+                <option
+                  *ngFor="let pointValue of pointValues"
+                  [ngValue]="pointValue"
+                >
+                  {{ pointValue }}
                 </option>
               </select>
             </td>
             <td *ngIf="pick.is_new_years_game">
               <select formControlName="points">
-                <option *ngFor="let pointValue of newYearsPointValues" [ngValue]="pointValue">
-                  {{pointValue}}
+                <option
+                  *ngFor="let pointValue of newYearsPointValues"
+                  [ngValue]="pointValue"
+                >
+                  {{ pointValue }}
                 </option>
               </select>
             </td>
           </tr>
         </ng-container>
       </ng-container>
-    </table>
-    <!-- Championship Pick -->
-    <div class="center">
+    </table> -->
+      <!-- Championship Pick -->
+      <!-- <div class="center">
       <br />
     </div>
     <h2 class="header">College Football Championship Game</h2>
     <div class="header" *ngIf="!showChampionship">
       Select the winners of the playoff games to compete in the championship
       game.
-    </div>
-    <!-- Championship Pick -->
-    <div *ngIf="showChampionship">
+    </div> -->
+      <!-- Championship Pick -->
+      <!-- <div *ngIf="showChampionship">
       <br />
       <table class="center">
         <tr>
@@ -155,7 +228,10 @@
         </tr>
         <ng-container [formGroup]="championshipPickForm">
           <ng-container formArrayName="championshipPicks">
-            <tr [formGroupName]="i" *ngFor="let pick of championshipPicks; let i=index">
+            <tr
+              [formGroupName]="i"
+              *ngFor="let pick of championshipPicks; let i = index"
+            >
               <td class="team-date">
                 {{ pick.game_time | date }}
               </td>
@@ -163,14 +239,20 @@
                 {{ pick.bowl_name }}
               </td>
               <td class="team-check" style="border-left: 1px solid black">
-                <sky-checkbox formControlName="team1picked" (change)="updateSelection(pick.game_id, 1, 0)">
+                <sky-checkbox
+                  formControlName="team1picked"
+                  (change)="updateSelection(pick.game_id, 1, 0)"
+                >
                 </sky-checkbox>
               </td>
               <td class="team-name" style="border-right: 1px solid black">
                 {{ pick.team_1_name }}
               </td>
               <td class="team-check" style="border-left: 1px solid black">
-                <sky-checkbox formControlName="team2picked" (change)="updateSelection(pick.game_id, 2, 0)">
+                <sky-checkbox
+                  formControlName="team2picked"
+                  (change)="updateSelection(pick.game_id, 2, 0)"
+                >
                 </sky-checkbox>
               </td>
               <td class="team-name" style="border-right: 1px solid black">
@@ -178,15 +260,21 @@
               </td>
               <td *ngIf="!pick.is_new_years_game">
                 <select formControlName="points">
-                  <option *ngFor="let pointValue of pointValues" [ngValue]="pointValue">
-                    {{pointValue}}
+                  <option
+                    *ngFor="let pointValue of pointValues"
+                    [ngValue]="pointValue"
+                  >
+                    {{ pointValue }}
                   </option>
                 </select>
               </td>
               <td *ngIf="pick.is_new_years_game">
                 <select formControlName="points">
-                  <option *ngFor="let pointValue of newYearsPointValues" [ngValue]="pointValue">
-                    {{pointValue}}
+                  <option
+                    *ngFor="let pointValue of newYearsPointValues"
+                    [ngValue]="pointValue"
+                  >
+                    {{ pointValue }}
                   </option>
                 </select>
               </td>
@@ -197,6 +285,7 @@
     </div>
     <div class="center">
       <br />
+    </div> -->
     </div>
     <!-- Tiebreakers -->
     <h2 class="header">Tiebreakers</h2>
@@ -208,22 +297,33 @@
       <div>
         <select formControlName="tiebreaker1Id">
           <option *ngFor="let pick of tiebreakerPicks" [ngValue]="pick.game_id">
-            {{pick.team_1_name}} vs. {{pick.team_2_name}}
+            {{ pick.team_1_name }} vs. {{ pick.team_2_name }}
           </option>
         </select>
       </div>
       <div class="header" style="text-align: center; padding-top: 20px">
-        Enter the total number of points scored in the highest scoring bowl game.
+        Enter the total number of points scored in the highest scoring bowl
+        game.
         <br />
-        <input formControlName="tiebreaker2" class="sky-form-control" style="width: 100px" type="number" min="1"
-          max="500" />
+        <input
+          formControlName="tiebreaker2"
+          class="sky-form-control"
+          style="width: 100px"
+          type="number"
+          min="1"
+          max="500"
+        />
       </div>
     </div>
     <sky-alert *ngIf="showSubmitError" alertType="danger">
       {{ submitErrorMsg }}
     </sky-alert>
     <div style="text-align: center; padding-top: 20px">
-      <button class="sky-btn sky-btn-primary sky-margin-inline-compact" (click)="submit()" [disabled]="false">
+      <button
+        class="sky-btn sky-btn-primary sky-margin-inline-compact"
+        (click)="submit()"
+        [disabled]="false"
+      >
         Submit
       </button>
       <button class="sky-btn sky-margin-inline-compact" (click)="clear()">
@@ -234,8 +334,8 @@
     <br />
   </div>
   <div *ngIf="submitted">
-    <picks-completed [picks]="allPicks" [name]="name" [email]="email">
-    </picks-completed>
+    <app-picks-completed [picks]="allPicks" [name]="name" [email]="email">
+    </app-picks-completed>
     <br />
   </div>
 </main>

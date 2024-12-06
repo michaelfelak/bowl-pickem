@@ -9,7 +9,9 @@
 
 <style>
   :host {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+      "Segoe UI Symbol";
     font-size: 14px;
     color: #333;
     box-sizing: border-box;
@@ -81,8 +83,10 @@
 
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
-  <img width="40"
-    src="https://imgs.search.brave.com/YWQLue13k0kRwWgI8ZrwHDvqDf6F9Rq-A4eyJK9iDgw/rs:fit:860:0:0/g:ce/aHR0cDovL2ltYWdl/cy5jbGlwYXJ0cGFu/ZGEuY29tL2Zvb3Ri/YWxsLWNsaXBhcnQt/Zm9vdGJhbGwtY2xp/cGFydC01LWRyLW9k/ZDEucG5n" />
+  <!-- <img
+    width="40"
+    src="https://imgs.search.brave.com/YWQLue13k0kRwWgI8ZrwHDvqDf6F9Rq-A4eyJK9iDgw/rs:fit:860:0:0/g:ce/aHR0cDovL2ltYWdl/cy5jbGlwYXJ0cGFu/ZGEuY29tL2Zvb3Ri/YWxsLWNsaXBhcnQt/Zm9vdGJhbGwtY2xp/cGFydC01LWRyLW9k/ZDEucG5n"
+  /> -->
   <p>Bowl Pick'em</p>
   <a routerLink="">Home</a>
   <a routerLink="picks">Submit Entry</a>
@@ -91,7 +95,6 @@
   <!-- <a routerLink="scenario-generator">Scenario Generator</a> -->
   <a routerLink="about">About</a>
   <a *ngIf="showAdmin" routerLink="admin">Admin</a>
-
 </div>
 <!-- <div class="contentXX"> -->
 <router-outlet></router-outlet>

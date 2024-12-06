@@ -2,22 +2,41 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { BowlService } from '../../shared/services/bowl.service';
 import {
   Bowl,
-  School,
   Game,
-  GameResultModel
+  GameResultModel,
+  School,
 } from '../../shared/services/bowl.model';
 import { mergeMap } from 'rxjs/operators';
-import * as dayjs from 'dayjs';
-import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { SkyRepeaterModule } from '@skyux/lists';
+import { SkyDropdownModule } from '@skyux/popovers';
+import { SkyCheckboxModule, SkyInputBoxModule } from '@skyux/forms';
+import { CommonModule } from '@angular/common';
+import { SettingsService } from 'src/app/shared/services/settings.service';
 
 @Component({
-  selector: 'add-bowl-game',
+  standalone: true,
+  selector: 'app-add-bowl-game',
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    SkyCheckboxModule,
+    SkyDropdownModule,
+    SkyInputBoxModule,
+    SkyRepeaterModule,
+  ],
+  providers: [SettingsService],
   templateUrl: './add-bowl-game.component.html',
-  styleUrls: ['./add-bowl-game.component.scss']
+  styleUrls: ['./add-bowl-game.component.scss'],
 })
 export class AddBowlGameComponent implements OnInit {
-  @Input() public hour: number = 1;
-  @Input() public minute: number = 0;
+  @Input() public hour = 1;
+  @Input() public minute = 0;
   @Input() public channel!: string;
   @Input() public year: number = new Date().getFullYear();
   @Input() public gameDate!: Date;
@@ -28,14 +47,14 @@ export class AddBowlGameComponent implements OnInit {
     'FOX',
     'FS1',
     'CBSSN',
-    'CBS'
+    'CBS',
   ];
   @Input() public selectedStation: string = this.stations[0];
-  public selectedBowl: Bowl = new Bowl();
-  public selectedSchool1: School = new School();
-  public selectedSchool2: School = new School();
-  public isChampionship: boolean = false;
-  public isPlayoff: boolean = false;
+  public selectedBowl: Bowl = {};
+  public selectedSchool1: School = {};
+  public selectedSchool2: School = {};
+  public isChampionship = false;
+  public isPlayoff = false;
   public bowls: Bowl[] = [];
   public schools: School[] = [];
   public addMessage!: string;
@@ -48,8 +67,8 @@ export class AddBowlGameComponent implements OnInit {
     day: FormControl<number | null>;
   }>;
 
-  constructor(private svc: BowlService) {
-
+  constructor(private svc: BowlService,
+    private settings: SettingsService) {
     this.formGroup = inject(FormBuilder).group({
       hour: new FormControl(12),
       minute: new FormControl(0),
@@ -58,7 +77,6 @@ export class AddBowlGameComponent implements OnInit {
       day: new FormControl(16),
     });
   }
-
 
   public ngOnInit() {
     this.refresh();
@@ -94,25 +112,31 @@ export class AddBowlGameComponent implements OnInit {
   public sortBowls() {
     if (this.bowls) {
       this.bowls.sort((a: Bowl, b: Bowl) => {
-        return a.name > b.name ? 1 : -1;
+        return a.name! > b.name! ? 1 : -1;
       });
     }
   }
 
   public addBowlGame() {
     this.addMessage = '';
-    let game = new Game();
+    const game: Game = {};
     game.BowlID = this.selectedBowl.id;
     game.School1ID = this.selectedSchool1.ID;
     game.School2ID = this.selectedSchool2.ID;
     game.Year = this.year;
-    game.GameTime = new Date(this.formGroup.value.year as number, (this.formGroup.value.month as number) - 1, this.formGroup.value.day as number, this.formGroup.value.hour as number, this.formGroup.value.minute as number);
+    game.GameTime = new Date(
+      this.formGroup.value.year as number,
+      (this.formGroup.value.month as number) - 1,
+      this.formGroup.value.day as number,
+      this.formGroup.value.hour as number,
+      this.formGroup.value.minute as number
+    );
     game.IsPlayoff = this.isPlayoff;
     game.IsChampionship = this.isChampionship;
     this.svc.addGame(game).subscribe(() => {
       this.addMessage = this.selectedBowl.name + ' Bowl Added!';
     });
-    let r = new GameResultModel();
+    const r: GameResultModel = {};
     r.score_1 = 0;
     r.score_2 = 0;
 
@@ -135,7 +159,7 @@ export class AddBowlGameComponent implements OnInit {
         })[0];
       }
     }
-    return new School();
+    return {} as School;
   }
 
   public updateStation(station: string) {

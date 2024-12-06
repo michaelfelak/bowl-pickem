@@ -1,0 +1,26 @@
+<sky-repeater expandMode="single">
+  <sky-repeater-item [isExpanded]="false">
+    <sky-repeater-item-title> Add Playoff Team </sky-repeater-item-title>
+    <sky-repeater-item-content>
+      <div style="max-width: 300px">
+        <form [formGroup]="schoolForm">
+          <sky-input-box labelText="School">
+            <select formControlName="school" style="display: inline-block">
+              <option [ngValue]="school" *ngFor="let school of schools">
+                {{ school.Name }}
+              </option>
+            </select>
+          </sky-input-box>
+          <sky-input-box labelText="Seed">
+            <input formControlName="seed" type="number" min="1" max="12" />
+          </sky-input-box>
+          <button (click)="submit()">Submit</button>
+        </form>
+      </div>
+      <h4>Current list</h4>
+      <div *ngFor="let school of playoffSchools">
+        {{ school.seed_number }}. {{ school.school_name }}
+      </div>
+    </sky-repeater-item-content>
+  </sky-repeater-item>
+</sky-repeater>

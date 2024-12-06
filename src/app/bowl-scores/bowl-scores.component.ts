@@ -4,22 +4,26 @@ import {
   Bowl,
   Game,
   GameResultModel,
-  School
+  School,
 } from '../shared/services/bowl.model';
-import { SkyAppConfig } from '@skyux/config';
 import { mergeMap } from 'rxjs/operators';
 import {
   SkyFlyoutConfig,
   SkyFlyoutInstance,
-  SkyFlyoutService
+  SkyFlyoutService,
 } from '@skyux/flyout';
 import { BowlPicksFlyoutComponent } from './bowl-picks-flyout/bowl-picks-flyout.component';
 import { BowlPicksFlyoutContext } from './bowl-picks-flyout/bowl-picks-flyout.context';
+import { CommonModule } from '@angular/common';
+import { SettingsService } from '../shared/services/settings.service';
 
 @Component({
-  selector: 'bowl-scores',
+  standalone: true,
+  selector: 'app-bowl-scores',
+  imports: [CommonModule],
+  providers: [SettingsService],
   templateUrl: './bowl-scores.component.html',
-  styleUrls: ['./bowl-scores.component.scss']
+  styleUrls: ['./bowl-scores.component.scss'],
 })
 export class BowlScoresComponent implements OnInit {
   public games!: Game[];
@@ -28,15 +32,15 @@ export class BowlScoresComponent implements OnInit {
   public todaysGames: GameResultModel[] = [];
   public bowls: Bowl[] = [];
   public schools: School[] = [];
-  public todaysDate: string = '';
+  public todaysDate = '';
   public flyout: SkyFlyoutInstance<any> | undefined;
-  @Input() public hideAllScores: boolean = false;
+  @Input() public hideAllScores = false;
 
   constructor(
     private svc: BowlService,
-    private config: SkyAppConfig,
-    private flyoutService: SkyFlyoutService
-  ) { }
+    private flyoutService: SkyFlyoutService,
+    private settings: SettingsService
+  ) {}
 
   public ngOnInit() {
     this.refresh();
@@ -44,34 +48,33 @@ export class BowlScoresComponent implements OnInit {
 
   public refresh() {
     this.svc
-      .getGames('2024')
+      .getGames(this.settings.currentYear)
       .pipe(
         mergeMap((result: Game[]) => {
           this.games = result;
           this.sortGamesByDate();
-          return this.svc.getGameResults(
-            '2024'
-          );
+          return this.svc.getGameResults(this.settings.currentYear);
         }),
         mergeMap((result: GameResultModel[]) => {
           this.gameResults = result.filter((game) => {
-            return game.score_1 + game.score_2 > 0;
+            return game.score_1! + game.score_2! > 0;
           });
           this.upcomingGames = result.filter((game) => {
-            return game.score_1 + game.score_2 === 0 &&
-              new Date(game.game_time).getDate() !== new Date().getDate();
+            return (
+              (game.score_1 ?? 0) + (game.score_2 ?? 0) === 0 &&
+              new Date(game.game_time!).getDate() !== new Date().getDate()
+            );
           });
-          console.log(new Date().getDate());
+          // console.log(new Date().getDate());
 
-          result.forEach((game) => {
-            console.log(new Date(game.game_time).getDate());
-
-          })
+          // result.forEach((game) => {
+          //   console.log(new Date(game.game_time!).getDate());
+          // });
           this.todaysGames = result.filter((game) => {
-            return new Date(game.game_time).getDate() === new Date().getDate();
-          })
-          console.log(result);
-          console.log(this.todaysGames);
+            return new Date(game.game_time!).getDate() === new Date().getDate();
+          });
+          // console.log(result);
+          // console.log(this.todaysGames);
           this.sortGamesResultsByDate();
           return this.svc.getBowlList();
         }),
@@ -90,13 +93,13 @@ export class BowlScoresComponent implements OnInit {
       })[0];
     }
 
-    return new School();
+    return {} as School;
   }
 
   public sortGamesByDate() {
     if (this.games) {
       this.games.sort((a: Game, b: Game) => {
-        return +new Date(a.GameTime) - +new Date(b.GameTime);
+        return +new Date(a.GameTime!) - +new Date(b.GameTime!);
       });
     }
   }
@@ -104,29 +107,29 @@ export class BowlScoresComponent implements OnInit {
   public sortGamesResultsByDate() {
     if (this.gameResults) {
       this.gameResults.sort((a: GameResultModel, b: GameResultModel) => {
-        return +new Date(a.game_time) - +new Date(b.game_time);
+        return +new Date(a.game_time!) - +new Date(b.game_time!);
       });
     }
   }
 
   public teamWon(team: number, gameResult: GameResultModel): boolean {
     if (team === 1) {
-      return gameResult.score_1 > gameResult.score_2;
+      return gameResult.score_1! > gameResult.score_2!;
     }
-    return gameResult.score_2 > gameResult.score_1;
+    return gameResult.score_2! > gameResult.score_1!;
   }
 
   public onNameClick(id: string) {
-    let record: BowlPicksFlyoutContext = new BowlPicksFlyoutContext();
+    const record: BowlPicksFlyoutContext = new BowlPicksFlyoutContext();
     record.gameId = id;
     const flyoutConfig: SkyFlyoutConfig = {
       providers: [
         {
           provide: BowlPicksFlyoutContext,
-          useValue: record
-        }
+          useValue: record,
+        },
       ],
-      defaultWidth: 500
+      defaultWidth: 500,
     };
     this.flyout = this.flyoutService.open(
       BowlPicksFlyoutComponent,
