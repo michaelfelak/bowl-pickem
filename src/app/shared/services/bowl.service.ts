@@ -26,8 +26,8 @@ export class BowlService {
   private baseUrl: string;
 
   constructor(private http: HttpClient) {
-    this.baseUrl = 'http://localhost:8081/api/v1/'; // local
-    // this.baseUrl = 'https://bowl-pickem-service-5a26054c7915.herokuapp.com/api/v1/'; // prod
+    // this.baseUrl = 'http://localhost:8081/api/v1/'; // local
+    this.baseUrl = 'https://bowl-pickem-service-5a26054c7915.herokuapp.com/api/v1/'; // prod
   }
 
   public getUserList() {
