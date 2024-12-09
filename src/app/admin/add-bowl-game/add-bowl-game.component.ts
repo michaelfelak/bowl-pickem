@@ -28,28 +28,18 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
     SkyCheckboxModule,
     SkyDropdownModule,
     SkyInputBoxModule,
-    SkyRepeaterModule,
+    
   ],
   providers: [SettingsService],
   templateUrl: './add-bowl-game.component.html',
   styleUrls: ['./add-bowl-game.component.scss'],
 })
 export class AddBowlGameComponent implements OnInit {
-  @Input() public hour = 1;
-  @Input() public minute = 0;
-  @Input() public channel!: string;
-  @Input() public year: number = new Date().getFullYear();
-  @Input() public gameDate!: Date;
-  public stations: string[] = [
-    'ESPN',
-    'ESPN2',
-    'ABC',
-    'FOX',
-    'FS1',
-    'CBSSN',
-    'CBS',
-  ];
-  @Input() public selectedStation: string = this.stations[0];
+  public hour = 1;
+  public minute = 0;
+  public channel!: string;
+  public year: number;
+  public gameDate!: Date;
   public selectedBowl: Bowl = {};
   public selectedSchool1: School = {};
   public selectedSchool2: School = {};
@@ -72,10 +62,11 @@ export class AddBowlGameComponent implements OnInit {
     this.formGroup = inject(FormBuilder).group({
       hour: new FormControl(12),
       minute: new FormControl(0),
-      year: new FormControl(2024),
+      year: new FormControl(this.settings.currentYear),
       month: new FormControl(12),
       day: new FormControl(16),
     });
+    this.year = this.settings.currentYear;
   }
 
   public ngOnInit() {
@@ -160,10 +151,6 @@ export class AddBowlGameComponent implements OnInit {
       }
     }
     return {} as School;
-  }
-
-  public updateStation(station: string) {
-    this.selectedStation = station;
   }
 
   public setBowlGame(id: string | undefined) {

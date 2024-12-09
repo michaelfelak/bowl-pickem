@@ -1,8 +1,63 @@
 <main>
-  <app-add-bowl></app-add-bowl>
-  <app-add-bowl-game></app-add-bowl-game>
-  <app-add-playoff-school></app-add-playoff-school>
-  <app-paid-status></app-paid-status>
-  <app-update-scores></app-update-scores>
-  <app-tiebreakers></app-tiebreakers>
+  <h1>Admin Page - Current Year: {{ currentYear }}</h1>
+  <sky-repeater expandMode="single">
+    <sky-repeater-item [isExpanded]="true">
+      <sky-repeater-item-title>
+        <div class="pull-left">
+          <span class="label"> Update Paid Status </span>
+        </div>
+        <div class="pull-right">
+          <span class="label">
+            {{ entrantsMessage }}
+          </span>
+        </div>
+      </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <app-paid-status
+          (numberOfEntrants)="(entrantsMessage)"
+        ></app-paid-status>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+
+    <sky-repeater-item>
+      <sky-repeater-item-title> Update Scores </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <app-update-scores></app-update-scores>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+
+    <sky-repeater-item>
+      <sky-repeater-item-title> Championship Results </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <app-add-playoff-result></app-add-playoff-result>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+
+    <sky-repeater-item>
+      <sky-repeater-item-title> Tiebreakers </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <app-tiebreakers></app-tiebreakers>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+    <sky-repeater-item>
+      <sky-repeater-item-title> Add Bowl </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <app-add-bowl></app-add-bowl>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+
+    <sky-repeater-item>
+      <sky-repeater-item-title> Add Bowl Game </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <app-add-bowl-game></app-add-bowl-game>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+
+    <sky-repeater-item>
+      <sky-repeater-item-title> Add Playoff School </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <app-add-playoff-school></app-add-playoff-school>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+  </sky-repeater>
 </main>

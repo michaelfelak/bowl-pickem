@@ -1,19 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { BowlService } from '../shared/services/bowl.service';
+import { SettingsService } from '../shared/services/settings.service';
 
 @Component({
   standalone: true,
   selector: 'app-scenario-generator',
   templateUrl: './scenario-generator.component.html',
-  styleUrls: ['./scenario-generator.component.scss']
+  styleUrls: ['./scenario-generator.component.scss'],
 })
 export class ScenarioGeneratorComponent implements OnInit {
-  constructor(private bowlService: BowlService) {
-
-  }
+  constructor(
+    private bowlService: BowlService,
+    private settingsService: SettingsService
+  ) {}
   ngOnInit(): void {
-    this.bowlService.getStandings(2024).subscribe((result) => {
-      console.log(result);
-    })
+    this.bowlService
+      .getStandings(this.settingsService.currentYear)
+      .subscribe((result) => {
+        console.log(result);
+      });
   }
 }

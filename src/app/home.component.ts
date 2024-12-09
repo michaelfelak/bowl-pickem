@@ -11,6 +11,7 @@ import { DailyBlogComponent } from './blog/daily-blog.component';
 })
 export class HomeComponent implements OnInit {
   constructor(private titleService: Title) {}
+
   public ngOnInit() {
     this.titleService.setTitle("Bowl Pick'em - Home");
   }

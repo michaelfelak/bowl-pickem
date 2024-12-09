@@ -23,7 +23,7 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
 @Component({
   standalone: true,
   selector: 'app-update-scores',
-  imports: [CommonModule, ReactiveFormsModule, SkyRepeaterModule],
+  imports: [CommonModule, ReactiveFormsModule],
   providers: [SettingsService],
   templateUrl: './update-scores.component.html',
   styleUrls: ['./update-scores.component.scss'],
@@ -52,7 +52,6 @@ export class UpdateScoresComponent implements OnInit {
 
   public ngOnInit() {
     this.refresh();
-    console.log(this.settings.currentYear);
   }
 
   public refresh() {

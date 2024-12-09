@@ -5,7 +5,6 @@
     "serviceUrl": "https://bowl-pickem-15ea7b3ae3e0.herokuapp.com/",
     "localServiceUrl": "http://localhost:8081/api/v1/",
     "showAdmin": true,
-    "showSubmitEntry": true,
-    "currentYear": 2024
+    "showSubmitEntry": true
   }
 }

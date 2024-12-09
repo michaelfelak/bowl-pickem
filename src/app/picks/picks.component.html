@@ -1,7 +1,7 @@
+<sky-alert *ngIf="showError" alertType="danger">
+  {{ errorMsg }}
+</sky-alert>
 <main>
-  <sky-alert *ngIf="showError" alertType="danger">
-    {{ errorMsg }}
-  </sky-alert>
   <div *ngIf="!submitted">
     <h1 class="header">Submit Entry</h1>
     <app-pick-summary
@@ -45,7 +45,7 @@
         <ng-container formArrayName="newpicks">
           <tr [formGroupName]="i" *ngFor="let pick of picks; let i = index">
             <td class="team-date">
-              {{ pick.game_time | date }}
+              {{ pick.game_time | date : "EEE MMM dd" }}
             </td>
             <td class="team-name" style="border-left: 1px solid black">
               {{ pick.bowl_name }}
@@ -71,7 +71,7 @@
               {{ pick.team_2_name }}
             </td>
             <td *ngIf="!pick.is_new_years_game">
-              <select formControlName="points">
+              <select formControlName="points" style="width: 50px;">
                 <option
                   *ngFor="let pointValue of pointValues"
                   [ngValue]="pointValue"
@@ -80,7 +80,7 @@
                 </option>
               </select>
             </td>
-            <td *ngIf="pick.is_new_years_game">
+            <td *ngIf="pick.is_new_years_game" style="width: 50px;">
               <select formControlName="points">
                 <option
                   *ngFor="let pointValue of newYearsPointValues"
@@ -96,25 +96,20 @@
     </table>
     <br />
     <!-- playoff section -->
-    <h2 class="header">Playoffs</h2>
-    <div class="sky-deemphasized">
-      Select 2 of the 12 schools that are in the College Football Playoff. You
-      will receive points based on wins earned by either school. A loss is zero
-      points. If your school wins and the seed of your school is the lower seed,
-      you will receive 1 point.If your school wins and the seed of your school
-      is the lower seed, you will receive 3 points. Example: You pick #3 Penn
-      State and #12 Arizona State. Penn State gets a bye in round 1, wins round
-      2 vs. the 6 seed, and wins round 3 vs. the 2 seed. They are awarded 4
-      total points (1 for the win vs. the 6 seed and 3 for the win vs. the 2
-      seed). Arizona State wins the play-in game vs. the #5 seed and the 2nd
-      round vs. the 4 seed. They are awarded 6 points.
-    </div>
     <form [formGroup]="pickForm">
+      <h2 class="header">Championship Game</h2>
+      <div class="sky-deemphasized" style="text-align: center">
+        Choose the two teams that will make the College Football Playoff
+        Championship Game.
+      </div>
       <div style="width: 400px; margin-left: auto; margin-right: auto">
         Choose 1st team
 
         <select formControlName="playoff1">
-          <option *ngFor="let school of playoffSchools">
+          <option
+            [value]="school.school_id"
+            *ngFor="let school of playoffSchoolsA"
+          >
             #{{ school.seed_number }}. {{ school.school_name }}
           </option>
         </select>
@@ -122,7 +117,23 @@
       <div style="width: 400px; margin-left: auto; margin-right: auto">
         Choose 2nd team
         <select formControlName="playoff2">
-          <option *ngFor="let school of playoffSchools">
+          <option
+            [value]="school.school_id"
+            *ngFor="let school of playoffSchoolsB"
+          >
+            #{{ school.seed_number }}. {{ school.school_name }}
+          </option>
+        </select>
+      </div>
+
+      <h2 class="header">National Champion</h2>
+      <div style="width: 400px; margin-left: auto; margin-right: auto">
+        Choose the National Champion
+        <select formControlName="champion">
+          <option
+            [value]="school.school_id"
+            *ngFor="let school of playoffSchools"
+          >
             #{{ school.seed_number }}. {{ school.school_name }}
           </option>
         </select>
@@ -289,19 +300,16 @@
     </div>
     <!-- Tiebreakers -->
     <h2 class="header">Tiebreakers</h2>
-    <div [formGroup]="tiebreakerForm" class="header" style="text-align: center">
+    <div [formGroup]="tiebreakerForm" class="header" >
+      <span class="header">
+        How many <span style="font-weight: bold">total</span> points will be
+        scored in the 2024-2025 bowl season? (The answer for last year was
+        <span style="font-weight: bold">2,237</span>).
+      </span>
       <div>
-        Select the game that will have the
-        <span style="font-weight: bold"> most points scored.</span>
+        <input formControlName="tiebreaker2" type="number" min="0" />
       </div>
-      <div>
-        <select formControlName="tiebreaker1Id">
-          <option *ngFor="let pick of tiebreakerPicks" [ngValue]="pick.game_id">
-            {{ pick.team_1_name }} vs. {{ pick.team_2_name }}
-          </option>
-        </select>
-      </div>
-      <div class="header" style="text-align: center; padding-top: 20px">
+      <!-- <div class="header" style="text-align: center; padding-top: 20px">
         Enter the total number of points scored in the highest scoring bowl
         game.
         <br />
@@ -313,7 +321,7 @@
           min="1"
           max="500"
         />
-      </div>
+      </div>-->
     </div>
     <sky-alert *ngIf="showSubmitError" alertType="danger">
       {{ submitErrorMsg }}

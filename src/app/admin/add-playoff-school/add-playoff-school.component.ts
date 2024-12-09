@@ -15,6 +15,7 @@ import {
   School,
 } from 'src/app/shared/services/bowl.model';
 import { BowlService } from 'src/app/shared/services/bowl.service';
+import { SettingsService } from 'src/app/shared/services/settings.service';
 
 @Component({
   standalone: true,
@@ -23,9 +24,9 @@ import { BowlService } from 'src/app/shared/services/bowl.service';
     CommonModule,
     ReactiveFormsModule,
     SkyInputBoxModule,
-    SkyRepeaterModule,
+    
   ],
-  providers: [BowlService, SkyAppConfig],
+  providers: [BowlService, SettingsService],
   templateUrl: './add-playoff-school.component.html',
   styleUrls: ['./add-playoff-school.component.scss'],
 })
@@ -38,13 +39,15 @@ export class AddPlayoffSchoolComponent implements OnInit {
     seed: FormControl<number | null>;
   }>;
 
-  constructor(private svc: BowlService, private formBuilder: FormBuilder, private config: SkyAppConfig) {
+  constructor(
+    private svc: BowlService,
+    private formBuilder: FormBuilder,
+    private settingsSvc: SettingsService
+  ) {
     this.schoolForm = this.formBuilder.group({
       school: new FormControl({}),
       seed: new FormControl(1),
     });
-
-    console.log(this.config);
   }
 
   public ngOnInit(): void {
@@ -52,7 +55,7 @@ export class AddPlayoffSchoolComponent implements OnInit {
       this.schools = result;
     });
 
-    this.svc.getPlayoffSchools(2024).subscribe((result) => {
+    this.svc.getPlayoffSchools(this.settingsSvc.currentYear).subscribe((result) => {
       this.playoffSchools = result;
     });
   }
@@ -60,7 +63,7 @@ export class AddPlayoffSchoolComponent implements OnInit {
   public submit() {
     if (this.schoolForm.value.school && this.schoolForm.value.seed) {
       const request: PlayoffSchoolRequest = {
-        year: 2024,
+        year: this.settingsSvc.currentYear,
         school_id: this.schoolForm.value.school.ID!,
         school_name: this.schoolForm.value.school.Name!,
         seed_number: this.schoolForm.value.seed,

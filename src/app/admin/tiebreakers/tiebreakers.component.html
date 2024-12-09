@@ -1,29 +1,18 @@
-<sky-repeater expandMode="single">
-    <sky-repeater-item [isExpanded]="false">
-        <sky-repeater-item-title>
-            <div class="pull-left">
-                <span class="label"> Tiebreakers</span>
-            </div>
-        </sky-repeater-item-title>
-        <sky-repeater-item-content>
-            <table class="center">
-                <tr>
-                    <th class="team-check">Entry</th>
-                    <th class="team-name">Highest Scoring Bowl</th>
-                    <th class="team-name">Highest Total Score</th>
-                </tr>
-                <tr *ngFor="let tiebreaker of tiebreakers">
-                    <td class="team-name">
-                        {{ tiebreaker.entry_name}}
-                    </td>
-                    <td class="team-name">
+<table class="center">
+  <tr>
+    <th class="team-check">Entry</th>
+    <!-- <th class="team-name">Highest Scoring Bowl</th> -->
+    <th class="team-name">Total Points</th>
+  </tr>
+  <tr *ngFor="let tiebreaker of tiebreakers">
+    <td class="team-name">
+      {{ tiebreaker.entry_name }}
+    </td>
+    <!-- <td class="team-name">
                         {{ tiebreaker.tiebreaker_1 }}
-                    </td>
-                    <td class="team-name">
-                        {{ tiebreaker.tiebreaker_2 }}
-                    </td>
-                </tr>
-            </table>
-        </sky-repeater-item-content>
-    </sky-repeater-item>
-</sky-repeater>
+                    </td> -->
+    <td class="team-name">
+      {{ tiebreaker.tiebreaker_2 }}
+    </td>
+  </tr>
+</table>
