@@ -1,97 +1,84 @@
-<sky-repeater expandMode="single">
-  <sky-repeater-item [isExpanded]="false">
-    <sky-repeater-item-title> Add Bowl Game </sky-repeater-item-title>
-    <sky-repeater-item-content>
-      <div>Bowl</div>
-      <sky-dropdown style="display: inline-block; width: 150px">
-        <sky-dropdown-button>{{ selectedBowl.name }}</sky-dropdown-button>
-        <sky-dropdown-menu>
-          <sky-dropdown-item *ngFor="let bowl of bowls">
-            <button
-              type="button"
-              class="sky-btn sky-btn-primary sky-margin-inline-compact"
-              (click)="setBowlGame(bowl.id)"
-            >
-              {{ bowl.name }} (ID: {{ bowl.id }})
-            </button>
-          </sky-dropdown-item>
-        </sky-dropdown-menu>
-      </sky-dropdown>
-      <div>School 1</div>
-      <sky-dropdown style="display: inline-block">
-        <sky-dropdown-button>{{ selectedSchool1.Name }}</sky-dropdown-button>
-        <sky-dropdown-menu>
-          <sky-dropdown-item *ngFor="let school of schools">
-            <button type="button" (click)="setSchool(school.ID!, 1)">
-              {{ school.Name }} (ID: {{ school.ID }})
-            </button>
-          </sky-dropdown-item>
-        </sky-dropdown-menu>
-      </sky-dropdown>
-      <div>School 2</div>
-      <sky-dropdown style="display: inline-block">
-        <sky-dropdown-button>{{ selectedSchool2.Name }}</sky-dropdown-button>
-        <sky-dropdown-menu>
-          <sky-dropdown-item *ngFor="let school of schools">
-            <button type="button" (click)="setSchool(school.ID!, 2)">
-              {{ school.Name }} (ID: {{ school.ID }})
-            </button>
-          </sky-dropdown-item>
-        </sky-dropdown-menu>
-      </sky-dropdown>
-      <!-- <div style="display: inline-block"> Date<br /> </div>
+<div>Bowl</div>
+<sky-dropdown style="display: inline-block; width: 150px">
+  <sky-dropdown-button>{{ selectedBowl.name }}</sky-dropdown-button>
+  <sky-dropdown-menu>
+    <sky-dropdown-item *ngFor="let bowl of bowls">
+      <button
+        type="button"
+        class="sky-btn sky-btn-primary sky-margin-inline-compact"
+        (click)="setBowlGame(bowl.id)"
+      >
+        {{ bowl.name }} (ID: {{ bowl.id }})
+      </button>
+    </sky-dropdown-item>
+  </sky-dropdown-menu>
+</sky-dropdown>
+<div>School 1</div>
+<sky-dropdown style="display: inline-block">
+  <sky-dropdown-button>{{ selectedSchool1.Name }}</sky-dropdown-button>
+  <sky-dropdown-menu>
+    <sky-dropdown-item *ngFor="let school of schools">
+      <button type="button" (click)="setSchool(school.ID!, 1)">
+        {{ school.Name }} (ID: {{ school.ID }})
+      </button>
+    </sky-dropdown-item>
+  </sky-dropdown-menu>
+</sky-dropdown>
+<div>School 2</div>
+<sky-dropdown style="display: inline-block">
+  <sky-dropdown-button>{{ selectedSchool2.Name }}</sky-dropdown-button>
+  <sky-dropdown-menu>
+    <sky-dropdown-item *ngFor="let school of schools">
+      <button type="button" (click)="setSchool(school.ID!, 2)">
+        {{ school.Name }} (ID: {{ school.ID }})
+      </button>
+    </sky-dropdown-item>
+  </sky-dropdown-menu>
+</sky-dropdown>
+<!-- <div style="display: inline-block"> Date<br /> </div>
             <input style="display: inline-block" type="date" value="2023-12-15" min="2023-12-15" max="2024-01-15" /> -->
-      <div>
-        <form [formGroup]="formGroup" style="width: 350px">
-          <sky-input-box
-            data-sky-id="input-box-first-name"
-            labelText="Year   Month   Day  Hour   Min"
-          >
-            <input
-              formControlName="year"
-              spellcheck="false"
-              type="number"
-              min="2024"
-              max="2025"
-            />
-            <input
-              formControlName="month"
-              spellcheck="false"
-              type="number"
-              min="1"
-              max="12"
-            />
-            <input
-              formControlName="day"
-              spellcheck="false"
-              type="number"
-              min="1"
-              max="31"
-            />
-            <input
-              formControlName="hour"
-              spellcheck="false"
-              type="number"
-              min="0"
-              max="23"
-            />
-            <input
-              formControlName="minute"
-              spellcheck="false"
-              type="number"
-              step="15"
-              min="0"
-              max="45"
-            />
-          </sky-input-box>
-        </form>
-      </div>
-      <!-- Playoff?
+<div>
+  <form [formGroup]="formGroup" style="width: 350px">
+    <sky-input-box
+      data-sky-id="input-box-first-name"
+      labelText="Year   Month   Day  Hour   Min"
+    >
+      <input formControlName="year" spellcheck="false" type="number" />
+      <input
+        formControlName="month"
+        spellcheck="false"
+        type="number"
+        min="1"
+        max="12"
+      />
+      <input
+        formControlName="day"
+        spellcheck="false"
+        type="number"
+        min="1"
+        max="31"
+      />
+      <input
+        formControlName="hour"
+        spellcheck="false"
+        type="number"
+        min="0"
+        max="23"
+      />
+      <input
+        formControlName="minute"
+        spellcheck="false"
+        type="number"
+        step="15"
+        min="0"
+        max="45"
+      />
+    </sky-input-box>
+  </form>
+</div>
+<!-- Playoff?
       <sky-checkbox [(checked)]="isPlayoff"></sky-checkbox>
       Championship?
       <sky-checkbox [(checked)]="isChampionship"></sky-checkbox> -->
-      <button (click)="addBowlGame()">Add Bowl Game</button>
-      {{ addMessage }}
-    </sky-repeater-item-content>
-  </sky-repeater-item>
-</sky-repeater>
+<button (click)="addBowlGame()">Add Bowl Game</button>
+{{ addMessage }}

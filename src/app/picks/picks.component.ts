@@ -49,6 +49,8 @@ import { SettingsService } from '../shared/services/settings.service';
 export class PicksComponent implements OnInit {
   public schools: School[] = [];
   public playoffSchools: PlayoffSchool[] = [];
+  public playoffSchoolsA: PlayoffSchool[] = [];
+  public playoffSchoolsB: PlayoffSchool[] = [];
   private games: Game[] = [];
   private bowls: Bowl[] = [];
   @Input() public picks: PickModel[] = [];
@@ -93,8 +95,9 @@ export class PicksComponent implements OnInit {
     newpicks: new FormArray([]),
     tiebreaker1Id: new FormControl(0),
     tiebreaker2: new FormControl(0),
-    playoff1: new FormControl(''),
-    playoff2: new FormControl(''),
+    playoff1: new FormControl(1),
+    playoff2: new FormControl(2),
+    champion: new FormControl(0),
   });
 
   // playoffPickForm = this.formBuilder.group({
@@ -153,7 +156,20 @@ export class PicksComponent implements OnInit {
     this.svc
       .getPlayoffSchools(this.settings.currentYear)
       .subscribe((result) => {
-        this.playoffSchools = result;
+        const leftSeeds = [1, 4, 5, 12, 8, 9];
+        const rightSeeds = [2, 3, 6, 7, 10, 11];
+        this.playoffSchools = result.sort(
+          (a: PlayoffSchool, b: PlayoffSchool) => {
+            return a.seed_number! > b.seed_number! ? 1 : -1;
+          }
+        );
+
+        this.playoffSchoolsA = this.playoffSchools.filter((x) => {
+          return leftSeeds.indexOf(x.seed_number) > -1;
+        });
+        this.playoffSchoolsB = this.playoffSchools.filter((x) => {
+          return rightSeeds.indexOf(x.seed_number) > -1;
+        });
       });
 
     // get schools, games, and bowls to make up the list
@@ -286,14 +302,14 @@ export class PicksComponent implements OnInit {
         this.showSubmitError = true;
         return;
       }
-      if (!this.tiebreakerForm.value.tiebreaker1Id) {
-        this.submitErrorMsg = 'Please select the highest-scoring game.';
-        this.showSubmitError = true;
-        return;
-      }
+      // if (!this.tiebreakerForm.value.tiebreaker1Id) {
+      //   this.submitErrorMsg = 'Please select the highest-scoring game.';
+      //   this.showSubmitError = true;
+      //   return;
+      // }
       if (!this.tiebreakerForm.value.tiebreaker2) {
         this.submitErrorMsg =
-          'Please enter the number of points that will be scored in the highest-scoring game.';
+          'Please enter the number of total points that will be scored across all games in the bowl season.';
         this.showSubmitError = true;
         return;
       }
@@ -361,10 +377,14 @@ export class PicksComponent implements OnInit {
         }),
         mergeMap(() => {
           // submit playoff picks
-          // console.log(result);
           return this.svc.addPlayoffPicks({
             playoff_picks: [
-              { entry_id: entryId.toString(), school1_id: 1, school2_id: 2 },
+              {
+                entry_id: entryId.toString(),
+                school1_id: Number(this.pickForm.value.playoff1!),
+                school2_id: Number(this.pickForm.value.playoff2!),
+                champion_school_id: Number(this.pickForm.value.champion!)
+              },
             ],
           });
         })
@@ -724,14 +744,14 @@ export class PicksComponent implements OnInit {
 
   private isBonusGame(game: Game, name: string): boolean {
     const bonusGameNames = [
-      'Military',
-      'Mayo',
-      'Holiday',
-      'Texas',
       'Fenway',
       'Pinstripe',
+      'New Mexico',
       'Pop-Tarts',
+      'Arizona',
+      'Military',
       'Alamo',
+      'Independence',
     ];
 
     // this is if there are bowl games on new years day

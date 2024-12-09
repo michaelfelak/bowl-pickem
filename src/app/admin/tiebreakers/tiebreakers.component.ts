@@ -8,7 +8,7 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
 @Component({
   standalone: true,
   selector: 'app-tiebreakers',
-  imports: [CommonModule, SkyRepeaterModule],
+  imports: [CommonModule],
   providers: [SettingsService],
   templateUrl: './tiebreakers.component.html',
   styleUrls: ['./tiebreakers.component.scss'],

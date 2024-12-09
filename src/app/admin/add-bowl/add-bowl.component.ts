@@ -20,7 +20,6 @@ import { SkyAlertModule } from '@skyux/indicators';
     ReactiveFormsModule,
     SkyAlertModule,
     SkyInputBoxModule,
-    SkyRepeaterModule,
   ],
   templateUrl: './add-bowl.component.html',
   styleUrls: ['./add-bowl.component.scss'],

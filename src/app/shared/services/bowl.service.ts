@@ -19,6 +19,9 @@ import {
   PlayoffPickRequest,
   PlayoffSchoolRequest,
   PlayoffSchool,
+  PlayoffResult as AddPlayoffResultRequest,
+  PlayoffPick,
+  PlayoffPickFlyout,
 } from './bowl.model';
 
 @Injectable()
@@ -126,6 +129,19 @@ export class BowlService {
   public getPlayoffSchools(year: number) {
     return this.http.get<PlayoffSchool[]>(
       this.baseUrl + 'playoffschool/list/' + year
+    );
+  }
+
+  public addPlayoffResult(request: AddPlayoffResultRequest) {
+    return this.http.post<AddPlayoffResultRequest[]>(
+      this.baseUrl + 'playoffschool/list/',
+      request
+    );
+  }
+
+  public getPlayoffPickForFlyout(entryId: string) {
+    return this.http.get<PlayoffPickFlyout>(
+      this.baseUrl + 'playoffpicks/flyout/' + entryId
     );
   }
 }

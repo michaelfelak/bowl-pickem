@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { BowlService } from '../../shared/services/bowl.service';
 import { Entry } from '../../shared/services/bowl.model';
 import { mergeMap } from 'rxjs/operators';
@@ -15,12 +15,15 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
 @Component({
   standalone: true,
   selector: 'app-paid-status',
-  imports: [CommonModule, SkyIconModule, SkyRepeaterModule],
+  imports: [CommonModule, SkyIconModule],
   providers: [SettingsService],
   templateUrl: './paid-status.component.html',
   styleUrls: ['./paid-status.component.scss'],
 })
 export class PaidStatusComponent implements OnInit {
+  @Output()
+  public numberOfEntrants = new EventEmitter<string>();
+
   public entries: Entry[] = [];
   public numUnpaidEntries = 0;
   public numPaidEntries = 0;
@@ -41,6 +44,7 @@ export class PaidStatusComponent implements OnInit {
       .getEntries(this.settings.currentYear)
       .subscribe((result: Entry[]) => {
         this.entries = result;
+
         this.sortEntriesByPaidStatus();
         this.calculatePaidTotal();
       });
@@ -96,6 +100,19 @@ export class PaidStatusComponent implements OnInit {
       this.numUnpaidEntries = this.entries.filter(function (entry) {
         return entry.paid === false;
       }).length;
+
+      //   <span class="label">
+      //   {{ this.numUnpaidEntries }} Unpaid - {{ this.numPaidEntries }} Paid -
+      //   {{ this.numPaidEntries + this.numUnpaidEntries }} Total
+      // </span>
+      this.numberOfEntrants.emit(
+        this.numUnpaidEntries +
+          ' Unpaid - ' +
+          this.numPaidEntries +
+          ' Paid - ' +
+          this.entries +
+          ' Total'
+      );
     }
   }
 }

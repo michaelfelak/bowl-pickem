@@ -25,8 +25,8 @@ import { SettingsService } from '../shared/services/settings.service';
 export class StandingsComponent implements OnInit {
   public standings: StandingsEntry[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
-  public showStandingsLink = true; // this shows the flyout links, only enable after bowls start
-  public currentYear!: number;
+  public showStandingsLink = false; // this shows the flyout links, only enable after bowls start
+  public currentYear: number = 0;
   public years: number[] = [2024, 2023, 2022, 2021, 2020, 2019];
 
   public sortCurrentPoints = false;
@@ -48,7 +48,7 @@ export class StandingsComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.currentYear = 2024;
+    this.currentYear = this.settings.currentYear;
     this.titleService.setTitle("Bowl Pick'em - Standings");
     this.retrieveStandings(this.currentYear);
   }

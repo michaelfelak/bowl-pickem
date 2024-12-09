@@ -1,0 +1,31 @@
+<form [formGroup]="resultsForm">
+  <h2 class="header">Championship Game</h2>
+
+  <div style="width: 400px; margin-left: auto; margin-right: auto">
+    Choose 1st team
+
+    <select formControlName="school1">
+      <option [value]="school.school_id" *ngFor="let school of playoffSchoolsA">
+        #{{ school.seed_number }}. {{ school.school_name }}
+      </option>
+    </select>
+  </div>
+  <div style="width: 400px; margin-left: auto; margin-right: auto">
+    Choose 2nd team
+    <select formControlName="school2">
+      <option [value]="school.school_id" *ngFor="let school of playoffSchoolsB">
+        #{{ school.seed_number }}. {{ school.school_name }}
+      </option>
+    </select>
+  </div>
+
+  <h2 class="header">National Champion</h2>
+  <div style="width: 400px; margin-left: auto; margin-right: auto">
+    National Champion
+    <select formControlName="champion">
+      <option [value]="school.school_id" *ngFor="let school of playoffSchools">
+        #{{ school.seed_number }}. {{ school.school_name }}
+      </option>
+    </select>
+  </div>
+</form>

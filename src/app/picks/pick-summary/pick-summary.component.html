@@ -1,23 +1,28 @@
 <div style="border: solid 1px #ccc">
   <table>
     <tr>
+      <sky-alert *ngIf="threePointError" alertType="danger" [closeable]="false">
+        You have exceeded the maximum number of 3 point games.
+      </sky-alert>
+      <sky-alert *ngIf="fivePointError" alertType="danger" [closeable]="false">
+        You have exceeded the maximum number of 5 point games.
+      </sky-alert>
+      <sky-alert *ngIf="tenPointError" alertType="danger" [closeable]="false">
+        You have exceeded the maximum number of 10 point games.
+      </sky-alert>
+    </tr>
+    <tr>
       <td>
-        <sky-alert *ngIf="threePointError" alertType="danger" [closeable]="false">
-          You have exceeded the maximum number of 3 point games.
-        </sky-alert>
-        <sky-alert *ngIf="fivePointError" alertType="danger" [closeable]="false">
-          You have exceeded the maximum number of 5 point games.
-        </sky-alert>
-        <sky-alert *ngIf="tenPointError" alertType="danger" [closeable]="false">
-          You have exceeded the maximum number of 10 point games.
-        </sky-alert>
         Complete the following:
         <ul>
           <li>Enter your entry name and email.</li>
           <li>Select a winner for each game, including the playoffs.</li>
           <li>Up to 5 games can have 5 bonus points.</li>
           <li>Up to 5 games can have 3 bonus points.</li>
-          <li>One "Bonus" bowl game can have 10 bonus points. (Military, Mayo, Holiday, Texas, Fenway, Pinstripe, Pop-Tarts, Alamo)</li>
+          <li>
+            One "Bonus" bowl game can have 10 bonus points. (Military, Mayo,
+            Holiday, Texas, Fenway, Pinstripe, Pop-Tarts, Alamo)
+          </li>
           <li>Select the tiebreakers at the end of the form.</li>
           <li>
             Validate all of your picks and points before clicking
@@ -25,8 +30,8 @@
           </li>
         </ul>
       </td>
-      <td style="width:15%">
-        <table style="text-align: right">
+      <td style="width: 15%">
+        <table style="text-align: right; width: 100%;">
           <td>
             <tr>
               <sky-key-info>
@@ -44,14 +49,16 @@
                 <sky-key-info-label> Five Point Games </sky-key-info-label>
               </sky-key-info>
             </tr>
-            <tr><sky-key-info>
+            <tr>
+              <sky-key-info>
                 <sky-key-info-value>
                   {{ tenPointGames }}
                 </sky-key-info-value>
                 <sky-key-info-label> Ten Point Games </sky-key-info-label>
               </sky-key-info>
             </tr>
-            <tr><sky-key-info>
+            <tr>
+              <sky-key-info>
                 <sky-key-info-value>
                   {{ possiblePoints }}
                 </sky-key-info-value>
@@ -60,6 +67,7 @@
             </tr>
           </td>
         </table>
+      </td>
     </tr>
   </table>
 </div>

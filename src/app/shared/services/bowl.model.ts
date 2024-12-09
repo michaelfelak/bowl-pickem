@@ -18,7 +18,21 @@ export interface PlayoffPick {
   entry_id: string;
   school1_id: number;
   school2_id: number;
+  champion_school_id: number
 }
+
+export interface PlayoffPickFlyout{
+  school_1?: string;
+  school_2?: string;
+  champion?: string;
+}
+export interface PlayoffResult {
+  year: number;
+  school1_id: number;
+  school2_id: number;
+  champion_school_id: number
+}
+
 
 export interface PickModel {
   id?: string;
@@ -50,10 +64,10 @@ export interface School {
 }
 
 export interface PlayoffSchool {
-  id?: string;
-  school_name: string;
-  school_id: string;
-  seed_number: string;
+  id?: number;
+  school_name: number;
+  school_id: number;
+  seed_number: number;
 }
 
 export interface Game {
