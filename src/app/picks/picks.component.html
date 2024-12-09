@@ -71,7 +71,7 @@
               {{ pick.team_2_name }}
             </td>
             <td *ngIf="!pick.is_new_years_game">
-              <select formControlName="points" style="width: 50px;">
+              <select formControlName="points" style="width: 50px">
                 <option
                   *ngFor="let pointValue of pointValues"
                   [ngValue]="pointValue"
@@ -80,7 +80,7 @@
                 </option>
               </select>
             </td>
-            <td *ngIf="pick.is_new_years_game" style="width: 50px;">
+            <td *ngIf="pick.is_new_years_game" style="width: 50px">
               <select formControlName="points">
                 <option
                   *ngFor="let pointValue of newYearsPointValues"
@@ -300,7 +300,7 @@
     </div>
     <!-- Tiebreakers -->
     <h2 class="header">Tiebreakers</h2>
-    <div [formGroup]="tiebreakerForm" class="header" >
+    <div [formGroup]="tiebreakerForm" class="header">
       <span class="header">
         How many <span style="font-weight: bold">total</span> points will be
         scored in the 2024-2025 bowl season? (The answer for last year was
@@ -326,6 +326,7 @@
     <sky-alert *ngIf="showSubmitError" alertType="danger">
       {{ submitErrorMsg }}
     </sky-alert>
+    <!-- <button (click)="selectAllTeam2()">pick all team 2s</button> -->
     <div style="text-align: center; padding-top: 20px">
       <button
         class="sky-btn sky-btn-primary sky-margin-inline-compact"
