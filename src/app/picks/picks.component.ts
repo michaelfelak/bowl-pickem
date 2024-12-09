@@ -89,14 +89,17 @@ export class PicksComponent implements OnInit {
   @Input() public tiebreaker2 = 0;
   public isLoading = true;
 
+  private championshipGameError: boolean = false;
+  private championError: boolean = true;
+
   pickForm = this.formBuilder.group({
     name: new FormControl(''),
     email: new FormControl(''),
     newpicks: new FormArray([]),
     tiebreaker1Id: new FormControl(0),
     tiebreaker2: new FormControl(0),
-    playoff1: new FormControl(1),
-    playoff2: new FormControl(2),
+    playoff1: new FormControl(0),
+    playoff2: new FormControl(0),
     champion: new FormControl(0),
   });
 
@@ -137,12 +140,14 @@ export class PicksComponent implements OnInit {
     this.pickForm.valueChanges.subscribe(() => {
       if (!this.isLoading) {
         this.validateBonusPoints();
+        this.validateChampionship();
         this.calculateTotalPoints();
       }
     });
     this.tiebreakerForm.valueChanges.subscribe(() => {
       if (!this.isLoading) {
         this.validateBonusPoints();
+        this.validateChampionship();
         this.calculateTotalPoints();
       }
     });
@@ -171,6 +176,7 @@ export class PicksComponent implements OnInit {
           return rightSeeds.indexOf(x.seed_number) > -1;
         });
       });
+      this.validateChampionship();
 
     // get schools, games, and bowls to make up the list
     this.svc
@@ -302,6 +308,15 @@ export class PicksComponent implements OnInit {
         this.showSubmitError = true;
         return;
       }
+      if (this.championshipGameError) {
+        this.submitErrorMsg =
+          'Select two teams to play in the championship game.';
+        this.showSubmitError = true;
+      }
+      if (this.championError) {
+        this.submitErrorMsg = 'Select the national champion.';
+        this.showSubmitError = true;
+      }
       // if (!this.tiebreakerForm.value.tiebreaker1Id) {
       //   this.submitErrorMsg = 'Please select the highest-scoring game.';
       //   this.showSubmitError = true;
@@ -383,7 +398,7 @@ export class PicksComponent implements OnInit {
                 entry_id: entryId.toString(),
                 school1_id: Number(this.pickForm.value.playoff1!),
                 school2_id: Number(this.pickForm.value.playoff2!),
-                champion_school_id: Number(this.pickForm.value.champion!)
+                champion_school_id: Number(this.pickForm.value.champion!),
               },
             ],
           });
@@ -584,6 +599,19 @@ export class PicksComponent implements OnInit {
     // if (type === 1) {
     //   this.buildChampionshipGame();
     // }
+  }
+
+  public validateChampionship() {
+    if (!this.pickForm.value.playoff1 || !this.pickForm.value.playoff2) {
+      this.championshipGameError = true;
+      this.championError = false;
+    } else if (!this.pickForm.value.champion) {
+      this.championshipGameError = false;
+      this.championError = true;
+    } else {
+      this.championError = false;
+      this.championshipGameError = false;
+    }
   }
 
   // only allow a certain amount of 3/5 point games

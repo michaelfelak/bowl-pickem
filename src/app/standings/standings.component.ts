@@ -51,6 +51,7 @@ export class StandingsComponent implements OnInit {
     this.currentYear = this.settings.currentYear;
     this.titleService.setTitle("Bowl Pick'em - Standings");
     this.retrieveStandings(this.currentYear);
+    this.showStandingsLink = this.settings.showStandingsFlyout;
   }
 
   public retrieveStandings(year: number) {
