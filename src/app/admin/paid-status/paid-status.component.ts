@@ -105,14 +105,14 @@ export class PaidStatusComponent implements OnInit {
       //   {{ this.numUnpaidEntries }} Unpaid - {{ this.numPaidEntries }} Paid -
       //   {{ this.numPaidEntries + this.numUnpaidEntries }} Total
       // </span>
-      this.numberOfEntrants.emit(
+      const foo = 
         this.numUnpaidEntries +
-          ' Unpaid - ' +
-          this.numPaidEntries +
-          ' Paid - ' +
-          this.entries +
-          ' Total'
-      );
+        ' Unpaid - ' +
+        this.numPaidEntries +
+        ' Paid - ' +
+        this.entries +
+        ' Total';
+      this.numberOfEntrants.emit(foo);
     }
   }
 }

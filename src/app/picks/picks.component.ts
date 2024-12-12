@@ -176,7 +176,7 @@ export class PicksComponent implements OnInit {
           return rightSeeds.indexOf(x.seed_number) > -1;
         });
       });
-      this.validateChampionship();
+    this.validateChampionship();
 
     // get schools, games, and bowls to make up the list
     this.svc
@@ -719,6 +719,16 @@ export class PicksComponent implements OnInit {
     //     totalPoints += pick.points;
     //   }
     // });
+
+    if (this.pickForm.value.playoff1) {
+      totalPoints += 2;
+    }
+    if (this.pickForm.value.playoff2) {
+      totalPoints += 2;
+    }
+    if (this.pickForm.value.champion) {
+      totalPoints += 5;
+    }
     return totalPoints;
   }
 
