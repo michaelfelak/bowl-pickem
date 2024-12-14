@@ -8,6 +8,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
+import { SettingsService } from './shared/services/settings.service';
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -18,7 +19,7 @@ import { CommonModule } from '@angular/common';
     HttpClientModule,
     FooterComponent,
   ],
-  providers: [BowlService],
+  providers: [BowlService, SettingsService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
