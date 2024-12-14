@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
+import { SettingsService } from './shared/services/settings.service';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +9,12 @@ import { Title } from '@angular/platform-browser';
 })
 export class AppComponent {
   public showAdmin = false;
-
-  constructor(private titleService: Title) {
+  public showSubmit = false;
+  constructor(
+    private titleService: Title,
+    private settingService: SettingsService
+  ) {
+    this.showSubmit = this.settingService.showSubmitEntry;
     this.titleService.setTitle("Bowl Pick'em - Home");
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);

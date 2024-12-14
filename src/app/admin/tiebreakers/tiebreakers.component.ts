@@ -24,7 +24,9 @@ export class TiebreakersComponent implements OnInit {
     this.bowlService
       .getTiebreakers(this.settings.currentYear)
       .subscribe((result) => {
-        this.tiebreakers = result;
+        this.tiebreakers = result.sort((a: Tiebreaker, b: Tiebreaker)=>{
+          return a.tiebreaker_2! > b.tiebreaker_2! ? -1 : 1;
+        });
       });
   }
 }

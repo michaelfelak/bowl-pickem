@@ -89,7 +89,7 @@
   /> -->
   <p>Bowl Pick'em</p>
   <a routerLink="">Home</a>
-  <a routerLink="picks">Submit Entry</a>
+  <a *ngIf="showSubmit" routerLink="picks">Submit Entry</a>
   <a routerLink="scores">Scores</a>
   <a routerLink="standings">Standings</a>
   <!-- <a routerLink="scenario-generator">Scenario Generator</a> -->
