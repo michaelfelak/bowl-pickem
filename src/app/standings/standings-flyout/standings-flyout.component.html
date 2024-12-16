@@ -1,8 +1,20 @@
 <main>
   <h3 class="header">Entry Name: {{ name }}</h3>
   <h3 class="header">Total points: {{ points }}</h3>
-  <h4 class="header">Championship Game: {{playoffPicks.school_1}} vs. {{playoffPicks.school_2}} </h4>
-  <h4 class="header">National Champion: {{playoffPicks.champion}} </h4>
+  <div *ngIf="playoffPicks">
+    <h4 class="header">
+      Championship Game:
+      <app-status-indicator [value]="playoffPicks.school_1_correct" />
+      {{ playoffPicks.school_1 }} vs.
+      <app-status-indicator [value]="playoffPicks.school_2_correct" />
+      {{ playoffPicks.school_2 }}
+    </h4>
+    <h4 class="header">
+      National Champion:
+      <app-status-indicator [value]="playoffPicks.champion_correct" />
+      {{ playoffPicks.champion }}
+    </h4>
+  </div>
   <table class="center">
     <tr>
       <th class="team-name" style="border-left: 1px solid black">Bowl</th>
@@ -18,41 +30,21 @@
         <b *ngIf="pick.not_played"><br />Canceled</b>
       </td>
       <td class="team-check" style="border-left: 1px solid black">
-        <sky-icon
-          style="color: red"
-          icon="times"
-          *ngIf="pick.team_1 && pick.team_2_won"
-        ></sky-icon>
-        <sky-icon
-          style="color: green"
-          icon="check-circle"
-          *ngIf="pick.team_1 && pick.team_1_won"
-        >
-        </sky-icon>
-        <sky-icon
-          icon="check"
-          *ngIf="!pick.team_1_won && !pick.team_2_won && pick.team_1"
-        ></sky-icon>
+        <app-status-indicator
+          *ngIf="pick.team_1"
+          [value]="pick.correct1"
+          [showCheck]="pick.team_1"
+        ></app-status-indicator>
       </td>
       <td class="team-name" style="border-right: 1px solid black">
         {{ pick.team_1_name }}
       </td>
       <td class="team-check" style="border-left: 1px solid black">
-        <sky-icon
-          style="color: red"
-          icon="times"
-          *ngIf="pick.team_2 && pick.team_1_won"
-        ></sky-icon>
-        <sky-icon
-          style="color: green"
-          icon="check-circle"
-          *ngIf="pick.team_2 && pick.team_2_won"
-        >
-        </sky-icon>
-        <sky-icon
-          icon="check"
-          *ngIf="!pick.team_1_won && !pick.team_2_won && pick.team_2"
-        ></sky-icon>
+        <app-status-indicator
+          *ngIf="pick.team_2"
+          [value]="pick.correct2"
+          [showCheck]="pick.team_2"
+        ></app-status-indicator>
       </td>
       <td class="team-name" style="border-right: 1px solid black">
         {{ pick.team_2_name }}

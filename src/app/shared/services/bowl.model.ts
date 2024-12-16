@@ -23,8 +23,11 @@ export interface PlayoffPick {
 
 export interface PlayoffPickFlyout{
   school_1?: string;
+  school_1_correct?: boolean;
   school_2?: string;
+  school_2_correct?: boolean;
   champion?: string;
+  champion_correct?: boolean;
 }
 export interface PlayoffResult {
   year: number;
@@ -155,7 +158,8 @@ export interface CompletedPick {
   team_2_name?: string;
   points?: number;
   earned_points?: number;
-  correct?: boolean;
+  correct1?: boolean;
+  correct2?: boolean;
   not_played?: boolean;
 }
 
@@ -202,6 +206,8 @@ export interface BowlPick {
   team_1_won?: boolean;
   team_2_won?: boolean;
   earned_points?: number;
+  correct1?: boolean;
+  correct2?: boolean;
 }
 
 export interface Tiebreaker {

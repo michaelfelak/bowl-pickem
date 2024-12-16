@@ -10,15 +10,14 @@ import {
 } from '../../shared/services/bowl.model';
 import { BowlPicksFlyoutContext } from './bowl-picks-flyout.context';
 import { mergeMap } from 'rxjs/operators';
-import { SkyIconModule } from '@skyux/indicators';
 import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SettingsService } from 'src/app/shared/services/settings.service';
+import { StatusIndicatorComponent } from '../../shared/status-indicator/status-indicator.component';
 
 @Component({
   standalone: true,
   selector: 'app-bowl-picks-flyout',
-  imports: [CommonModule, BrowserAnimationsModule, SkyIconModule],
+  imports: [CommonModule, StatusIndicatorComponent],
   providers: [SettingsService],
   templateUrl: './bowl-picks-flyout.component.html',
   styleUrls: ['./bowl-picks-flyout.component.scss'],
@@ -153,6 +152,14 @@ export class BowlPicksFlyoutComponent implements OnInit {
         this.gameHasResult = true;
         this.team1score = result.score_1!;
         this.team2score = result.score_2!;
+        if (pick.team_1_picked !== undefined && pick.team_1_won !== undefined) {
+          pick.correct1 =
+            pick.team_1_picked === true && pick.team_1_won === true;
+        }
+        if (pick.team_2_picked !== undefined && pick.team_2_won !== undefined) {
+          pick.correct2 =
+            pick.team_2_picked === true && pick.team_2_won === true;
+        }
 
         if (
           (pick.team_1_won && !pick.team_1_picked) ||

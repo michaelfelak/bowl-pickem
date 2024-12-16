@@ -3,10 +3,12 @@ import { BlogEntry } from '../shared/services/bowl.model';
 import { BowlService } from '../shared/services/bowl.service';
 import * as dayjs from 'dayjs';
 import { SettingsService } from '../shared/services/settings.service';
+import { SkyRepeaterModule } from '@skyux/lists';
 
 @Component({
   standalone: true,
   selector: 'app-daily-blog',
+  imports: [SkyRepeaterModule],
   providers: [SettingsService],
   templateUrl: './daily-blog.component.html',
   styleUrls: ['./daily-blog.component.scss'],
