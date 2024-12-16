@@ -9,7 +9,7 @@ import {
 } from '@skyux/flyout';
 import { StandingsFlyoutComponent } from './standings-flyout/standings-flyout.component';
 import { StandingsFlyoutContext } from './standings-flyout/standings-flyout.context';
-import { SkyIconModule, SkyWaitService } from '@skyux/indicators';
+import { SkyWaitService } from '@skyux/indicators';
 import { SkyDropdownModule } from '@skyux/popovers';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from '../shared/services/settings.service';
@@ -17,7 +17,7 @@ import { SettingsService } from '../shared/services/settings.service';
 @Component({
   standalone: true,
   selector: 'app-standings',
-  imports: [CommonModule, SkyDropdownModule, SkyIconModule],
+  imports: [CommonModule, SkyDropdownModule],
   providers: [SettingsService],
   templateUrl: './standings.component.html',
   styleUrls: ['./standings.component.scss'],

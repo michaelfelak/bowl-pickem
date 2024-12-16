@@ -3,18 +3,17 @@ import { BowlService } from '../../shared/services/bowl.service';
 import {
   CompletedEntry,
   CompletedPick,
-  PlayoffPick,
   PlayoffPickFlyout,
 } from '../../shared/services/bowl.model';
 import { StandingsFlyoutContext } from './standings-flyout.context';
-import { SkyIconModule } from '@skyux/indicators';
 import { CommonModule } from '@angular/common';
 import { mergeMap } from 'rxjs';
+import { StatusIndicatorComponent } from '../../shared/status-indicator/status-indicator.component';
 
 @Component({
   standalone: true,
   selector: 'app-standings-flyout',
-  imports: [CommonModule, SkyIconModule],
+  imports: [CommonModule, StatusIndicatorComponent],
   templateUrl: './standings-flyout.component.html',
   styleUrls: ['./standings-flyout.component.scss'],
 })
@@ -42,12 +41,17 @@ export class StandingsFlyoutComponent implements OnInit {
         })
       )
       .subscribe((result: any) => {
+        console.log(result);
         this.entry = result;
         this.name = this.entry.entry_name!;
         this.picks = this.entry.picks!;
-        this.picks.forEach((a: CompletedPick) => {
-          if (a.earned_points) {
-            this.points += a.earned_points;
+        this.picks.forEach((pick: CompletedPick) => {
+          if (pick.team_1_won || pick.team_2_won) {
+            pick.correct1 = pick.correct2 =
+              pick.earned_points !== undefined && pick.earned_points > 0;
+          }
+          if (pick.earned_points) {
+            this.points += pick.earned_points;
           }
         });
       });

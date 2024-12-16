@@ -26,12 +26,7 @@
       <button type="button" (click)="togglePaid(entry.id!)">Mark</button>
     </td>
     <td class="team-check">
-      <sky-icon
-        style="color: green"
-        *ngIf="entry.paid"
-        icon="check-circle"
-      ></sky-icon>
-      <sky-icon style="color: red" *ngIf="!entry.paid" icon="times"></sky-icon>
+      <app-status-indicator [value]="entry.paid" />
     </td>
     <td class="team-name">
       {{ entry.name }}

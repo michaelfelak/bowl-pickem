@@ -12,7 +12,6 @@ import {
 import { Title } from '@angular/platform-browser';
 import {
   SkyAlertModule,
-  SkyIconModule,
   SkyWaitService,
 } from '@skyux/indicators';
 import { mergeMap } from 'rxjs/operators';
@@ -39,7 +38,6 @@ import { SettingsService } from '../shared/services/settings.service';
     PickSummaryComponent,
     SkyAlertModule,
     SkyCheckboxModule,
-    SkyIconModule,
     SkyInputBoxModule,
   ],
   providers: [SettingsService],

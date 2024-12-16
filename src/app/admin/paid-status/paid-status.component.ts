@@ -8,14 +8,13 @@ import {
   SkyConfirmType,
 } from '@skyux/modals';
 import { CommonModule } from '@angular/common';
-import { SkyIconModule } from '@skyux/indicators';
-import { SkyRepeaterModule } from '@skyux/lists';
 import { SettingsService } from 'src/app/shared/services/settings.service';
+import { StatusIndicatorComponent } from 'src/app/shared/status-indicator/status-indicator.component';
 
 @Component({
   standalone: true,
   selector: 'app-paid-status',
-  imports: [CommonModule, SkyIconModule],
+  imports: [CommonModule, StatusIndicatorComponent],
   providers: [SettingsService],
   templateUrl: './paid-status.component.html',
   styleUrls: ['./paid-status.component.scss'],
@@ -105,7 +104,7 @@ export class PaidStatusComponent implements OnInit {
       //   {{ this.numUnpaidEntries }} Unpaid - {{ this.numPaidEntries }} Paid -
       //   {{ this.numPaidEntries + this.numUnpaidEntries }} Total
       // </span>
-      const foo = 
+      const foo =
         this.numUnpaidEntries +
         ' Unpaid - ' +
         this.numPaidEntries +
