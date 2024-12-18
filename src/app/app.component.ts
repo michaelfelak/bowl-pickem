@@ -25,5 +25,8 @@ export class AppComponent {
       this.showAdmin = true;
       console.log('Logged in as administrator');
     }
+    if (id === '784920abf-e832-bddb-88ae-7ac89ea3ab21'){
+      this.showSubmit = true;
+    }
   }
 }

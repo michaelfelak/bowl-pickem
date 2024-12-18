@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AboutComponent } from './about/about.component';
 import { StandingsComponent } from './standings/standings.component';
 import { AdminComponent } from './admin/admin.component';
-import { AdminRouteGuard } from './admin/index.guard';
+import { AdminRouteGuard, PicksRouteGuard } from './admin/index.guard';
 import { PicksComponent } from './picks/picks.component';
 import { HomeComponent } from './home.component';
 import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
@@ -20,7 +20,8 @@ const routes: Routes = [
   },
   {
     path: 'picks',
-    component: PicksComponent
+    component: PicksComponent,
+    canActivate: [PicksRouteGuard]
   },
   {
     path: 'scores',
@@ -44,6 +45,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
-  providers: [AdminRouteGuard]
+  providers: [AdminRouteGuard, PicksRouteGuard]
 })
 export class AppRoutingModule { }
