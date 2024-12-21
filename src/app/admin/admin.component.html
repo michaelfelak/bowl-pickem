@@ -2,6 +2,12 @@
   <h1>Admin Page - Current Year: {{ currentYear }}</h1>
   <sky-repeater expandMode="single">
     <sky-repeater-item [isExpanded]="true">
+      <sky-repeater-item-title> Update Scores </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        <app-update-scores></app-update-scores>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+    <sky-repeater-item>
       <sky-repeater-item-title>
         <div class="pull-left">
           <span class="label"> Update Paid Status </span>
@@ -16,13 +22,6 @@
         <app-paid-status
           (numberOfEntrants)="(entrantsMessage)"
         ></app-paid-status>
-      </sky-repeater-item-content>
-    </sky-repeater-item>
-
-    <sky-repeater-item>
-      <sky-repeater-item-title> Update Scores </sky-repeater-item-title>
-      <sky-repeater-item-content>
-        <app-update-scores></app-update-scores>
       </sky-repeater-item-content>
     </sky-repeater-item>
 
