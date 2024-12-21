@@ -94,6 +94,9 @@ export class UpdateScoresComponent implements OnInit {
         (result: Bowl[]) => {
           this.bowls = result;
           this.buildPicks();
+          this.gameResults.sort((a: GameResultModel, b: GameResultModel) => {
+            return (a.score_1 ?? 0) < (b.score_1 ?? 0) ? -1 : 1;
+          });
         },
         (err: Error) => {
           console.log('error reaching the web service: ', err);
