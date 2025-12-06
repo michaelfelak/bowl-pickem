@@ -27,7 +27,8 @@ export interface UserResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8081/api/auth'; // Update this to your backend API URL
+  // private apiUrl = 'http://localhost:8081/api/auth'; // local
+  private apiUrl = 'https://bowl-pickem-144ffdd934e7.herokuapp.com/api/auth'; 
   private readonly TOKEN_KEY = 'auth_token';
   private readonly EMAIL_KEY = 'auth_email';
   private currentUserSubject: BehaviorSubject<string | null>;
