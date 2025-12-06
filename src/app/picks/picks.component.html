@@ -20,6 +20,27 @@
 <main *ngIf="isAuthenticated">
   <div *ngIf="!submitted">
     <h1 class="header">Submit Entry</h1>
+    
+    <!-- Game Count Header -->
+    <div class="game-count-header">
+      <div class="game-count-item">
+        <span class="game-count-label">3-Point Games:</span>
+        <span class="game-count-value" [class.error]="threePointGames > maxThreePointGames">{{ threePointGames }}/{{ maxThreePointGames }}</span>
+      </div>
+      <div class="game-count-item">
+        <span class="game-count-label">5-Point Games:</span>
+        <span class="game-count-value" [class.error]="fivePointGames > maxFivePointGames">{{ fivePointGames }}/{{ maxFivePointGames }}</span>
+      </div>
+      <div class="game-count-item">
+        <span class="game-count-label">10-Point Games:</span>
+        <span class="game-count-value" [class.error]="tenPointGames > maxTenPointGames">{{ tenPointGames }}/{{ maxTenPointGames }}</span>
+      </div>
+      <div class="game-count-item">
+        <span class="game-count-label">Total Possible Points:</span>
+        <span class="game-count-value" style="font-weight: bold;">{{ calculateTotalPoints() }}</span>
+      </div>
+    </div>
+    
     <app-pick-summary
       [name]="name"
       [threePointGames]="threePointGames"
@@ -108,48 +129,58 @@
       </ng-container>
     </table>
     <br />
-    <!-- playoff section -->
-    <form [formGroup]="pickForm">
+    <!-- Championship and Champion Selection Section -->
+    <form [formGroup]="pickForm" class="playoff-section">
       <h2 class="header">Championship Game</h2>
-      <div class="sky-deemphasized" style="text-align: center">
-        Choose the two teams that will make the College Football Playoff
-        Championship Game.
+      <div class="section-description">
+        Choose the two teams that will make the College Football Playoff Championship Game.
       </div>
-      <div style="width: 400px; margin-left: auto; margin-right: auto">
-        Choose 1st team
+      
+      <div class="playoff-container">
+        <div class="playoff-team-selector">
+          <label for="playoff1-select">1st Team</label>
+          <select id="playoff1-select" formControlName="playoff1">
+            <option [value]="null" disabled selected>Select team...</option>
+            <option
+              [value]="school.school_id"
+              *ngFor="let school of playoffSchoolsA"
+            >
+              #{{ school.seed_number }}. {{ school.school_name }}
+            </option>
+          </select>
+        </div>
 
-        <select formControlName="playoff1">
-          <option
-            [value]="school.school_id"
-            *ngFor="let school of playoffSchoolsA"
-          >
-            #{{ school.seed_number }}. {{ school.school_name }}
-          </option>
-        </select>
-      </div>
-      <div style="width: 400px; margin-left: auto; margin-right: auto">
-        Choose 2nd team
-        <select formControlName="playoff2">
-          <option
-            [value]="school.school_id"
-            *ngFor="let school of playoffSchoolsB"
-          >
-            #{{ school.seed_number }}. {{ school.school_name }}
-          </option>
-        </select>
+        <div class="playoff-team-selector">
+          <label for="playoff2-select">2nd Team</label>
+          <select id="playoff2-select" formControlName="playoff2">
+            <option [value]="null" disabled selected>Select team...</option>
+            <option
+              [value]="school.school_id"
+              *ngFor="let school of playoffSchoolsB"
+            >
+              #{{ school.seed_number }}. {{ school.school_name }}
+            </option>
+          </select>
+        </div>
       </div>
 
-      <h2 class="header">National Champion</h2>
-      <div style="width: 400px; margin-left: auto; margin-right: auto">
-        Choose the National Champion
-        <select formControlName="champion">
-          <option
-            [value]="school.school_id"
-            *ngFor="let school of playoffSchools"
-          >
-            #{{ school.seed_number }}. {{ school.school_name }}
-          </option>
-        </select>
+      <h2 class="header champion-header">National Champion</h2>
+      <div class="section-description">
+        Choose the National Champion.
+      </div>
+
+      <div class="champion-container">
+        <div class="champion-selector">
+          <select formControlName="champion">
+            <option [value]="null" disabled selected>Select champion...</option>
+            <option
+              [value]="school.school_id"
+              *ngFor="let school of playoffSchools"
+            >
+              #{{ school.seed_number }}. {{ school.school_name }}
+            </option>
+          </select>
+        </div>
       </div>
     </form>
     <!-- not used anymore-->
@@ -311,30 +342,24 @@
       <br />
     </div> -->
     </div>
-    <!-- Tiebreakers -->
-    <h2 class="header">Tiebreakers</h2>
-    <div [formGroup]="tiebreakerForm" class="header">
-      <span class="header">
-        How many <span style="font-weight: bold">total</span> points will be
-        scored in the 2024-2025 bowl season? (The answer for last year was
-        <span style="font-weight: bold">2,237</span>).
-      </span>
-      <div>
-        <input formControlName="tiebreaker2" type="number" min="0" />
+    <!-- Tiebreakers (Collapsible) -->
+    <div class="tiebreaker-section">
+      <h2 class="tiebreaker-header" (click)="toggleRulesSection()">
+        <span class="toggle-arrow" [class.expanded]="showRulesSection">▶</span>
+        Tiebreakers & Rules
+      </h2>
+      <div class="tiebreaker-content" *ngIf="showRulesSection">
+        <div [formGroup]="tiebreakerForm" class="tiebreaker-form">
+          <span class="tiebreaker-question">
+            How many <span style="font-weight: bold">total</span> points will be
+            scored in the 2024-2025 bowl season? (The answer for last year was
+            <span style="font-weight: bold">2,237</span>).
+          </span>
+          <div class="tiebreaker-input">
+            <input formControlName="tiebreaker2" type="number" min="0" />
+          </div>
+        </div>
       </div>
-      <!-- <div class="header" style="text-align: center; padding-top: 20px">
-        Enter the total number of points scored in the highest scoring bowl
-        game.
-        <br />
-        <input
-          formControlName="tiebreaker2"
-          class="sky-form-control"
-          style="width: 100px"
-          type="number"
-          min="1"
-          max="500"
-        />
-      </div>-->
     </div>
     <sky-alert *ngIf="showSubmitError" alertType="danger">
       {{ submitErrorMsg }}

@@ -10,6 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from './shared/services/settings.service';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { SecurityInterceptor } from './shared/interceptors/security.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,6 +25,11 @@ import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
   providers: [
     BowlService,
     SettingsService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: SecurityInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
