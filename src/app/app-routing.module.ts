@@ -8,8 +8,14 @@ import { PicksComponent } from './picks/picks.component';
 import { HomeComponent } from './home.component';
 import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
 import { ScenarioGeneratorComponent } from './scenario-generator/scenario-generator.component';
+import { LoginComponent } from './auth/login.component';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
+  {
+    path: 'login',
+    component: LoginComponent
+  },
   {
     path: '',
     component: HomeComponent
@@ -21,7 +27,8 @@ const routes: Routes = [
   {
     path: 'picks',
     component: PicksComponent,
-    canActivate: [PicksRouteGuard]
+    canActivate: [AuthGuard]
+    // canActivate: [PicksRouteGuard]
   },
   {
     path: 'scores',
@@ -30,7 +37,7 @@ const routes: Routes = [
   {
     path: 'admin',
     component: AdminComponent,
-    canActivate: [AdminRouteGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'standings',
@@ -45,6 +52,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
-  providers: [AdminRouteGuard, PicksRouteGuard]
+  providers: [AdminRouteGuard, PicksRouteGuard, AuthGuard]
 })
 export class AppRoutingModule { }

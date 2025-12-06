@@ -26,8 +26,8 @@ export class StandingsComponent implements OnInit {
   public standings: StandingsEntry[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
   public showStandingsLink = false; // this shows the flyout links, only enable after bowls start
-  public currentYear: number = 0;
-  public years: number[] = [2024, 2023, 2022, 2021, 2020, 2019];
+  public currentYear: number;
+  public years: number[] = [2025, 2024, 2023, 2022, 2021, 2020, 2019];
 
   public sortCurrentPoints = false;
   public sortRemainingPoints = false;
@@ -45,22 +45,23 @@ export class StandingsComponent implements OnInit {
     private flyoutService: SkyFlyoutService,
     private waitSvc: SkyWaitService,
     private settings: SettingsService
-  ) {}
+  ) {
+    this.currentYear = this.settings.currentYear;
+  }
 
   public ngOnInit() {
-    this.currentYear = this.settings.currentYear;
     this.titleService.setTitle("Bowl Pick'em - Standings");
     this.retrieveStandings(this.currentYear);
     this.showStandingsLink = this.settings.showStandingsFlyout;
   }
 
   public retrieveStandings(year: number) {
-    this.waitSvc.beginNonBlockingPageWait();
+    // this.waitSvc.beginNonBlockingPageWait();
 
     this.svc.getStandings(year).subscribe((result: StandingsEntry[]) => {
       this.standings = result;
       this.assignRank();
-      this.waitSvc.endNonBlockingPageWait();
+      // this.waitSvc.endNonBlockingPageWait();
       return result;
     });
   }

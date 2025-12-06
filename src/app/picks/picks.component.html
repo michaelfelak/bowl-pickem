@@ -1,7 +1,23 @@
 <sky-alert *ngIf="showError" alertType="danger">
   {{ errorMsg }}
 </sky-alert>
-<main>
+
+<!-- Login Required Message -->
+<div *ngIf="!isAuthenticated" style="text-align: center; padding: 40px; background-color: #f5f5f5; margin: 20px; border-radius: 8px;">
+  <h2 style="color: #333; margin-bottom: 20px;">Login Required</h2>
+  <p style="color: #666; margin-bottom: 30px; font-size: 16px;">
+    You must be logged in to submit an entry. Please log in to continue.
+  </p>
+  <button 
+    (click)="login()" 
+    style="background-color: #014d0e; color: white; padding: 12px 30px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; font-weight: 600;"
+  >
+    Go to Login
+  </button>
+</div>
+
+<!-- Picks Form (shown only when authenticated) -->
+<main *ngIf="isAuthenticated">
   <div *ngIf="!submitted">
     <h1 class="header">Submit Entry</h1>
     <app-pick-summary
@@ -22,9 +38,6 @@
     >
       <sky-input-box data-sky-id="input-box-first-name" labelText="Entry Name">
         <input formControlName="name" spellcheck="false" type="text" />
-      </sky-input-box>
-      <sky-input-box data-sky-id="input-box-first-name" labelText="Email">
-        <input formControlName="email" spellcheck="false" type="text" />
       </sky-input-box>
     </form>
     <br />

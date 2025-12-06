@@ -129,6 +129,11 @@
         <td class="team-check">{{ pick.remaining_points }}</td>
         <td class="team-check">{{ pick.possible_points }}</td>
       </tr>
+      <tr *ngIf="standings === null || standings.length === 0">
+        <td colspan="7" style="text-align: center; padding: 20px; font-size: 16px; color: #666;">
+          No entries submitted
+        </td>
+      </tr>
     </table>
   </div>
 </main>

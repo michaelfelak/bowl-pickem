@@ -21,7 +21,6 @@ import { SkyRepeaterModule } from '@skyux/lists';
     PaidStatusComponent,
     UpdateScoresComponent,
     TiebreakersComponent,
-    AddPlayoffSchoolComponent,
     AddPlayoffResultComponent,
   ],
   providers: [BowlService, SettingsService],
@@ -29,8 +28,8 @@ import { SkyRepeaterModule } from '@skyux/lists';
   styleUrls: ['./admin.component.scss'],
 })
 export class AdminComponent {
-  public currentYear;
-  public years: number[] = [2019, 2020, 2021, 2022, 2023, 2024];
+  public currentYear: number;
+  public years: number[] = [2019, 2020, 2021, 2022, 2023, 2024, 2025];
   public entrantsMessage: string = '';
 
   constructor(private settingsSvc: SettingsService) {
