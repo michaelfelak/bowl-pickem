@@ -1,137 +1,34 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-
-<style>
-  :host {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-      Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
-      "Segoe UI Symbol";
-    font-size: 14px;
-    color: #333;
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 8px 0;
-  }
-
-  p {
-    margin: 0;
-  }
-
-  .spacer {
-    flex: 1;
-  }
-
-  .toolbar {
-    /* position: absolute;
-    top: 0;
-    left: 0;
-    right: 0; */
-    height: 60px;
-    display: flex;
-    align-items: center;
-    background-color: #014d0e;
-    color: white;
-    font-weight: 600;
-  }
-
-  .toolbar img {
-    margin: 0 16px;
-  }
-
-  .content {
-    display: flex;
-    margin: 32px auto 32px;
-    padding: 0 16px;
-    max-width: 960px;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  a,
-  a:visited {
-    color: #ebebeb;
-    padding: 10px;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: #eeff00;
-    padding: 10px;
-    text-decoration: none;
-  }
-
-  p {
-    padding: 10px;
-    text-decoration: none;
-  }
-
-  .spacer {
-    flex: 1;
-  }
-
-  .auth-section {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-right: 16px;
-  }
-
-  .username {
-    color: white;
-    font-weight: 500;
-  }
-
-  button {
-    background-color: #0066cc;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: background-color 0.2s;
-  }
-
-  button:hover {
-    background-color: #0052a3;
-  }
-
-  button:active {
-    transform: scale(0.98);
-  }
-</style>
-
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
-  <!-- <img
-    width="40"
-    src="https://imgs.search.brave.com/YWQLue13k0kRwWgI8ZrwHDvqDf6F9Rq-A4eyJK9iDgw/rs:fit:860:0:0/g:ce/aHR0cDovL2ltYWdl/cy5jbGlwYXJ0cGFu/ZGEuY29tL2Zvb3Ri/YWxsLWNsaXBhcnQt/Zm9vdGJhbGwtY2xp/cGFydC01LWRyLW9k/ZDEucG5n"
-  /> -->
+  <!-- Hamburger Menu -->
+  <button class="hamburger" [class.open]="menuOpen" (click)="toggleMenu()" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
   <p>Bowl Pick'em</p>
-  <a routerLink="">Home</a>
-  <a *ngIf="showSubmit" routerLink="picks">Submit Entry</a>
-  <a routerLink="scores">Scores</a>
-  <a routerLink="standings">Standings</a>
-  <!-- <a routerLink="scenario-generator">Scenario Generator</a> -->
-  <a routerLink="about">About</a>
-  <a *ngIf="showAdmin" routerLink="admin">Admin</a>
-  
+
+  <!-- Desktop Navigation -->
+  <nav class="nav-menu">
+    <a routerLink="" (click)="closeMenu()">Home</a>
+    <a *ngIf="showSubmit" routerLink="picks" (click)="closeMenu()">Submit Entry</a>
+    <a routerLink="scores" (click)="closeMenu()">Scores</a>
+    <a routerLink="standings" (click)="closeMenu()">Standings</a>
+    <a routerLink="about" (click)="closeMenu()">About</a>
+    <a *ngIf="showAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
+  </nav>
+
+  <!-- Mobile Navigation -->
+  <nav class="mobile-menu" [class.open]="menuOpen">
+    <a routerLink="" (click)="closeMenu()">Home</a>
+    <a *ngIf="showSubmit" routerLink="picks" (click)="closeMenu()">Submit Entry</a>
+    <a routerLink="scores" (click)="closeMenu()">Scores</a>
+    <a routerLink="standings" (click)="closeMenu()">Standings</a>
+    <a routerLink="about" (click)="closeMenu()">About</a>
+    <a *ngIf="showAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
+  </nav>
+
   <!-- Auth Section -->
   <div class="spacer"></div>
   <div class="auth-section">
@@ -144,6 +41,6 @@
     </ng-template>
   </div>
 </div>
-<!-- <div class="contentXX"> -->
+
 <router-outlet></router-outlet>
 <app-footer></app-footer>
