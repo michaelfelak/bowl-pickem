@@ -71,6 +71,7 @@ export class PicksComponent implements OnInit {
   @Input() public name = '';
   public email = '';
   public isAuthenticated = false;
+  public showRulesSection = false;
 
   public showError = false;
   public errorMsg!: string;
@@ -589,6 +590,10 @@ export class PicksComponent implements OnInit {
     this.threePointGames = 0;
     this.fivePointGames = 0;
     this.showSubmitError = false;
+  }
+
+  public toggleRulesSection() {
+    this.showRulesSection = !this.showRulesSection;
   }
 
   public calculateTotalPoints(): number {

@@ -1,17 +1,6 @@
 <div style="border: solid 1px #ccc">
   <table>
     <tr>
-      <sky-alert *ngIf="threePointError" alertType="danger" [closeable]="false">
-        You have exceeded the maximum number of 3 point games.
-      </sky-alert>
-      <sky-alert *ngIf="fivePointError" alertType="danger" [closeable]="false">
-        You have exceeded the maximum number of 5 point games.
-      </sky-alert>
-      <sky-alert *ngIf="tenPointError" alertType="danger" [closeable]="false">
-        You have exceeded the maximum number of 10 point games.
-      </sky-alert>
-    </tr>
-    <tr>
       <td>
         Complete the following:
         <ul>
@@ -20,11 +9,13 @@
           <li>Up to 5 games can have 5 bonus points.</li>
           <li>Up to 5 games can have 3 bonus points.</li>
           <li>
-            One "Bonus" bowl game on 12/28 can have 10 bonus points. (Fenway, Pinstripe,
-            New Mexico, Pop-Tarts, Arizona, Military, Alamo, and Independence)
+            One "Bonus" bowl game on 12/28 can have 10 bonus points. (Fenway,
+            Pinstripe, New Mexico, Pop-Tarts, Arizona, Military, Alamo, and
+            Independence)
           </li>
           <li>
-            Select the two teams to play in the National Championship Game. Each correct selection earns 2 points.
+            Select the two teams to play in the National Championship Game. Each
+            correct selection earns 2 points.
           </li>
           <li>
             Select the National Champion. A correct selection earns 5 points.
@@ -35,44 +26,6 @@
             <span class="sky-emphasized">Submit</span>.
           </li>
         </ul>
-      </td>
-      <td style="width: 15%">
-        <table style="text-align: right; width: 100%">
-          <td>
-            <tr>
-              <sky-key-info>
-                <sky-key-info-value>
-                  {{ threePointGames }}
-                </sky-key-info-value>
-                <sky-key-info-label> Three Point Games </sky-key-info-label>
-              </sky-key-info>
-            </tr>
-            <tr>
-              <sky-key-info>
-                <sky-key-info-value>
-                  {{ fivePointGames }}
-                </sky-key-info-value>
-                <sky-key-info-label> Five Point Games </sky-key-info-label>
-              </sky-key-info>
-            </tr>
-            <tr>
-              <sky-key-info>
-                <sky-key-info-value>
-                  {{ tenPointGames }}
-                </sky-key-info-value>
-                <sky-key-info-label> Ten Point Games </sky-key-info-label>
-              </sky-key-info>
-            </tr>
-            <tr>
-              <sky-key-info>
-                <sky-key-info-value>
-                  {{ possiblePoints }}
-                </sky-key-info-value>
-                <sky-key-info-label> Total Possible Points </sky-key-info-label>
-              </sky-key-info>
-            </tr>
-          </td>
-        </table>
       </td>
     </tr>
   </table>
