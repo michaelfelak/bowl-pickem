@@ -16,6 +16,7 @@ export class AppComponent {
   public currentUser$: Observable<string | null>;
   public currentUserEmail = '';
   public isAuthenticated = false;
+  public menuOpen = false;
 
   constructor(
     private titleService: Title,
@@ -56,5 +57,13 @@ export class AppComponent {
 
   login(): void {
     this.router.navigate(['/login']);
+  }
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu(): void {
+    this.menuOpen = false;
   }
 }
