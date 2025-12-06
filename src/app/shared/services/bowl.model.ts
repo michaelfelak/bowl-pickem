@@ -98,12 +98,13 @@ export interface PersonRequest {
 }
 
 export interface EntryRequest {
-  Name?: string;
-  Email?: string;
-  Tiebreaker1?: number;
-  Tiebreaker2?: number;
-  IsTesting?: boolean;
-  Year?: number;
+  name?: string;
+  email?: string;
+  user_id?: string;
+  tiebreaker_1?: number;
+  tiebreaker_2?: number;
+  testing?: boolean;
+  year?: number;
 }
 
 export interface PersonResponse {

@@ -13,11 +13,5 @@ export class ScenarioGeneratorComponent implements OnInit {
     private bowlService: BowlService,
     private settingsService: SettingsService
   ) {}
-  ngOnInit(): void {
-    this.bowlService
-      .getStandings(this.settingsService.currentYear)
-      .subscribe((result) => {
-        console.log(result);
-      });
-  }
+  ngOnInit(): void {}
 }

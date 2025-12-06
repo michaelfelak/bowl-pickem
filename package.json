@@ -19,6 +19,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@auth0/angular-jwt": "^5.2.0",
     "@skyux/config": "9.17.0",
     "@skyux/flyout": "9.17.0",
     "@skyux/forms": "9.17.0",

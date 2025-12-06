@@ -79,6 +79,42 @@
     padding: 10px;
     text-decoration: none;
   }
+
+  .spacer {
+    flex: 1;
+  }
+
+  .auth-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-right: 16px;
+  }
+
+  .username {
+    color: white;
+    font-weight: 500;
+  }
+
+  button {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+
+  button:hover {
+    background-color: #0052a3;
+  }
+
+  button:active {
+    transform: scale(0.98);
+  }
 </style>
 
 <!-- Toolbar -->
@@ -95,6 +131,18 @@
   <!-- <a routerLink="scenario-generator">Scenario Generator</a> -->
   <a routerLink="about">About</a>
   <a *ngIf="showAdmin" routerLink="admin">Admin</a>
+  
+  <!-- Auth Section -->
+  <div class="spacer"></div>
+  <div class="auth-section">
+    <ng-container *ngIf="isAuthenticated; else notLoggedIn">
+      <span class="username">Logged in as {{ currentUser$ | async }}<span *ngIf="currentUserEmail"> ({{ currentUserEmail }})</span></span>
+      <button (click)="logout()">Logout</button>
+    </ng-container>
+    <ng-template #notLoggedIn>
+      <button (click)="login()">Login</button>
+    </ng-template>
+  </div>
 </div>
 <!-- <div class="contentXX"> -->
 <router-outlet></router-outlet>
