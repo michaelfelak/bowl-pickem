@@ -72,6 +72,8 @@ export class PicksComponent implements OnInit {
   public email = '';
   public isAuthenticated = false;
   public showRulesSection = false;
+  public gamesPicked = 0;
+  public totalGames = 0;
 
   public showError = false;
   public errorMsg!: string;
@@ -127,6 +129,7 @@ export class PicksComponent implements OnInit {
         this.validateBonusPoints();
         this.validateChampionship();
         this.calculateTotalPoints();
+        this.countGamesPicked();
       }
     });
     this.tiebreakerForm.valueChanges.subscribe(() => {
@@ -134,6 +137,15 @@ export class PicksComponent implements OnInit {
         this.validateBonusPoints();
         this.validateChampionship();
         this.calculateTotalPoints();
+      }
+    });
+  }
+
+  public countGamesPicked(): void {
+    this.gamesPicked = 0;
+    this.pickFormArray.value.forEach((pick: any) => {
+      if (pick.team1picked || pick.team2picked) {
+        this.gamesPicked++;
       }
     });
   }
@@ -216,6 +228,10 @@ export class PicksComponent implements OnInit {
               })
             );
           });
+
+          // Set total games after picks are loaded
+          this.totalGames = this.picks.length;
+          this.countGamesPicked();
 
           // this.allChampionshipPicks.forEach((pick) => {
           //   this.championshipPickFormArray.push(
@@ -344,8 +360,8 @@ export class PicksComponent implements OnInit {
             const newPick: PickModel = {};
             newPick.entry_id = returnEntryId;
             newPick.game_id = pick.gameId;
-            newPick.team_1 = pick.team1picked;
-            newPick.team_2 = pick.team2picked;
+            newPick.team_1_picked = pick.team1picked;
+            newPick.team_2_picked = pick.team2picked;
             newPick.points = pick.points;
             newPick.team_1_name = pick.team1name;
             newPick.team_2_name = pick.team2name;
@@ -400,8 +416,8 @@ export class PicksComponent implements OnInit {
         p.team_1_name = this.getSchoolFromID(game.School1ID!);
         p.team_2_name = this.getSchoolFromID(game.School2ID!);
         const bowl = this.getBowlFromID(game.BowlID);
-        p.team_1 = false;
-        p.team_2 = false;
+        p.team_1_picked = false;
+        p.team_2_picked = false;
         p.bowl_name = bowl.name;
         p.game_time = dayjs(game.GameTime).format('MM/DD/YYYY hh:mm:ss');
         p.is_new_years_game = this.isBonusGame(game, bowl.name!);
@@ -417,7 +433,7 @@ export class PicksComponent implements OnInit {
   public toggleAll() {
     this.picks.forEach((pick: PickModel) => {
       if (!pick.is_championship) {
-        pick.team_1 = true;
+        pick.team_1_picked = true;
       }
     });
   }
@@ -436,6 +452,40 @@ export class PicksComponent implements OnInit {
       }
     });
     return isValid;
+  }
+
+  public isFormValid(): boolean {
+    const isTesting = this.pickForm.value.name === 'test';
+
+    if (isTesting) {
+      return true;
+    }
+
+    if (!this.pickForm.value.name) {
+      return false;
+    }
+
+    if (!this.email || this.email.indexOf('@') === -1) {
+      return false;
+    }
+
+    if (!this.validatePicks()) {
+      return false;
+    }
+
+    if (this.threePointError || this.fivePointError || this.tenPointError) {
+      return false;
+    }
+
+    if (this.championshipGameError || this.championError) {
+      return false;
+    }
+
+    if (!this.tiebreakerForm.value.tiebreaker2) {
+      return false;
+    }
+
+    return true;
   }
 
   public getBowlFromID(id: string | undefined): Bowl {
@@ -473,22 +523,27 @@ export class PicksComponent implements OnInit {
     this.calculateTotalPoints();
   }
 
-  public updateSelection(gameId?: string, i?: number) {
-    const pick = this.getPickFromId(gameId!);
-    if (i === 1) {
-      if (pick.team_2) {
-        pick.team_2 = false;
-      }
-    }
-    if (i === 2) {
-      if (pick.team_1) {
-        pick.team_1 = false;
-      }
-    }
+  public updateSelection(gameId?: string, teamNumber?: number) {
+    // Find the index of the pick in the form array
+    const pickIndex = this.pickFormArray.controls.findIndex(control => {
+      return control.get('gameId')?.value === gameId;
+    });
 
-    // if (type === 1) {
-    //   this.buildChampionshipGame();
-    // }
+    if (pickIndex === -1) return;
+
+    const pickGroup = this.pickFormArray.at(pickIndex);
+    
+    if (teamNumber === 1) {
+      // If team 1 is being selected, deselect team 2
+      if (pickGroup.get('team1picked')?.value) {
+        pickGroup.get('team2picked')?.setValue(false);
+      }
+    } else if (teamNumber === 2) {
+      // If team 2 is being selected, deselect team 1
+      if (pickGroup.get('team2picked')?.value) {
+        pickGroup.get('team1picked')?.setValue(false);
+      }
+    }
   }
 
   public validateChampionship() {
@@ -580,16 +635,33 @@ export class PicksComponent implements OnInit {
 
   // reset all picks to none
   public clear() {
-    this.picks.filter(function (pick) {
-      pick.team_1 = false;
-      pick.team_2 = false;
-      pick.points = 1;
+    // Clear all pick selections and reset points to 1
+    this.pickFormArray.controls.forEach((control) => {
+      control.patchValue({
+        team1picked: false,
+        team2picked: false,
+        points: 1
+      });
     });
+
+    // Clear playoff and champion selections
+    this.pickForm.get('playoff1')?.setValue(0);
+    this.pickForm.get('playoff2')?.setValue(0);
+    this.pickForm.get('champion')?.setValue(0);
+
+    // Reset error flags
     this.fivePointError = false;
     this.threePointError = false;
+    this.tenPointError = false;
     this.threePointGames = 0;
     this.fivePointGames = 0;
+    this.tenPointGames = 0;
     this.showSubmitError = false;
+    this.gamesPicked = 0;
+
+    // Validate to clear any error states
+    this.validateChampionship();
+    this.validateBonusPoints();
   }
 
   public toggleRulesSection() {
@@ -614,6 +686,23 @@ export class PicksComponent implements OnInit {
       totalPoints += 5;
     }
     return totalPoints;
+  }
+
+  public calculateMaxPossiblePoints(): number {
+    const totalGames = this.picks.length;
+    // 1 point for each game (base)
+    let maxPoints = totalGames;
+    // 5 games with 3 bonus points (so +3 additional per game)
+    maxPoints += this.maxThreePointGames * 3;
+    // 5 games with 5 bonus points (so +5 additional per game)
+    maxPoints += this.maxFivePointGames * 5;
+    // 1 game with 10 bonus points (so +10 additional)
+    maxPoints += this.maxTenPointGames * 10;
+    // Playoff selections: 2 points each for 2 teams
+    maxPoints += 4;
+    // Champion selection: 5 points
+    maxPoints += 5;
+    return maxPoints;
   }
 
   public selectTiebreaker1(gameId: string) {
@@ -653,5 +742,89 @@ export class PicksComponent implements OnInit {
 
   login(): void {
     this.router.navigate(['/login']);
+  }
+
+  public pickForMe(): void {
+    // Collect non-playoff games to assign bonus points
+    const nonPlayoffGameIndices: number[] = [];
+    const playoffGameIndices: number[] = [];
+
+    this.pickFormArray.controls.forEach((control, index) => {
+      const isPlayoff = control.get('gameId')?.value && 
+        this.picks[index] && 
+        this.picks[index].is_playoff;
+      
+      if (isPlayoff) {
+        playoffGameIndices.push(index);
+      } else {
+        nonPlayoffGameIndices.push(index);
+      }
+    });
+
+    // Randomly select 5 games for 3-point bonus from non-playoff games
+    const threePointIndices = this.getRandomIndices(nonPlayoffGameIndices, this.maxThreePointGames);
+    // Randomly select 5 games for 5-point bonus from remaining non-playoff games
+    const remainingIndices = nonPlayoffGameIndices.filter(i => !threePointIndices.includes(i));
+    const fivePointIndices = this.getRandomIndices(remainingIndices, this.maxFivePointGames);
+    // Randomly select 1 bonus game for 10-point bonus from remaining non-playoff games
+    const tenPointIndices = this.getRandomIndices(
+      remainingIndices.filter(i => !fivePointIndices.includes(i)), 
+      this.maxTenPointGames
+    );
+
+    // Pick a random winner for each game and assign bonus points
+    this.pickFormArray.controls.forEach((control, index) => {
+      // Randomly pick team 1 or team 2 (50/50 chance)
+      const pickTeam1 = Math.random() < 0.5;
+      
+      control.patchValue({
+        team1picked: pickTeam1,
+        team2picked: !pickTeam1
+      });
+
+      // Assign bonus points
+      let points = 1;
+      if (threePointIndices.includes(index)) {
+        points = 3;
+      } else if (fivePointIndices.includes(index)) {
+        points = 5;
+      } else if (tenPointIndices.includes(index)) {
+        points = 10;
+      }
+      control.patchValue({ points });
+    });
+
+    // Randomly pick playoff teams
+    const playoffSchools = this.playoffSchools;
+    if (playoffSchools && playoffSchools.length > 0) {
+      const randomPlayoff1Index = Math.floor(Math.random() * playoffSchools.length);
+      let randomPlayoff2Index = Math.floor(Math.random() * playoffSchools.length);
+      
+      // Ensure we pick two different teams
+      while (randomPlayoff2Index === randomPlayoff1Index) {
+        randomPlayoff2Index = Math.floor(Math.random() * playoffSchools.length);
+      }
+
+      const playoff1TeamId = playoffSchools[randomPlayoff1Index].school_id;
+      const playoff2TeamId = playoffSchools[randomPlayoff2Index].school_id;
+
+      this.pickForm.get('playoff1')?.setValue(playoff1TeamId);
+      this.pickForm.get('playoff2')?.setValue(playoff2TeamId);
+
+      // Pick champion - any random team from all playoff schools
+      const randomChampionIndex = Math.floor(Math.random() * playoffSchools.length);
+      this.pickForm.get('champion')?.setValue(playoffSchools[randomChampionIndex].school_id);
+    }
+
+    // Validate championship selections to clear any error states
+    this.validateChampionship();
+    this.validateBonusPoints();
+    this.countGamesPicked();
+  }
+
+  private getRandomIndices(indices: number[], count: number): number[] {
+    if (indices.length === 0) return [];
+    const shuffled = [...indices].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, Math.min(count, indices.length));
   }
 }

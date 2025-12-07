@@ -1,60 +1,88 @@
 <main>
-  <h3 class="header">Entry Name: {{ name }}</h3>
-  <h3 class="header">Total points: {{ points }}</h3>
-  <div *ngIf="playoffPicks">
-    <h4 class="header">
-      Championship Game:
-      <app-status-indicator [value]="playoffPicks.school_1_correct" />
-      {{ playoffPicks.school_1 }} vs.
-      <app-status-indicator [value]="playoffPicks.school_2_correct" />
-      {{ playoffPicks.school_2 }}
-    </h4>
-    <h4 class="header">
-      National Champion:
-      <app-status-indicator [value]="playoffPicks.champion_correct" />
-      {{ playoffPicks.champion }}
-    </h4>
+  <div class="flyout-header">
+    <h2 class="entry-name">{{ name }}</h2>
+    <div class="total-points">
+      <span class="label">Total Points:</span>
+      <span class="points-value">{{ points }}</span>
+    </div>
   </div>
-  <table class="center">
-    <tr>
-      <th class="team-name" style="border-left: 1px solid black">Bowl</th>
-      <th class="team-check" style="border-left: 1px solid black"></th>
-      <th class="team-name">Team 1</th>
-      <th class="team-check" style="border-left: 1px solid black"></th>
-      <th class="team-name" style="border-right: 1px solid black">Team 2</th>
-      <th class="team-points" style="border-right: 1px solid black">Points</th>
-    </tr>
-    <tr *ngFor="let pick of picks">
-      <td class="team-name" style="border-left: 1px solid black">
-        {{ pick.bowl_name }}
-        <b *ngIf="pick.not_played"><br />Canceled</b>
-      </td>
-      <td class="team-check" style="border-left: 1px solid black">
-        <app-status-indicator
-          *ngIf="pick.team_1"
-          [value]="pick.correct1"
-          [showCheck]="pick.team_1"
-        ></app-status-indicator>
-      </td>
-      <td class="team-name" style="border-right: 1px solid black">
-        {{ pick.team_1_name }}
-      </td>
-      <td class="team-check" style="border-left: 1px solid black">
-        <app-status-indicator
-          *ngIf="pick.team_2"
-          [value]="pick.correct2"
-          [showCheck]="pick.team_2"
-        ></app-status-indicator>
-      </td>
-      <td class="team-name" style="border-right: 1px solid black">
-        {{ pick.team_2_name }}
-      </td>
-      <td class="team-check">
-        <div *ngIf="!pick.earned_points">
-          <i>{{ pick.points }}</i>
+
+  <!-- Championship Game Section -->
+  <div *ngIf="playoffPicks" class="championship-section">
+    <h3 class="section-title">Championship Game</h3>
+    
+    <div class="playoff-pick">
+      <div class="playoff-matchup">
+        <div class="team-pick">
+          <app-status-indicator [value]="playoffPicks.school_1_correct" />
+          <span class="team-name">{{ playoffPicks.school_1 }}</span>
         </div>
-        <div *ngIf="pick.earned_points">{{ pick.earned_points }}</div>
-      </td>
-    </tr>
-  </table>
+        <span class="vs-text">vs</span>
+        <div class="team-pick">
+          <app-status-indicator [value]="playoffPicks.school_2_correct" />
+          <span class="team-name">{{ playoffPicks.school_2 }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="playoff-pick">
+      <h4 class="champion-title">National Champion</h4>
+      <div class="champion-matchup">
+        <div class="team-pick">
+          <app-status-indicator [value]="playoffPicks.champion_correct" />
+          <span class="team-name">{{ playoffPicks.champion }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bowl Picks Table -->
+  <div class="picks-section">
+    <h3 class="section-title">Bowl Game Picks</h3>
+    
+    <div class="table-wrapper">
+      <table class="picks-table">
+        <thead>
+          <tr>
+            <th class="bowl-col">Bowl</th>
+            <th class="pick-col">Team 1</th>
+            <th class="pick-col">Team 2</th>
+            <th class="points-col">Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pick of picks; let i = index" [class.alt-row]="i % 2 === 1">
+            <td class="bowl-col">
+              <span class="bowl-name">{{ pick.bowl_name }}</span>
+              <span *ngIf="pick.not_played" class="canceled-badge">Canceled</span>
+            </td>
+            <td class="pick-col">
+              <div class="team-pick-item">
+                <app-status-indicator
+                  *ngIf="pick.team_1"
+                  [value]="pick.correct1"
+                  [showCheck]="pick.team_1"
+                ></app-status-indicator>
+                <span>{{ pick.team_1_name }}</span>
+              </div>
+            </td>
+            <td class="pick-col">
+              <div class="team-pick-item">
+                <app-status-indicator
+                  *ngIf="pick.team_2"
+                  [value]="pick.correct2"
+                  [showCheck]="pick.team_2"
+                ></app-status-indicator>
+                <span>{{ pick.team_2_name }}</span>
+              </div>
+            </td>
+            <td class="points-col">
+              <span *ngIf="!pick.earned_points" class="pending-points">{{ pick.points }}</span>
+              <span *ngIf="pick.earned_points" class="earned-points">{{ pick.earned_points }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </main>

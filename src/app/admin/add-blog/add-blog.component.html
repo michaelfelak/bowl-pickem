@@ -1,0 +1,77 @@
+<div class="add-blog-container">
+  <form [formGroup]="blogForm">
+    <div class="form-group">
+      <label for="title">Blog Title (Optional)</label>
+      <input
+        id="title"
+        type="text"
+        formControlName="title"
+        placeholder="Enter blog title or leave blank for default date title"
+        class="form-control"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="postedBy">Posted By <span class="required">*</span></label>
+      <input
+        id="postedBy"
+        type="text"
+        formControlName="postedBy"
+        placeholder="Your name or identifier"
+        class="form-control"
+        required
+      />
+      <small class="error" *ngIf="blogForm.get('postedBy')?.hasError('required') && blogForm.get('postedBy')?.touched">
+        Posted by field is required
+      </small>
+    </div>
+
+    <div class="form-group">
+      <label for="body">Blog Content <span class="required">*</span></label>
+      <textarea
+        id="body"
+        formControlName="body"
+        placeholder="Enter your blog content here (supports line breaks)"
+        class="form-control textarea"
+        rows="15"
+        required
+      ></textarea>
+      <small class="character-count">
+        {{ blogForm.get('body')?.value?.length || 0 }} characters
+      </small>
+      <small class="error" *ngIf="blogForm.get('body')?.hasError('required') && blogForm.get('body')?.touched">
+        Blog content is required
+      </small>
+      <small class="error" *ngIf="blogForm.get('body')?.hasError('minlength') && blogForm.get('body')?.touched">
+        Blog content must be at least 10 characters
+      </small>
+    </div>
+
+    <div class="alert alert-success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <div class="alert alert-danger" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div class="button-group">
+      <button
+        type="button"
+        (click)="submitBlog()"
+        [disabled]="isSubmitting || blogForm.invalid"
+        class="btn btn-primary"
+      >
+        {{ isSubmitting ? 'Posting...' : 'Post Blog' }}
+      </button>
+      <button
+        type="button"
+        (click)="resetForm()"
+        [disabled]="isSubmitting"
+        class="btn btn-secondary"
+      >
+        Clear
+      </button>
+    </div>
+  </form>
+</div>

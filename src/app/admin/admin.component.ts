@@ -4,6 +4,7 @@ import { AddBowlGameComponent } from './add-bowl-game/add-bowl-game.component';
 import { PaidStatusComponent } from './paid-status/paid-status.component';
 import { UpdateScoresComponent } from './update-scores/update-scores.component';
 import { TiebreakersComponent } from './tiebreakers/tiebreakers.component';
+import { AddBlogComponent } from './add-blog/add-blog.component';
 import { BowlService } from '../shared/services/bowl.service';
 import { AddPlayoffSchoolComponent } from './add-playoff-school/add-playoff-school.component';
 import { SettingsService } from '../shared/services/settings.service';
@@ -22,6 +23,7 @@ import { SkyRepeaterModule } from '@skyux/lists';
     UpdateScoresComponent,
     TiebreakersComponent,
     AddPlayoffResultComponent,
+    AddBlogComponent,
   ],
   providers: [BowlService, SettingsService],
   templateUrl: './admin.component.html',

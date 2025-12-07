@@ -1,0 +1,137 @@
+<div class="edit-entry-container">
+  <!-- Header -->
+  <div class="edit-header">
+    <button class="back-btn" (click)="goBack()" title="Back to My Entries">
+      ← Back to My Entries
+    </button>
+    <h1>Edit Entry</h1>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="showError" class="error-alert">
+    <strong>Error:</strong> {{ errorMsg }}
+  </div>
+
+  <!-- Success Alert -->
+  <div *ngIf="showSuccess" class="success-alert">
+    <strong>Success!</strong> {{ successMsg }}
+  </div>
+
+  <!-- Validation Error Alert -->
+  <div *ngIf="validationResult && !validationResult.isValid" class="validation-alert">
+    <strong>Validation Error:</strong> {{ validationResult | json }}
+  </div>
+
+  <!-- Entry Summary -->
+  <div *ngIf="entry && !isLoading" class="entry-summary">
+    <span class="summary-item"><strong>{{ entry.name || entry.entry_name }}</strong></span>
+    <span class="summary-item">Submitted: {{ formatDate(entry.timestamp || entry.created_date) }}</span>
+  </div>
+
+  <!-- Picks Edit Table -->
+  <div *ngIf="!isLoading && picks.length > 0" class="picks-edit-container">
+    <form [formGroup]="pickForm">
+      <table class="picks-edit-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Game</th>
+            <th colspan="2" class="team-header">Team Selection</th>
+            <th>Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let pickControl of pickFormControls; let i = index" [formGroup]="pickControl" [class.locked-row]="!pickControl.get('isEditable')?.value">
+            <td class="pick-number">{{ i + 1 }}</td>
+            <td class="game-cell">
+              <div class="game-label">{{ pickControl.get('gameLabel')?.value }}</div>
+              <div class="game-time">{{ pickControl.get('gameTime')?.value }}</div>
+              <div *ngIf="!pickControl.get('isEditable')?.value" class="status-badge">Game Started</div>
+            </td>
+            
+            <!-- Team 1 Selection -->
+            <td class="team-cell">
+              <button 
+                *ngIf="pickControl.get('isEditable')?.value"
+                type="button"
+                class="team-btn"
+                [class.selected]="isTeamSelected(i, 1)"
+                (click)="togglePick(i, 1)"
+                [title]="'Select ' + pickControl.get('team_1_name')?.value"
+              >
+                {{ pickControl.get('team_1_name')?.value }}
+              </button>
+              <span *ngIf="!pickControl.get('isEditable')?.value" class="team-text">
+                {{ isTeamSelected(i, 1) ? pickControl.get('team_1_name')?.value : '-' }}
+              </span>
+            </td>
+
+            <!-- Team 2 Selection -->
+            <td class="team-cell">
+              <button 
+                *ngIf="pickControl.get('isEditable')?.value"
+                type="button"
+                class="team-btn"
+                [class.selected]="isTeamSelected(i, 2)"
+                (click)="togglePick(i, 2)"
+                [title]="'Select ' + pickControl.get('team_2_name')?.value"
+              >
+                {{ pickControl.get('team_2_name')?.value }}
+              </button>
+              <span *ngIf="!pickControl.get('isEditable')?.value" class="team-text">
+                {{ isTeamSelected(i, 2) ? pickControl.get('team_2_name')?.value : '-' }}
+              </span>
+            </td>
+
+            <!-- Points Selection -->
+            <td class="points-cell">
+              <select 
+                *ngIf="pickControl.get('isEditable')?.value"
+                formControlName="points"
+                class="points-select"
+              >
+                <option *ngFor="let point of getAvailablePoints(i)" [value]="point">
+                  {{ point }} pt
+                </option>
+              </select>
+              <span *ngIf="!pickControl.get('isEditable')?.value" class="points-text">
+                <strong>{{ pickControl.get('points')?.value }}</strong>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+
+  <!-- Bonus Points Summary -->
+  <div *ngIf="validationResult && !isLoading" class="bonus-summary">
+    <div class="summary-row" [class.error]="validationResult.threePointError">
+      <span>3-point games:</span>
+      <span><strong>{{ validationResult.threePointGames }}/5</strong></span>
+    </div>
+    <div class="summary-row" [class.error]="validationResult.fivePointError">
+      <span>5-point games:</span>
+      <span><strong>{{ validationResult.fivePointGames }}/5</strong></span>
+    </div>
+    <div class="summary-row" [class.error]="validationResult.tenPointError">
+      <span>10-point games:</span>
+      <span><strong>{{ validationResult.tenPointGames }}/1</strong></span>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div *ngIf="!isLoading && picks.length > 0" class="button-group">
+    <button class="save-btn" (click)="saveChanges()" [disabled]="isSaving || !validationResult?.isValid">
+      {{ isSaving ? 'Saving...' : 'Save Changes' }}
+    </button>
+    <button class="cancel-btn" (click)="goBack()" [disabled]="isSaving" type="button">
+      Cancel
+    </button>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && picks.length === 0" class="empty-state">
+    <p>No picks found for this entry.</p>
+  </div>
+</div>

@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
+:host {
+  display: block;
+}
+
 main {
   margin-left: 5%;
   margin-right: 5%;
@@ -6,37 +9,251 @@ main {
   font-family: 'Titillium Web', sans-serif;
 }
 
-.team-check {
-  width: 5%;
-}
-.team-name {
-  width: 20%;
-  vertical-align: middle;
-}
-
-table {
-  width: 85%;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid black;
-  border-collapse: collapse;
-}
-
 .header {
-  text-align: center;
+  margin: 30px 0 20px 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: 600;
+  border-bottom: 3px solid #014d0e;
+  padding-bottom: 15px;
 }
 
-th,
-td {
-  vertical-align: middle;
-  border: none;
+.header-info {
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #014d0e;
+
+  .info-text {
+    margin: 0 0 15px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .year-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    label {
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+  }
+}
+
+.standings-container {
+  margin: 20px 0;
+}
+
+.empty-state {
   text-align: center;
-  border: 1px solid black;
+  padding: 60px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  color: #666;
+  font-size: 16px;
+  margin: 20px 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.standings-table {
+  width: 100%;
   border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+
+  thead {
+    background-color: #014d0e;
+    color: white;
+
+    th {
+      padding: 12px 15px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &.sortable:hover {
+        background-color: #003008;
+      }
+
+      .sort-indicator {
+        margin-left: 5px;
+        font-size: 11px;
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid #e0e0e0;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #f5f5f5;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      &.alt-row {
+        background-color: #fafafa;
+
+        &:hover {
+          background-color: #f0f0f0;
+        }
+      }
+
+      td {
+        padding: 12px 15px;
+        font-size: 14px;
+        color: #333;
+        text-align: center;
+        vertical-align: middle;
+      }
+    }
+  }
 }
 
-tr:nth-child(even) {
-  background-color: lightsteelblue;
+.rank-col {
+  width: 10%;
+  font-weight: 600;
+  color: #014d0e;
+}
+
+.name-col {
+  width: 30%;
+  text-align: left;
+}
+
+.points-col {
+  width: 15%;
+}
+
+.entry-link {
+  color: #014d0e;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  main {
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+
+  .header {
+    font-size: 22px;
+    margin: 20px 0 15px 0;
+  }
+
+  .standings-table {
+    thead {
+      th {
+        padding: 10px;
+        font-size: 11px;
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          padding: 10px;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+
+  .header-info {
+    padding: 12px;
+    margin-bottom: 15px;
+
+    .info-text {
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+
+    .year-selector {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    margin-left: 2%;
+    margin-right: 2%;
+  }
+
+  .header {
+    font-size: 20px;
+    margin: 15px 0 10px 0;
+  }
+
+  .header-info {
+    padding: 10px;
+    margin-bottom: 12px;
+
+    .info-text {
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .year-selector {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+
+      label {
+        font-size: 12px;
+      }
+    }
+  }
+
+  .standings-table {
+    font-size: 12px;
+
+    thead {
+      th {
+        padding: 8px;
+        font-size: 10px;
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          padding: 8px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+  .rank-col,
+  .name-col,
+  .points-col {
+    width: auto;
+  }
 }

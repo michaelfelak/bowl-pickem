@@ -42,8 +42,11 @@ export interface PickModel {
   entry_id?: string;
   game_id?: string;
   points?: number;
+  bonus_points?: number;
   team_1?: boolean;
   team_2?: boolean;
+  team_1_picked?: boolean;
+  team_2_picked?: boolean;
   team_1_name?: string;
   team_2_name?: string;
   score_1?: number;
@@ -115,9 +118,15 @@ export interface PersonResponse {
 export interface Entry {
   id?: string;
   name?: string;
+  entry_name?: string;
   email?: string;
   paid?: boolean;
   created_date?: string;
+  timestamp?: string;
+  tiebreaker_1?: number;
+  tiebreaker_2?: number;
+  picks?: PickModel[];
+  year?: number;
 }
 
 export interface GameResultModel {
@@ -190,11 +199,12 @@ export interface TodaysGame {
 }
 
 export interface BlogEntry {
-  Id?: string;
-  Title?: string;
-  Body?: string;
-  CreatedDate?: string;
-  PostedBy?: string;
+  id?: string;
+  title?: string;
+  body?: string;
+  created_date?: string;
+  posted_by?: string;
+  year?: number;
 }
 
 export interface BowlPick {

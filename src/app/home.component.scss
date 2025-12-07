@@ -1,5 +1,63 @@
 @import url("https://fonts.googleapis.com/css?family=Titillium+Web&display=swap");
 
+:host {
+  display: block;
+}
+
+main {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 900px;
+  padding: 20px;
+  height: 100%;
+  font-family: "Titillium Web", sans-serif;
+}
+
+.container {
+  padding: 20px 0;
+}
+
+.header {
+  margin: 30px 0 10px 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: 600;
+  border-bottom: 3px solid #014d0e;
+  padding-bottom: 15px;
+  text-align: center;
+}
+
+.subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 16px;
+  margin-bottom: 30px;
+
+  a {
+    color: #014d0e;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #0a6b1a;
+      text-decoration: underline;
+    }
+  }
+}
+
+.section-header {
+  margin: 30px 0 20px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.blog-section {
+  margin-top: 40px;
+  padding: 20px 0;
+}
+
 .delete-button {
   background-color: maroon;
   border-color: maroon;
@@ -9,13 +67,6 @@
 .create-button {
   padding-left: 35px;
   padding-top: 30px;
-}
-
-main {
-  margin-left: 5%;
-  margin-right: 5%;
-  height: 100%;
-  font-family: "Titillium Web", sans-serif;
 }
 
 .navbar {
