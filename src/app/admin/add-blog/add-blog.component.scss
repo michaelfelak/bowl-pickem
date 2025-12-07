@@ -1,0 +1,136 @@
+:host {
+  display: block;
+}
+
+.add-blog-container {
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+
+    .required {
+      color: #d32f2f;
+    }
+  }
+
+  input.form-control,
+  textarea.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: #333;
+
+    &:focus {
+      outline: none;
+      border-color: #014d0e;
+      box-shadow: 0 0 0 3px rgba(1, 77, 14, 0.1);
+    }
+
+    &:disabled {
+      background-color: #f0f0f0;
+      color: #999;
+      cursor: not-allowed;
+    }
+
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  textarea.form-control {
+    resize: vertical;
+    min-height: 300px;
+    line-height: 1.5;
+  }
+
+  .character-count {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 12px;
+  }
+
+  .error {
+    display: block;
+    color: #d32f2f;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+}
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  border-left: 4px solid #ddd;
+
+  &.alert-success {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border-left-color: #2e7d32;
+  }
+
+  &.alert-danger {
+    background-color: #ffebee;
+    color: #c62828;
+    border-left-color: #c62828;
+  }
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &.btn-primary {
+      background-color: #014d0e;
+      color: white;
+
+      &:hover:not(:disabled) {
+        background-color: #003008;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    &.btn-secondary {
+      background-color: #e5e5e5;
+      color: #333;
+
+      &:hover:not(:disabled) {
+        background-color: #d0d0d0;
+      }
+    }
+  }
+}

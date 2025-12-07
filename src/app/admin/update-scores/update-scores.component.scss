@@ -1,47 +1,65 @@
-@import url("https://fonts.googleapis.com/css?family=Titillium+Web&display=swap");
-main {
-  margin-left: 5%;
-  margin-right: 5%;
-  height: 100%;
-  font-family: "Titillium Web", sans-serif;
+:host {
+  display: block;
 }
 
-.delete-button {
-  background-color: maroon;
-  border-color: maroon;
-  color: white;
-}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
 
-.create-button {
-  padding-left: 35px;
-  padding-top: 30px;
-}
+  thead {
+    background-color: #014d0e;
+    color: white;
 
-.navbar {
-  font-size: 14pt;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
+    th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
 
-//  /deep/ .sky-section-heading {
-//    font-family: 'Titillium Web', // sans-serif;
-//  }
+  tbody {
+    tr {
+      border-bottom: 1px solid #e0e0e0;
+      transition: background-color 0.2s ease;
 
-//  /deep/ .sky-emphasized {
-//    font-weight: bold;
-//    font-family: 'Titillium Web', // sans-serif;
-//  }
+      &:hover {
+        background-color: #f5f5f5;
+      }
 
-.event-options {
-  width: 60%;
-}
+      &:last-child {
+        border-bottom: none;
+      }
 
-.current-totals {
-  width: 40%;
-  text-align: right;
+      td {
+        padding: 15px;
+        font-size: 14px;
+        color: #333;
+        text-align: center;
+        vertical-align: middle;
+
+        input[type="number"] {
+          width: 60px;
+          padding: 8px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          font-size: 14px;
+
+          &:focus {
+            outline: none;
+            border-color: #014d0e;
+            box-shadow: 0 0 4px rgba(1, 77, 14, 0.2);
+          }
+        }
+      }
+    }
+  }
 }
 
 .team-check {
@@ -50,35 +68,142 @@ input::-webkit-inner-spin-button {
 
 .team-name {
   width: 20%;
-  vertical-align: middle;
 }
 
 .team-score {
   width: 5%;
-  vertical-align: middle;
 }
 
-table {
-  width: 95%;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.header {
-  text-align: center;
-}
-
-th,
-td {
-  vertical-align: middle;
+.update-btn {
+  background-color: #014d0e;
+  color: white;
+  padding: 8px 16px;
   border: none;
-  text-align: center;
-  border: 1px solid black;
-  border-collapse: collapse;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+
+  &:hover {
+    background-color: #003008;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
 }
 
-tr:nth-child(even) {
-  background-color: lightsteelblue;
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.hide-mobile {
+  display: table-cell;
+}
+
+/* Tablet and smaller */
+@media (max-width: 768px) {
+  table {
+    thead {
+      font-size: 12px;
+
+      th {
+        padding: 12px;
+        font-size: 12px;
+      }
+    }
+
+    tbody {
+      tr {
+        td {
+          padding: 12px;
+          font-size: 12px;
+
+          input[type="number"] {
+            width: 50px;
+            padding: 6px;
+            font-size: 12px;
+          }
+        }
+      }
+    }
+  }
+
+  .update-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+
+  .team-check {
+    width: 15%;
+  }
+
+  .team-name {
+    width: 25%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .hide-mobile {
+    display: none;
+  }
+
+  table {
+    thead {
+      display: none;
+    }
+
+    tbody {
+      tr {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid #e0e0e0;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        padding: 10px;
+
+        td {
+          padding: 12px;
+          border-bottom: 1px solid #f0f0f0;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          text-align: right;
+
+          &:before {
+            content: attr(data-label);
+            font-weight: 600;
+            margin-right: 15px;
+            flex: 0 0 50%;
+            text-align: left;
+            color: #666;
+          }
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          input[type="number"] {
+            width: 70px;
+          }
+        }
+      }
+    }
+  }
+
+  .team-check {
+    width: auto;
+  }
+
+  .team-name {
+    width: auto;
+  }
+
+  .update-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 12px;
+  }
 }

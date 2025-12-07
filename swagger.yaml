@@ -1,0 +1,438 @@
+openapi: 3.0.0
+info:
+  title: Bowl Pickem Service API
+  description: API for managing bowl game picks, entries, and tournament brackets
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: /api/v1  
+    description: API Server
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+
+  /auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: User registration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Registration successful
+
+  /entry/list/{year}:
+    get:
+      tags:
+        - Entries
+      summary: Get all entries for a year
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of entries
+
+  /entry/{id}:
+    get:
+      tags:
+        - Entries
+      summary: Get entry details with picks
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Entry with all picks
+
+  /entry/add:
+    post:
+      tags:
+        - Entries
+      summary: Create new entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                year:
+                  type: integer
+      responses:
+        '201':
+          description: Entry created
+
+  /entry/save:
+    patch:
+      tags:
+        - Entries
+      summary: Save entry with picks
+      description: Updates existing picks or inserts new picks for an entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                entry_id:
+                  type: integer
+                picks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      game_id:
+                        type: integer
+                      points:
+                        type: integer
+                      team_1:
+                        type: boolean
+                      team_2:
+                        type: boolean
+      responses:
+        '200':
+          description: Entry saved successfully
+
+  /entry/delete/{id}:
+    delete:
+      tags:
+        - Entries
+      summary: Delete entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Entry deleted
+
+  /user/{userId}/entries:
+    get:
+      tags:
+        - User Entries
+      summary: Get all user entries
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of user entries
+
+  /user/{userId}/entry/{year}:
+    get:
+      tags:
+        - User Entries
+      summary: Get user entry for specific year
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User entry for year
+
+  /standings/{year}:
+    get:
+      tags:
+        - Standings
+      summary: Get standings for year
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Standings data
+
+  /game/list/{year}:
+    get:
+      tags:
+        - Games
+      summary: Get games for year
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of games
+
+  /school/list:
+    get:
+      tags:
+        - Schools
+      summary: Get all schools
+      responses:
+        '200':
+          description: List of schools
+
+  /bowl/list:
+    get:
+      tags:
+        - Bowls
+      summary: Get all bowls
+      responses:
+        '200':
+          description: List of bowls
+
+  /picks/add:
+    post:
+      tags:
+        - Picks
+      summary: Add picks for user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '201':
+          description: Picks added
+
+  /picks/update:
+    patch:
+      tags:
+        - Picks
+      summary: Update picks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Picks updated
+
+  /completedentry/{id}:
+    get:
+      tags:
+        - Entries
+      summary: Get completed entry results
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Completed entry with results
+
+  /blogentry/create/{year}:
+    post:
+      tags:
+        - Blog
+      summary: Create a new blog entry
+      description: Admin endpoint to post a new blog entry for a specific year
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The year for the blog entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - Body
+                - PostedBy
+                - CreatedDate
+              properties:
+                Title:
+                  type: string
+                  description: Blog title (optional, defaults to "Blog Entry")
+                Body:
+                  type: string
+                  description: Blog content/body text
+                PostedBy:
+                  type: string
+                  description: Author name or identifier
+                CreatedDate:
+                  type: string
+                  format: date-time
+                  description: ISO 8601 timestamp
+      responses:
+        '201':
+          description: Blog entry created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlogEntry'
+        '400':
+          description: Invalid request body
+        '500':
+          description: Server error
+
+  /blogentry/list/{year}:
+    get:
+      tags:
+        - Blog
+      summary: Get all blog entries for a year
+      description: Retrieve all blog entries for a specific year, ordered by date (newest first)
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The year to retrieve blog entries for
+      responses:
+        '200':
+          description: List of blog entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BlogEntry'
+        '400':
+          description: Invalid year parameter
+        '500':
+          description: Server error
+
+  /blogentry/{id}:
+    delete:
+      tags:
+        - Blog
+      summary: Delete a blog entry
+      description: Admin endpoint to delete a blog entry by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: The blog entry ID to delete
+      responses:
+        '204':
+          description: Blog entry deleted successfully
+        '400':
+          description: Invalid ID parameter
+        '404':
+          description: Blog entry not found
+        '500':
+          description: Server error
+
+components:
+  schemas:
+    Entry:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        paid:
+          type: boolean
+        year:
+          type: integer
+        created_date:
+          type: string
+          format: date-time
+        tiebreaker1:
+          type: integer
+        tiebreaker2:
+          type: integer
+
+    Pick:
+      type: object
+      properties:
+        game_id:
+          type: integer
+        points:
+          type: integer
+        team_1:
+          type: boolean
+        team_2:
+          type: boolean
+
+    BlogEntry:
+      type: object
+      properties:
+        Id:
+          type: integer
+          description: Unique identifier for the blog entry
+        Title:
+          type: string
+          description: Blog title
+        Body:
+          type: string
+          description: Blog content
+        PostedBy:
+          type: string
+          description: Author name or identifier
+        CreatedDate:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp when the entry was created
+        Year:
+          type: integer
+          description: The year this blog entry belongs to

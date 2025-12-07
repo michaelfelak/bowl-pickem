@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
+:host {
+  display: block;
+}
+
 main {
   margin-left: 5%;
   margin-right: 5%;
@@ -6,74 +9,88 @@ main {
   font-family: 'Titillium Web', sans-serif;
 }
 
+.header {
+  margin: 30px 0 20px 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: 600;
+  border-bottom: 3px solid #014d0e;
+  padding-bottom: 15px;
+}
+
+.admin-container {
+  margin: 20px 0;
+
+  ::ng-deep .sky-repeater {
+    .sky-repeater-item {
+      margin-bottom: 0;
+
+      .sky-repeater-item-title {
+        background-color: #f5f5f5;
+        color: #333;
+        font-weight: 600;
+        padding: 15px;
+        border-left: 4px solid #014d0e;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #efefef;
+        }
+
+        .label {
+          font-size: 14px;
+          color: #333;
+        }
+
+        .pull-left,
+        .pull-right {
+          display: inline-block;
+        }
+
+        .pull-right {
+          float: right;
+        }
+      }
+
+      .sky-repeater-item-content {
+        padding: 20px;
+        background-color: white;
+        border: 1px solid #e0e0e0;
+        border-top: none;
+      }
+    }
+  }
+}
+
 .delete-button {
-  background-color: maroon;
-  border-color: maroon;
+  background-color: #d32f2f;
+  border-color: #d32f2f;
   color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #b71c1c;
+  }
 }
 
 .create-button {
-  padding-left: 35px;
-  padding-top: 30px;
-}
-
-.navbar {
-  font-size: 14pt;
-}
-
-//  /deep/ .sky-section-heading {
-//    font-family: 'Titillium Web', // sans-serif;
-//  }
-
-//  /deep/ .sky-emphasized {
-//    font-weight: bold;
-//    font-family: 'Titillium Web', // sans-serif;
-//  }
-
-.event-options {
-  width: 60%;
-}
-
-.current-totals {
-  width: 40%;
-  text-align: right;
-}
-
-.team-check {
-  width: 12%;
-}
-
-.team-name {
-  width: 20%;
-  vertical-align: middle;
-}
-
-.team-score {
-  width: 5%;
-  vertical-align: middle;
-}
-
-table {
-  width: 95%;
-}
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.header {
-  text-align: center;
-}
-
-th,
-td {
-  vertical-align: middle;
+  background-color: #014d0e;
+  color: white;
+  padding: 12px 30px;
   border: none;
-  text-align: center;
-  border: 1px solid black;
-  border-collapse: collapse;
-}
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 15px 0;
 
-tr:nth-child(even) {
-  background-color: lightsteelblue;
+  &:hover {
+    background-color: #003008;
+  }
 }

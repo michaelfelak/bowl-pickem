@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
 
+:host {
+  display: block;
+}
+
 main {
   margin-left: auto;
   margin-right: auto;
@@ -7,6 +11,42 @@ main {
   padding: 20px;
   height: 100%;
   font-family: 'Titillium Web', sans-serif;
+}
+
+.pick-for-me-btn {
+  background-color: #014d0e;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+}
+
+.pick-for-me-btn:hover {
+  background-color: #0a6b1a;
+}
+
+.pick-for-me-btn:active {
+  background-color: #014d0e;
+}
+
+.header {
+  margin: 30px 0 20px 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: 600;
+  border-bottom: 3px solid #014d0e;
+  padding-bottom: 15px;
+}
+
+.section-header {
+  margin: 30px 0 20px 0;
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .game-count-header {
@@ -23,6 +63,13 @@ main {
   top: 60px;
   z-index: 99;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.game-count-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
 }
 
 .game-count-item {
@@ -67,6 +114,68 @@ main {
   .game-count-value {
     font-size: 14px;
   }
+
+  table.center {
+    font-size: 13px;
+  }
+
+  table.center th {
+    padding: 10px 5px;
+    font-size: 12px;
+  }
+
+  table.center td {
+    padding: 8px 5px;
+    font-size: 13px;
+  }
+
+  .team-check {
+    width: 5%;
+  }
+
+  .team-name {
+    width: 18%;
+  }
+
+  .team-date {
+    width: 10%;
+  }
+
+  .team-points {
+    width: 8%;
+  }
+}
+
+@media (max-width: 480px) {
+  table.center {
+    font-size: 12px;
+  }
+
+  table.center th {
+    padding: 8px 3px;
+    font-size: 11px;
+  }
+
+  table.center td {
+    padding: 6px 3px;
+    font-size: 12px;
+  }
+
+  .team-check {
+    width: 5%;
+  }
+
+  .team-name {
+    width: 17%;
+  }
+
+  .team-date {
+    width: 10%;
+  }
+
+  .team-points {
+    width: 7%;
+  }
 }
 
 .team-check {
@@ -96,111 +205,58 @@ table {
   margin-left: auto;
   margin-right: auto;
 }
+
 table.center {
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid black;
   border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-tr.borderleft {
-  border-left: 1px solid black;
-  border-collapse: collapse;
+table.center tr:first-child {
+  background-color: #014d0e;
+  color: white;
 }
 
-tr.borderright {
-  border-right: 1px solid black;
-  border-collapse: collapse;
+table.center thead th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background-color: #014d0e;
+  color: white;
 }
 
-.header {
-  text-align: center;
+table.center tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
 }
 
-th,
-td {
-  vertical-align: middle;
-  border: none;
-  text-align: center;
+table.center tbody tr:hover {
+  background-color: #f5f5f5;
 }
 
-tr:nth-child(even) {
-  background-color: lightsteelblue;
+table.center tbody tr:last-child {
+  border-bottom: none;
 }
 
-/* Tiebreaker/Rules Section */
-.tiebreaker-section {
-  margin: 30px 0;
-}
-
-.tiebreaker-header {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  padding: 15px 20px;
-  cursor: pointer;
-  font-size: 18px;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  user-select: none;
-  border-radius: 4px;
-  transition: background-color 0.3s ease;
-}
-
-.tiebreaker-header:hover {
-  background-color: #e6e6e6;
-}
-
-.toggle-arrow {
-  display: inline-block;
-  transition: transform 0.3s ease;
-  font-size: 16px;
-}
-
-.toggle-arrow.expanded {
-  transform: rotate(90deg);
-}
-
-.tiebreaker-content {
-  border: 1px solid #ccc;
-  border-top: none;
-  padding: 20px;
-  background-color: #fafafa;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-
-.tiebreaker-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
-}
-
-.tiebreaker-question {
-  text-align: center;
-  font-size: 16px;
+table.center td {
+  padding: 15px;
+  font-size: 14px;
   color: #333;
-}
-
-.tiebreaker-input {
-  margin-top: 10px;
-}
-
-.tiebreaker-input input {
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-  width: 150px;
   text-align: center;
 }
 
-.tiebreaker-input input:focus {
-  outline: none;
-  border-color: #014d0e;
-  box-shadow: 0 0 5px rgba(1, 77, 14, 0.3);
+table.center th {
+  padding: 15px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Playoff/Championship Section Styles */
@@ -228,9 +284,9 @@ tr:nth-child(even) {
 .playoff-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 30px;
   margin-bottom: 30px;
-  max-width: 600px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -249,14 +305,15 @@ tr:nth-child(even) {
 
 .playoff-team-selector select,
 .champion-selector select {
-  padding: 10px 12px;
+  padding: 12px 15px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-size: 15px;
+  font-size: 16px;
   background-color: white;
   color: #333;
   cursor: pointer;
   transition: border-color 0.2s, box-shadow 0.2s;
+  min-height: 45px;
 }
 
 .playoff-team-selector select:hover,
@@ -283,7 +340,7 @@ tr:nth-child(even) {
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
 }
 
 .champion-selector select {
@@ -292,6 +349,63 @@ tr:nth-child(even) {
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
+  .header {
+    font-size: 22px;
+    margin: 20px 0 15px 0;
+  }
+
+  .section-header {
+    font-size: 18px;
+  }
+
+  .game-count-header {
+    gap: 15px;
+    padding: 12px;
+    margin: 10px 0;
+  }
+
+  .game-count-item {
+    gap: 4px;
+  }
+
+  .game-count-label {
+    font-size: 11px;
+  }
+
+  .game-count-value {
+    font-size: 14px;
+  }
+
+  table.center {
+    font-size: 13px;
+  }
+
+  table.center th {
+    padding: 12px;
+    font-size: 12px;
+  }
+
+  table.center td {
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .team-check {
+    width: 5%;
+  }
+
+  .team-name {
+    width: 18%;
+  }
+
+  .team-date {
+    width: 10%;
+  }
+
+  .team-points {
+    width: 8%;
+  }
+
   .playoff-section {
     margin: 30px 10px;
     padding: 20px;
@@ -310,5 +424,61 @@ tr:nth-child(even) {
 
   .champion-header {
     margin-top: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    font-size: 22px;
+  }
+
+  .section-header {
+    font-size: 16px;
+  }
+
+  table.center {
+    font-size: 12px;
+  }
+
+  table.center th {
+    padding: 8px 3px;
+    font-size: 11px;
+  }
+
+  table.center td {
+    padding: 6px 3px;
+    font-size: 14px;
+  }
+
+  .team-check {
+    width: 5%;
+  }
+
+  .team-name {
+    width: 17%;
+  }
+
+  .team-date {
+    width: 10%;
+  }
+
+  .team-points {
+    width: 7%;
+  }
+
+  .playoff-section {
+    margin: 20px 10px;
+    padding: 15px;
+  }
+
+  .playoff-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .section-description {
+    font-size: 12px;
+    margin-bottom: 15px;
   }
 }

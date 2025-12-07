@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { SettingsService } from './shared/services/settings.service';
 import { AuthService } from './shared/services/auth.service';
@@ -17,6 +17,7 @@ export class AppComponent {
   public currentUserEmail = '';
   public isAuthenticated = false;
   public menuOpen = false;
+  public showUserDropdown = false;
 
   constructor(
     private titleService: Title,
@@ -32,26 +33,40 @@ export class AppComponent {
     this.authService.currentUser$.subscribe(() => {
       this.isAuthenticated = this.authService.isAuthenticated();
       this.currentUserEmail = this.authService.getCurrentUserEmail() || '';
+      this.updateAdminStatus();
     });
     this.showSubmit = this.settingService.showSubmitEntry;
     this.titleService.setTitle("Bowl Pick'em - Home");
+    
+    // Check admin status on initialization
+    this.updateAdminStatus();
+    
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
-
-    // check if admin
-    if (id === '89310bc3-d828-ae83-11bb-7bc89ea3ab21') {
-      this.showAdmin = true;
-      console.log('Logged in as administrator');
-    }
     if (id === '784920abf-e832-bddb-88ae-7ac89ea3ab21'){
       this.showSubmit = true;
+    }
+  }
+
+  /**
+   * Update admin status based on logged-in user
+   */
+  private updateAdminStatus(): void {
+    const userEmail = this.authService.getCurrentUserEmail();
+    const userId = this.authService.getCurrentUserId();
+    
+    // Show admin tab if logged in as michaelfelak@gmail.com or userid = 2
+    this.showAdmin = userEmail === 'michaelfelak@gmail.com' || userId === '2';
+    if (this.showAdmin) {
+      console.log('Logged in as administrator');
     }
   }
 
   logout(): void {
     this.authService.logout();
     this.isAuthenticated = false;
+    this.showUserDropdown = false;
     this.router.navigate(['/']);
   }
 
@@ -65,5 +80,25 @@ export class AppComponent {
 
   closeMenu(): void {
     this.menuOpen = false;
+  }
+
+  toggleUserDropdown(): void {
+    this.showUserDropdown = !this.showUserDropdown;
+  }
+
+  navigateToMyProfile(): void {
+    this.showUserDropdown = false;
+    this.router.navigate(['/my-entries']);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    const userAvatarContainer = document.querySelector('.user-avatar-container');
+    
+    // Close dropdown if clicking outside the container
+    if (userAvatarContainer && !userAvatarContainer.contains(target)) {
+      this.showUserDropdown = false;
+    }
   }
 }

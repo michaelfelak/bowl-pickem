@@ -10,6 +10,9 @@ import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
 import { ScenarioGeneratorComponent } from './scenario-generator/scenario-generator.component';
 import { LoginComponent } from './auth/login.component';
 import { AuthGuard } from './shared/guards/auth.guard';
+import { MyEntriesComponent } from './my-entries/my-entries.component';
+import { ViewEntryComponent } from './my-entries/view-entry/view-entry.component';
+import { EditEntryComponent } from './my-entries/edit-entry/edit-entry.component';
 
 const routes: Routes = [
   {
@@ -31,13 +34,28 @@ const routes: Routes = [
     // canActivate: [PicksRouteGuard]
   },
   {
+    path: 'my-entries',
+    component: MyEntriesComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'my-entries/:id/view',
+    component: ViewEntryComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'my-entries/:id/edit',
+    component: EditEntryComponent,
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'scores',
     component: BowlScoresComponent
   },
   {
     path: 'admin',
     component: AdminComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AdminRouteGuard]
   },
   {
     path: 'standings',

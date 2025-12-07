@@ -1,0 +1,54 @@
+<div class="view-entry-container">
+  <!-- Header -->
+  <div class="view-header">
+    <button class="back-btn" (click)="goBack()" title="Back to My Entries">
+      ← Back to My Entries
+    </button>
+    <h1>View Entry</h1>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="showError" class="error-alert">
+    <strong>Error:</strong> {{ errorMsg }}
+  </div>
+
+  <!-- Entry Summary -->
+  <div *ngIf="entry && !isLoading" class="entry-summary">
+    <span class="summary-item"><strong>{{ entry.name || entry.entry_name }}</strong></span>
+    <span class="summary-item">Submitted: {{ formatDate(entry.timestamp || entry.created_date) }}</span>
+  </div>
+
+  <!-- Picks Table -->
+  <div *ngIf="!isLoading && picks.length > 0" class="picks-table-container">
+    <table class="picks-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Game</th>
+          <th>Your Pick</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pick of picks; let i = index">
+          <td class="pick-number">{{ i + 1 }}</td>
+          <td class="game-cell">
+            <div class="game-label">{{ pick.gameLabel }}</div>
+            <div class="game-time">{{ pick.gameTime }}</div>
+          </td>
+          <td class="pick-cell">
+            <strong>{{ getPickedTeam(pick) }}</strong>
+          </td>
+          <td class="points-cell">
+            <strong>{{ pick.points || 0 }}</strong>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && picks.length === 0" class="empty-state">
+    <p>No picks found for this entry.</p>
+  </div>
+</div>

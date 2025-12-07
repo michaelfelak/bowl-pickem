@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { SettingsService } from './settings.service';
 
 export interface LoginRequest {
   username: string;
@@ -27,15 +28,15 @@ export interface UserResponse {
   providedIn: 'root'
 })
 export class AuthService {
-  // private apiUrl = 'http://localhost:8081/api/auth'; // local
-  private apiUrl = 'https://bowl-pickem-144ffdd934e7.herokuapp.com/api/auth'; 
+  private apiUrl: string;
   private readonly TOKEN_KEY = 'auth_token';
   private readonly EMAIL_KEY = 'auth_email';
   private currentUserSubject: BehaviorSubject<string | null>;
   public currentUser$: Observable<string | null>;
   public jwtHelper = new JwtHelperService();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private settingsService: SettingsService) {
+    this.apiUrl = this.settingsService.authApiUrl;
     this.currentUserSubject = new BehaviorSubject<string | null>(this.getUsernameFromToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
   }

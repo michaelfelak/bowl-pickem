@@ -19,4 +19,10 @@ export class PickSummaryComponent {
   @Input() public threePointError!: boolean;
   @Input() public fivePointError!: boolean;
   @Input() public tenPointError!: boolean;
+  @Input() public gamesPicked: number = 0;
+  @Input() public totalGames: number = 0;
+
+  get progressPercentage(): number {
+    return this.totalGames > 0 ? Math.round((this.gamesPicked / this.totalGames) * 100) : 0;
+  }
 }

@@ -24,6 +24,10 @@
     <!-- Game Count Header -->
     <div class="game-count-header">
       <div class="game-count-item">
+        <span class="game-count-label">Games Picked:</span>
+        <span class="game-count-value">{{ gamesPicked }}/{{ totalGames }}</span>
+      </div>
+      <div class="game-count-item">
         <span class="game-count-label">3-Point Games:</span>
         <span class="game-count-value" [class.error]="threePointGames > maxThreePointGames">{{ threePointGames }}/{{ maxThreePointGames }}</span>
       </div>
@@ -37,12 +41,14 @@
       </div>
       <div class="game-count-item">
         <span class="game-count-label">Total Possible Points:</span>
-        <span class="game-count-value" style="font-weight: bold;">{{ calculateTotalPoints() }}</span>
+        <span class="game-count-value" style="font-weight: bold;">{{ calculateTotalPoints() }} / {{ calculateMaxPossiblePoints() }}</span>
       </div>
     </div>
     
     <app-pick-summary
       [name]="name"
+      [gamesPicked]="gamesPicked"
+      [totalGames]="totalGames"
       [threePointGames]="threePointGames"
       [fivePointGames]="fivePointGames"
       [tenPointGames]="tenPointGames"
@@ -60,6 +66,17 @@
       <sky-input-box data-sky-id="input-box-first-name" labelText="Entry Name">
         <input formControlName="name" spellcheck="false" type="text" />
       </sky-input-box>
+      
+      <!-- Pick for Me Button -->
+      <div style="text-align: center; margin: 15px 0;">
+        <button 
+          (click)="pickForMe()" 
+          type="button"
+          class="pick-for-me-btn"
+        >
+          Pick for me
+        </button>
+      </div>
     </form>
     <br />
     <!-- Bowl Picks -->
@@ -342,25 +359,7 @@
       <br />
     </div> -->
     </div>
-    <!-- Tiebreakers (Collapsible) -->
-    <div class="tiebreaker-section">
-      <h2 class="tiebreaker-header" (click)="toggleRulesSection()">
-        <span class="toggle-arrow" [class.expanded]="showRulesSection">▶</span>
-        Tiebreakers & Rules
-      </h2>
-      <div class="tiebreaker-content" *ngIf="showRulesSection">
-        <div [formGroup]="tiebreakerForm" class="tiebreaker-form">
-          <span class="tiebreaker-question">
-            How many <span style="font-weight: bold">total</span> points will be
-            scored in the 2024-2025 bowl season? (The answer for last year was
-            <span style="font-weight: bold">2,237</span>).
-          </span>
-          <div class="tiebreaker-input">
-            <input formControlName="tiebreaker2" type="number" min="0" />
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Tiebreakers Section Removed -->
     <sky-alert *ngIf="showSubmitError" alertType="danger">
       {{ submitErrorMsg }}
     </sky-alert>
@@ -369,7 +368,6 @@
       <button
         class="sky-btn sky-btn-primary sky-margin-inline-compact"
         (click)="submit()"
-        [disabled]="false"
       >
         Submit
       </button>

@@ -1,58 +1,58 @@
-<table class="center">
-  <tr>
-    <th class="team-check">Game</th>
-    <th class="team-check">Bowl Game</th>
-    <th class="team-name">Date/Time</th>
-    <th class="team-name">Team 1</th>
-    <th class="team-check">Team 1 Score</th>
-    <th class="team-name">Team 2</th>
-    <th class="team-check">Team 2 Score</th>
-    <th>Points</th>
-  </tr>
-  <ng-container [formGroup]="scoresForm">
-    <ng-container formArrayName="games">
-      <tr [formGroupName]="i" *ngFor="let bowl of gameResults; let i = index">
-        <td class="team-check">
-          {{ bowl.game_id }}
-        </td>
-        <td class="team-name">
-          {{ bowl.bowl_name }}
-        </td>
-        <td class="team-name">
-          {{ bowl.game_time | date : "short" }}
-        </td>
-        <td class="team-name">
-          {{ bowl.team_1_name }}
-        </td>
-        <td class="team-check">
-          <!-- <input type="number" min="0" [(ngModel)]="bowl.score_1" /> -->
-          <input
-            formControlName="score1"
-            class="sky-form-control"
-            style="width: 50px"
-            type="number"
-            min="0"
-          />
-        </td>
-        <td class="team-name">
-          {{ bowl.team_2_name }}
-        </td>
-        <td class="team-check">
-          <!-- <input type="number" min="0" [(ngModel)]="bowl.score_2" /> -->
-          <input
-            formControlName="score2"
-            class="sky-form-control"
-            style="width: 50px"
-            type="number"
-            min="0"
-          />
-        </td>
-        <td class="team-check">
-          <button type="button" (click)="updateBowlScore(bowl.game_id!)">
-            Update
-          </button>
-        </td>
-      </tr>
+<table class="center scores-table">
+  <thead>
+    <tr>
+      <th class="team-check hide-mobile">Game</th>
+      <th class="team-check">Bowl Game</th>
+      <th class="team-name hide-mobile">Date/Time</th>
+      <th class="team-name">Team 1</th>
+      <th class="team-check">Score</th>
+      <th class="team-name">Team 2</th>
+      <th class="team-check">Score</th>
+      <th class="team-check">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container [formGroup]="scoresForm">
+      <ng-container formArrayName="games">
+        <tr [formGroupName]="i" *ngFor="let bowl of gameResults; let i = index">
+          <td class="team-check hide-mobile" data-label="Game">
+            {{ bowl.game_id }}
+          </td>
+          <td class="team-name" data-label="Bowl Game">
+            {{ bowl.bowl_name }}
+          </td>
+          <td class="team-name hide-mobile" data-label="Date/Time">
+            {{ bowl.game_time | date : "short" }}
+          </td>
+          <td class="team-name" data-label="Team 1">
+            {{ bowl.team_1_name }}
+          </td>
+          <td class="team-check" data-label="Team 1 Score">
+            <input
+              formControlName="score1"
+              class="sky-form-control"
+              type="number"
+              min="0"
+            />
+          </td>
+          <td class="team-name" data-label="Team 2">
+            {{ bowl.team_2_name }}
+          </td>
+          <td class="team-check" data-label="Team 2 Score">
+            <input
+              formControlName="score2"
+              class="sky-form-control"
+              type="number"
+              min="0"
+            />
+          </td>
+          <td class="team-check" data-label="Action">
+            <button type="button" (click)="updateBowlScore(bowl.game_id!)" class="update-btn">
+              Update
+            </button>
+          </td>
+        </tr>
+      </ng-container>
     </ng-container>
-  </ng-container>
+  </tbody>
 </table>
