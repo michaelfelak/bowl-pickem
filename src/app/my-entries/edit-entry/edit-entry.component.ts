@@ -123,9 +123,6 @@ export class EditEntryComponent implements OnInit {
       this.bowlService.getEntryWithPicks(this.entryId).toPromise(),
     ])
       .then(([games, entryData]) => {
-        console.log('Games data:', games);
-        console.log('Entry with picks response:', entryData);
-
         this.games = games || [];
         this.entry = entryData;
         this.processPicks(entryData?.picks || []);
@@ -182,14 +179,6 @@ export class EditEntryComponent implements OnInit {
    */
   private buildPickForm(): void {
     this.picks.forEach((pick, index) => {
-      console.log(`Building form for pick ${index}:`, {
-        team_1: pick.team_1_picked,
-        team_2: pick.team_2_picked,
-        team_1_name: pick.team_1_name,
-        team_2_name: pick.team_2_name,
-        points: pick.points,
-      });
-
       this.pickFormArray.push(
         this.formBuilder.group({
           game_id: new FormControl(pick.game_id),
@@ -320,7 +309,6 @@ export class EditEntryComponent implements OnInit {
 
       this.bowlService.saveEntry(entryData).subscribe({
         next: (response) => {
-          console.log('Update response:', response);
           this.isSaving = false;
           this.successMsg = 'Your picks have been updated successfully!';
           this.showSuccess = true;

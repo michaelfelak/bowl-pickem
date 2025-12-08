@@ -73,9 +73,6 @@ export class ViewEntryComponent implements OnInit {
       this.bowlService.getStandingsEntry(this.entryId).toPromise()
     ])
       .then(([games, completedEntry]) => {
-        console.log('Games data:', games);
-        console.log('Completed entry response:', completedEntry);
-        
         this.games = games || [];
         this.entry = completedEntry as unknown as Entry;
         this.processPicks(completedEntry?.picks || []);
@@ -95,10 +92,6 @@ export class ViewEntryComponent implements OnInit {
    */
   private processPicks(picks: CompletedPick[]): void {
     this.picks = picks.map(pick => {
-      console.log('Processing completed pick:', pick);
-      console.log('  team_1:', pick.team_1, 'correct1:', pick.correct1);
-      console.log('  team_2:', pick.team_2, 'correct2:', pick.correct2);
-      console.log('  team_1_name:', pick.team_1_name, 'team_2_name:', pick.team_2_name);
       return {
         ...pick,
         gameLabel: this.getGameLabel(pick),

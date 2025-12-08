@@ -57,7 +57,7 @@ export class AppComponent {
     const userId = this.authService.getCurrentUserId();
     
     // Show admin tab if logged in as michaelfelak@gmail.com or userid = 2
-    this.showAdmin = userEmail === 'michaelfelak@gmail.com' || userId === '2';
+    this.showAdmin =  userId === '2' || userId === '3';
     if (this.showAdmin) {
       console.log('Logged in as administrator');
     }

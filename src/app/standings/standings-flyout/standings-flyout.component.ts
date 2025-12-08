@@ -35,13 +35,11 @@ export class StandingsFlyoutComponent implements OnInit {
       .getPlayoffPickForFlyout(this.context.entryId)
       .pipe(
         mergeMap((playoffResult) => {
-          console.log(playoffResult);
           this.playoffPicks = playoffResult;
           return this.svc.getStandingsEntry(this.context.entryId);
         })
       )
       .subscribe((result: any) => {
-        console.log(result);
         this.entry = result;
         this.name = this.entry.entry_name!;
         this.picks = this.entry.picks!;
