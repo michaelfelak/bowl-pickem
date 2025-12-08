@@ -28,7 +28,7 @@ export class AppComponent {
     this.currentUser$ = this.authService.currentUser$;
     this.isAuthenticated = this.authService.isAuthenticated();
     this.currentUserEmail = this.authService.getCurrentUserEmail() || '';
-    
+
     // Subscribe to auth status changes
     this.authService.currentUser$.subscribe(() => {
       this.isAuthenticated = this.authService.isAuthenticated();
@@ -37,14 +37,14 @@ export class AppComponent {
     });
     this.showSubmit = this.settingService.showSubmitEntry;
     this.titleService.setTitle("Bowl Pick'em - Home");
-    
+
     // Check admin status on initialization
     this.updateAdminStatus();
-    
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const id = urlParams.get('id');
-    if (id === '784920abf-e832-bddb-88ae-7ac89ea3ab21'){
+    if (id === '784920abf-e832-bddb-88ae-7ac89ea3ab21') {
       this.showSubmit = true;
     }
   }
@@ -54,10 +54,10 @@ export class AppComponent {
    */
   private updateAdminStatus(): void {
     const userEmail = this.authService.getCurrentUserEmail();
-    const userId = this.authService.getCurrentUserId();
-    
-    // Show admin tab if logged in as michaelfelak@gmail.com or userid = 2
-    this.showAdmin =  userId === '2' || userId === '3';
+    const userId = this.authService.getCurrentUserId()?.toString();
+
+    // Show admin tab if logged in as userid = 2
+    this.showAdmin = userId === '2' || userId === '3';
     if (this.showAdmin) {
       console.log('Logged in as administrator');
     }
@@ -94,8 +94,10 @@ export class AppComponent {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    const userAvatarContainer = document.querySelector('.user-avatar-container');
-    
+    const userAvatarContainer = document.querySelector(
+      '.user-avatar-container'
+    );
+
     // Close dropdown if clicking outside the container
     if (userAvatarContainer && !userAvatarContainer.contains(target)) {
       this.showUserDropdown = false;
