@@ -1,19 +1,55 @@
-<div style="max-width: 300px">
-  <form [formGroup]="schoolForm">
-    <sky-input-box labelText="School">
-      <select formControlName="school" style="display: inline-block">
+<div class="playoff-school-container">
+  <!-- Success Alert -->
+  <sky-alert *ngIf="showSuccess" alertType="success" class="alert">
+    <strong>Success:</strong> {{ successMsg }}
+  </sky-alert>
+
+  <!-- Error Alert -->
+  <sky-alert *ngIf="showError" alertType="danger" class="alert">
+    <strong>Error:</strong> {{ errorMsg }}
+  </sky-alert>
+
+  <!-- Form Section -->
+  <form [formGroup]="schoolForm" class="form-section">
+    <div class="form-group">
+      <label class="form-label">School</label>
+      <select formControlName="school" class="form-select">
+        <option [ngValue]="null" disabled selected>Select a school...</option>
         <option [ngValue]="school" *ngFor="let school of schools">
           {{ school.Name }}
         </option>
       </select>
-    </sky-input-box>
-    <sky-input-box labelText="Seed">
-      <input formControlName="seed" type="number" min="1" max="12" />
-    </sky-input-box>
-    <button (click)="submit()">Submit</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Seed Number</label>
+      <input 
+        formControlName="seed" 
+        type="number" 
+        min="1" 
+        max="12"
+        class="form-input"
+      />
+    </div>
+
+    <button (click)="submit()" type="button" class="submit-button">
+      Add School
+    </button>
   </form>
-</div>
-<h4>Current list</h4>
-<div *ngFor="let school of playoffSchools">
-  {{ school.seed_number }}. {{ school.school_name }}
+
+  <!-- Current Schools List -->
+  <div class="schools-list-section" *ngIf="playoffSchools.length > 0">
+    <h3 class="list-header">Current Playoff Schools</h3>
+    <div class="schools-list">
+      <div class="school-item" *ngFor="let school of playoffSchools">
+        <span class="seed">#{{ school.seed_number }}</span>
+        <span class="name">{{ school.school_name }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="playoffSchools.length === 0">
+    <p>No playoff schools added yet.</p>
+  </div>
 </div>

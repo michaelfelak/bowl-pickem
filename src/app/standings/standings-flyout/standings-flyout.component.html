@@ -59,21 +59,19 @@
             <td class="pick-col">
               <div class="team-pick-item">
                 <app-status-indicator
-                  *ngIf="pick.team_1"
-                  [value]="pick.correct1"
+                  [value]="pick.team_1 ? (pick.correct1 !== false ? pick.correct1 : false) : undefined"
                   [showCheck]="pick.team_1"
                 ></app-status-indicator>
-                <span>{{ pick.team_1_name }}</span>
+                <span>{{ pick.team_1_name }} {{pick.correct1}}</span>
               </div>
             </td>
             <td class="pick-col">
               <div class="team-pick-item">
                 <app-status-indicator
-                  *ngIf="pick.team_2"
-                  [value]="pick.correct2"
+                  [value]="pick.team_2 ? (pick.correct2 !== false ? pick.correct2 : false) : undefined"
                   [showCheck]="pick.team_2"
                 ></app-status-indicator>
-                <span>{{ pick.team_2_name }}</span>
+                <span>{{ pick.team_2_name }}{{pick.correct2}}</span>
               </div>
             </td>
             <td class="points-col">

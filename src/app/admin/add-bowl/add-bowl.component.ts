@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { BowlService } from '../../shared/services/bowl.service';
 import { Bowl } from '../../shared/services/bowl.model';
-import { SkyRepeaterModule } from '@skyux/lists';
 import { CommonModule } from '@angular/common';
-import { SkyInputBoxModule } from '@skyux/forms';
 import {
   FormBuilder,
   FormControl,
@@ -19,7 +17,6 @@ import { SkyAlertModule } from '@skyux/indicators';
     CommonModule,
     ReactiveFormsModule,
     SkyAlertModule,
-    SkyInputBoxModule,
   ],
   templateUrl: './add-bowl.component.html',
   styleUrls: ['./add-bowl.component.scss'],

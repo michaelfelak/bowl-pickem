@@ -1,5 +1,6 @@
 // tslint?:disable variable-name
 export interface PickRequest {
+  entry_id?: string;
   picks?: PickModel[];
 }
 

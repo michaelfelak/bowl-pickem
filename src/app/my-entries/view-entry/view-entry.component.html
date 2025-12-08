@@ -25,7 +25,8 @@
         <tr>
           <th>#</th>
           <th>Game</th>
-          <th>Your Pick</th>
+          <th>Team 1</th>
+          <th>Team 2</th>
           <th>Points</th>
         </tr>
       </thead>
@@ -37,10 +38,20 @@
             <div class="game-time">{{ pick.gameTime }}</div>
           </td>
           <td class="pick-cell">
-            <strong>{{ getPickedTeam(pick) }}</strong>
+            <div class="team-pick-item">
+              <app-status-indicator [value]="pick.correct1"></app-status-indicator>
+              <span>{{ pick.team_1_name }}</span>
+            </div>
+          </td>
+          <td class="pick-cell">
+            <div class="team-pick-item">
+              <app-status-indicator [value]="pick.correct2"></app-status-indicator>
+              <span>{{ pick.team_2_name }}</span>
+            </div>
           </td>
           <td class="points-cell">
-            <strong>{{ pick.points || 0 }}</strong>
+            <span *ngIf="!pick.earned_points" class="pending-points">{{ pick.points }}</span>
+            <span *ngIf="pick.earned_points" class="earned-points">{{ pick.earned_points }}</span>
           </td>
         </tr>
       </tbody>

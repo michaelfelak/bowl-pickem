@@ -2,6 +2,22 @@
   {{ errorMsg }}
 </sky-alert>
 
+<!-- Confirmation Dialog -->
+<app-submission-confirmation
+  *ngIf="showConfirmation"
+  [entryName]="confirmationData?.entryName"
+  [totalPossiblePoints]="confirmationData?.totalPossiblePoints"
+  [threePointGames]="confirmationData?.threePointGames"
+  [fivePointGames]="confirmationData?.fivePointGames"
+  [tenPointGames]="confirmationData?.tenPointGames"
+  [allGamesPicked]="confirmationData?.allGamesPicked"
+  [totalGamesPicked]="confirmationData?.totalGamesPicked"
+  [totalGames]="confirmationData?.totalGames"
+  [onConfirm]="confirmationData?.onConfirm"
+  [onCancel]="confirmationData?.onCancel"
+>
+</app-submission-confirmation>
+
 <!-- Login Required Message -->
 <div *ngIf="!isAuthenticated" style="text-align: center; padding: 40px; background-color: #f5f5f5; margin: 20px; border-radius: 8px;">
   <h2 style="color: #333; margin-bottom: 20px;">Login Required</h2>
@@ -150,7 +166,7 @@
     <form [formGroup]="pickForm" class="playoff-section">
       <h2 class="header">Championship Game</h2>
       <div class="section-description">
-        Choose the two teams that will make the College Football Playoff Championship Game.
+        Choose the two teams that will make the College Football Playoff Championship Game. You will receive 2 points for each correct pick.
       </div>
       
       <div class="playoff-container">
@@ -183,7 +199,7 @@
 
       <h2 class="header champion-header">National Champion</h2>
       <div class="section-description">
-        Choose the National Champion.
+        Choose the National Champion. You will receive 5 points for picking the National Champion.
       </div>
 
       <div class="champion-container">

@@ -1,84 +1,90 @@
-<div>Bowl</div>
-<sky-dropdown style="display: inline-block; width: 150px">
-  <sky-dropdown-button>{{ selectedBowl.name }}</sky-dropdown-button>
-  <sky-dropdown-menu>
-    <sky-dropdown-item *ngFor="let bowl of bowls">
-      <button
-        type="button"
-        class="sky-btn sky-btn-primary sky-margin-inline-compact"
-        (click)="setBowlGame(bowl.id)"
-      >
-        {{ bowl.name }} (ID: {{ bowl.id }})
-      </button>
-    </sky-dropdown-item>
-  </sky-dropdown-menu>
-</sky-dropdown>
-<div>School 1</div>
-<sky-dropdown style="display: inline-block">
-  <sky-dropdown-button>{{ selectedSchool1.Name }}</sky-dropdown-button>
-  <sky-dropdown-menu>
-    <sky-dropdown-item *ngFor="let school of schools">
-      <button type="button" (click)="setSchool(school.ID!, 1)">
-        {{ school.Name }} (ID: {{ school.ID }})
-      </button>
-    </sky-dropdown-item>
-  </sky-dropdown-menu>
-</sky-dropdown>
-<div>School 2</div>
-<sky-dropdown style="display: inline-block">
-  <sky-dropdown-button>{{ selectedSchool2.Name }}</sky-dropdown-button>
-  <sky-dropdown-menu>
-    <sky-dropdown-item *ngFor="let school of schools">
-      <button type="button" (click)="setSchool(school.ID!, 2)">
-        {{ school.Name }} (ID: {{ school.ID }})
-      </button>
-    </sky-dropdown-item>
-  </sky-dropdown-menu>
-</sky-dropdown>
-<!-- <div style="display: inline-block"> Date<br /> </div>
-            <input style="display: inline-block" type="date" value="2023-12-15" min="2023-12-15" max="2024-01-15" /> -->
-<div>
-  <form [formGroup]="formGroup" style="width: 350px">
-    <sky-input-box
-      data-sky-id="input-box-first-name"
-      labelText="Year   Month   Day  Hour   Min"
-    >
-      <input formControlName="year" spellcheck="false" type="number" />
-      <input
-        formControlName="month"
-        spellcheck="false"
-        type="number"
-        min="1"
-        max="12"
-      />
-      <input
-        formControlName="day"
-        spellcheck="false"
-        type="number"
-        min="1"
-        max="31"
-      />
-      <input
-        formControlName="hour"
-        spellcheck="false"
-        type="number"
-        min="0"
-        max="23"
-      />
-      <input
-        formControlName="minute"
-        spellcheck="false"
-        type="number"
-        step="15"
-        min="0"
-        max="45"
-      />
-    </sky-input-box>
+<div class="add-bowl-game-container">
+  <!-- Success Message -->
+  <div *ngIf="addMessage" class="success-message">
+    {{ addMessage }}
+  </div>
+
+  <!-- Form Section -->
+  <form [formGroup]="formGroup" class="form-section">
+    <!-- Bowl Selection -->
+    <div class="form-group">
+      <label class="form-label">Bowl</label>
+      <sky-dropdown class="form-dropdown">
+        <sky-dropdown-button>{{ selectedBowl.name }}</sky-dropdown-button>
+        <sky-dropdown-menu>
+          <sky-dropdown-item *ngFor="let bowl of bowls">
+            <button
+              type="button"
+              class="dropdown-item-btn"
+              (click)="setBowlGame(bowl.id)"
+            >
+              {{ bowl.name }}
+            </button>
+          </sky-dropdown-item>
+        </sky-dropdown-menu>
+      </sky-dropdown>
+    </div>
+
+    <!-- School 1 Selection -->
+    <div class="form-group">
+      <label class="form-label">School 1</label>
+      <sky-dropdown class="form-dropdown">
+        <sky-dropdown-button>{{ selectedSchool1.Name }}</sky-dropdown-button>
+        <sky-dropdown-menu>
+          <sky-dropdown-item *ngFor="let school of schools">
+            <button type="button" (click)="setSchool(school.ID!, 1)" class="dropdown-item-btn">
+              {{ school.Name }}
+            </button>
+          </sky-dropdown-item>
+        </sky-dropdown-menu>
+      </sky-dropdown>
+    </div>
+
+    <!-- School 2 Selection -->
+    <div class="form-group">
+      <label class="form-label">School 2</label>
+      <sky-dropdown class="form-dropdown">
+        <sky-dropdown-button>{{ selectedSchool2.Name }}</sky-dropdown-button>
+        <sky-dropdown-menu>
+          <sky-dropdown-item *ngFor="let school of schools">
+            <button type="button" (click)="setSchool(school.ID!, 2)" class="dropdown-item-btn">
+              {{ school.Name }}
+            </button>
+          </sky-dropdown-item>
+        </sky-dropdown-menu>
+      </sky-dropdown>
+    </div>
+
+    <!-- Date/Time Selection -->
+    <div class="form-group">
+      <label class="form-label">Game Date & Time</label>
+      <div class="datetime-inputs">
+        <div class="datetime-field">
+          <label class="datetime-label">Year</label>
+          <input formControlName="year" type="number" class="form-input small" />
+        </div>
+        <div class="datetime-field">
+          <label class="datetime-label">Month</label>
+          <input formControlName="month" type="number" min="1" max="12" class="form-input small" />
+        </div>
+        <div class="datetime-field">
+          <label class="datetime-label">Day</label>
+          <input formControlName="day" type="number" min="1" max="31" class="form-input small" />
+        </div>
+        <div class="datetime-field">
+          <label class="datetime-label">Hour</label>
+          <input formControlName="hour" type="number" min="0" max="23" class="form-input small" />
+        </div>
+        <div class="datetime-field">
+          <label class="datetime-label">Min</label>
+          <input formControlName="minute" type="number" step="15" min="0" max="45" class="form-input small" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button (click)="addBowlGame()" type="button" class="submit-button">
+      Add Bowl Game
+    </button>
   </form>
 </div>
-<!-- Playoff?
-      <sky-checkbox [(checked)]="isPlayoff"></sky-checkbox>
-      Championship?
-      <sky-checkbox [(checked)]="isChampionship"></sky-checkbox> -->
-<button (click)="addBowlGame()">Add Bowl Game</button>
-{{ addMessage }}

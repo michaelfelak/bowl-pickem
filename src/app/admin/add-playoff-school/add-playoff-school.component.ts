@@ -6,9 +6,8 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { SkyAppConfig } from '@skyux/config';
+import { SkyAlertModule } from '@skyux/indicators';
 import { SkyInputBoxModule } from '@skyux/forms';
-import { SkyRepeaterModule } from '@skyux/lists';
 import {
   PlayoffSchool,
   PlayoffSchoolRequest,
@@ -24,7 +23,7 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
     CommonModule,
     ReactiveFormsModule,
     SkyInputBoxModule,
-    
+    SkyAlertModule,
   ],
   providers: [BowlService, SettingsService],
   templateUrl: './add-playoff-school.component.html',
@@ -33,6 +32,10 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
 export class AddPlayoffSchoolComponent implements OnInit {
   public schools: School[] = [];
   public playoffSchools: PlayoffSchool[] = [];
+  public successMsg = '';
+  public showSuccess = false;
+  public errorMsg = '';
+  public showError = false;
 
   public schoolForm: FormGroup<{
     school: FormControl<School | null>;
@@ -51,25 +54,59 @@ export class AddPlayoffSchoolComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.loadData();
+  }
+
+  private loadData(): void {
     this.svc.getSchools().subscribe((result) => {
       this.schools = result;
     });
 
-    this.svc.getPlayoffSchools(this.settingsSvc.currentYear).subscribe((result) => {
-      this.playoffSchools = result;
-    });
+    this.loadPlayoffSchools();
   }
 
-  public submit() {
-    if (this.schoolForm.value.school && this.schoolForm.value.seed) {
-      const request: PlayoffSchoolRequest = {
-        year: this.settingsSvc.currentYear,
-        school_id: this.schoolForm.value.school.ID!,
-        school_name: this.schoolForm.value.school.Name!,
-        seed_number: this.schoolForm.value.seed,
-      };
+  private loadPlayoffSchools(): void {
+    this.svc
+      .getPlayoffSchools(this.settingsSvc.currentYear)
+      .subscribe((result) => {
+        this.playoffSchools = result;
+      });
+  }
 
-      this.svc.addPlayoffSchool(request).subscribe();
+  public submit(): void {
+    this.showSuccess = false;
+    this.showError = false;
+
+    if (!this.schoolForm.value.school || !this.schoolForm.value.seed) {
+      this.errorMsg = 'Please select a school and seed number.';
+      this.showError = true;
+      return;
     }
+
+    const request: PlayoffSchoolRequest = {
+      year: this.settingsSvc.currentYear,
+      school_id: this.schoolForm.value.school.ID!,
+      school_name: this.schoolForm.value.school.Name!,
+      seed_number: this.schoolForm.value.seed,
+    };
+
+    this.svc.addPlayoffSchool(request).subscribe(
+      () => {
+        this.successMsg = `${request.school_name} (#${request.seed_number}) added successfully!`;
+        this.showSuccess = true;
+        // Reload the playoff schools list
+        this.loadPlayoffSchools();
+        // Reset form
+        this.schoolForm.reset({
+          school: null,
+          seed: 1,
+        });
+      },
+      (error) => {
+        console.error('Error adding playoff school:', error);
+        this.errorMsg = 'Failed to add school. Please try again.';
+        this.showError = true;
+      }
+    );
   }
 }
