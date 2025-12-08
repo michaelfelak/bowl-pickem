@@ -1,7 +1,12 @@
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
   <!-- Hamburger Menu -->
-  <button class="hamburger" [class.open]="menuOpen" (click)="toggleMenu()" aria-label="Toggle menu">
+  <button
+    class="hamburger"
+    [class.open]="menuOpen"
+    (click)="toggleMenu()"
+    aria-label="Toggle menu"
+  >
     <span></span>
     <span></span>
     <span></span>
@@ -12,8 +17,12 @@
   <!-- Desktop Navigation -->
   <nav class="nav-menu">
     <a routerLink="" (click)="closeMenu()">Home</a>
-    <a *ngIf="showSubmit" routerLink="picks" (click)="closeMenu()">Submit Entry</a>
-    <a routerLink="my-entries" (click)="closeMenu()">My Profile</a>
+    <a *ngIf="showSubmit" routerLink="picks" (click)="closeMenu()"
+      >Submit Entry</a
+    >
+    <a *ngIf="isAdmin" routerLink="my-entries" (click)="closeMenu()"
+      >My Profile</a
+    >
     <a routerLink="scores" (click)="closeMenu()">Scores</a>
     <a routerLink="standings" (click)="closeMenu()">Standings</a>
     <a routerLink="about" (click)="closeMenu()">About</a>
@@ -23,8 +32,12 @@
   <!-- Mobile Navigation -->
   <nav class="mobile-menu" [class.open]="menuOpen">
     <a routerLink="" (click)="closeMenu()">Home</a>
-    <a *ngIf="showSubmit" routerLink="picks" (click)="closeMenu()">Submit Entry</a>
-    <a routerLink="my-entries" (click)="closeMenu()">My Profile</a>
+    <a *ngIf="showSubmit" routerLink="picks" (click)="closeMenu()"
+      >Submit Entry</a
+    >
+    <a *ngIf="isAdmin" routerLink="my-entries" (click)="closeMenu()"
+      >My Profile</a
+    >
     <a routerLink="scores" (click)="closeMenu()">Scores</a>
     <a routerLink="standings" (click)="closeMenu()">Standings</a>
     <a routerLink="about" (click)="closeMenu()">About</a>
@@ -37,28 +50,26 @@
     <ng-container *ngIf="isAuthenticated; else notLoggedIn">
       <!-- User Avatar Dropdown -->
       <div class="user-avatar-container">
-        <button 
-          class="user-avatar" 
+        <button
+          class="user-avatar"
           (click)="toggleUserDropdown()"
           [title]="'User menu for ' + (currentUser$ | async)"
           aria-label="User menu"
         >
           {{ (currentUser$ | async)?.[0]?.toUpperCase() }}
         </button>
-        
+
         <!-- Dropdown Menu -->
         <div class="user-dropdown" *ngIf="showUserDropdown">
           <div class="dropdown-username">{{ currentUser$ | async }}</div>
-          <button 
-            class="dropdown-item" 
+          <button
+            *ngIf="isAdmin"
+            class="dropdown-item"
             (click)="navigateToMyProfile()"
           >
             My Profile
           </button>
-          <button 
-            class="dropdown-item logout-item" 
-            (click)="logout()"
-          >
+          <button class="dropdown-item logout-item" (click)="logout()">
             Logout
           </button>
         </div>

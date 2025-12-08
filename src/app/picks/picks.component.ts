@@ -339,6 +339,15 @@ export class PicksComponent implements OnInit {
     const fivePointGames = this.getBonusGames(5);
     const tenPointGames = this.getBonusGames(10);
 
+    // Get championship school names from form values
+    const playoff1Id = this.pickForm.value.playoff1;
+    const playoff2Id = this.pickForm.value.playoff2;
+    const championId = this.pickForm.value.champion;
+
+    const playoff1School = this.playoffSchools.find(s => s.school_id === playoff1Id);
+    const playoff2School = this.playoffSchools.find(s => s.school_id === playoff2Id);
+    const championSchool = this.playoffSchools.find(s => s.school_id === championId);
+
     this.confirmationData = {
       entryName: this.pickForm.value.name,
       totalPossiblePoints: this.calculateTotalPoints(),
@@ -348,6 +357,9 @@ export class PicksComponent implements OnInit {
       allGamesPicked: this.gamesPicked === this.totalGames,
       totalGamesPicked: this.gamesPicked,
       totalGames: this.totalGames,
+      championshipParticipant1: playoff1School?.school_name,
+      championshipParticipant2: playoff2School?.school_name,
+      champion: championSchool?.school_name,
       onConfirm: () => this.confirmSubmission(),
       onCancel: () => this.cancelSubmission(),
     };

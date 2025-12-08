@@ -239,7 +239,7 @@ export class BowlService {
    * @param entry The entry data to save (must include entry_id and picks)
    */
   public saveEntry(entry: any): Observable<any> {
-    return this.http.patch(`${this.baseUrl}entry/save`, entry);
+    return this.http.post(`${this.baseUrl}entry/save`, entry);
   }
 
   /**

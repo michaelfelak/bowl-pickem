@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 })
 export class AppComponent {
   public showAdmin = false;
+  public isAdmin = false;
   public showSubmit = false;
   public currentUser$: Observable<string | null>;
   public currentUserEmail = '';
@@ -56,8 +57,9 @@ export class AppComponent {
     const userEmail = this.authService.getCurrentUserEmail();
     const userId = this.authService.getCurrentUserId()?.toString();
 
-    // Show admin tab if logged in as userid = 2
+    // Show admin tab if logged in as userid = 2 or 3
     this.showAdmin = userId === '2' || userId === '3';
+    this.isAdmin = userId === '2' || userId === '3';
     if (this.showAdmin) {
       console.log('Logged in as administrator');
     }

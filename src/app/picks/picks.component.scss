@@ -235,8 +235,12 @@ table.center tbody tr {
   transition: background-color 0.2s ease;
 }
 
+table.center tr.alt-row {
+  background-color: #f0f8f0;
+}
+
 table.center tbody tr:hover {
-  background-color: #f5f5f5;
+  background-color: #e8f5e9;
 }
 
 table.center tbody tr:last-child {

@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 export class SettingsService {
   public currentYear: number = 2025;
   public showSubmitEntry: boolean = true;
-  public showStandingsFlyout: boolean = true;
+  public showStandingsFlyout: boolean = false;
 
   // Base URLs for API endpoints
   public authApiUrl: string = 'https://bowl-pickem-144ffdd934e7.herokuapp.com/api/auth'; // prod

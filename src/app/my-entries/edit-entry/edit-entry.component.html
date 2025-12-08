@@ -7,11 +7,6 @@
     <h1>Edit Entry</h1>
   </div>
 
-  <!-- Error Alert -->
-  <div *ngIf="showError" class="error-alert">
-    <strong>Error:</strong> {{ errorMsg }}
-  </div>
-
   <!-- Success Alert -->
   <div *ngIf="showSuccess" class="success-alert">
     <strong>Success!</strong> {{ successMsg }}
@@ -128,6 +123,11 @@
     <button class="cancel-btn" (click)="goBack()" [disabled]="isSaving" type="button">
       Cancel
     </button>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="showError" class="error-alert">
+    <strong>Error:</strong> {{ errorMsg }}
   </div>
 
   <!-- Empty State -->

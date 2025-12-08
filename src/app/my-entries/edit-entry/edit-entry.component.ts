@@ -190,8 +190,8 @@ export class EditEntryComponent implements OnInit {
           gameLabel: new FormControl(pick.gameLabel),
           gameTime: new FormControl(pick.gameTime),
           isEditable: new FormControl(pick.isEditable),
-        //   hasStarted: new FormControl(pick.hasStarted),
-           hasStarted: new FormControl(false),
+          //   hasStarted: new FormControl(pick.hasStarted),
+          hasStarted: new FormControl(false),
         })
       );
     });
@@ -300,10 +300,10 @@ export class EditEntryComponent implements OnInit {
 
       // Map form values back to PickModel format
       const picksToUpdate = this.pickFormArray.value as PickModel[];
-
+      console.log(picksToUpdate);
       // Prepare entry data with picks and entry ID (as required by /entry/save endpoint)
       const entryData = {
-        entry_id: this.entryId,
+        entry_id: Number(this.entryId),
         picks: picksToUpdate,
       };
 
