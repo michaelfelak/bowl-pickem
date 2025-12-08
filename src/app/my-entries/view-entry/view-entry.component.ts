@@ -4,12 +4,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { BowlService } from '../../shared/services/bowl.service';
 import { AuthService } from '../../shared/services/auth.service';
-import { Entry, PickModel, Game } from '../../shared/services/bowl.model';
+import { Entry, PickModel, Game, CompletedEntry, CompletedPick } from '../../shared/services/bowl.model';
 import { SkyWaitService, SkyAlertModule } from '@skyux/indicators';
+import { StatusIndicatorComponent } from '../../shared/status-indicator/status-indicator.component';
 import * as dayjs from 'dayjs';
 import { SettingsService } from '../../shared/services/settings.service';
 
-interface PickDisplay extends PickModel {
+interface PickDisplay extends CompletedPick {
   gameLabel?: string;
   gameTime?: string;
   isPicked?: boolean;
@@ -18,7 +19,7 @@ interface PickDisplay extends PickModel {
 @Component({
   standalone: true,
   selector: 'app-view-entry',
-  imports: [CommonModule, RouterModule, SkyAlertModule],
+  imports: [CommonModule, RouterModule, SkyAlertModule, StatusIndicatorComponent],
   providers: [SettingsService],
   templateUrl: './view-entry.component.html',
   styleUrls: ['./view-entry.component.scss'],
@@ -66,19 +67,15 @@ export class ViewEntryComponent implements OnInit {
   private loadData(): void {
     this.waitService.beginNonBlockingPageWait();
     
-    // Load games and entry data in parallel
+    // Load games and completed entry data in parallel
     Promise.all([
       this.bowlService.getGames(this.currentYear).toPromise(),
-      this.bowlService.getEntryWithPicks(this.entryId).toPromise()
+      this.bowlService.getStandingsEntry(this.entryId).toPromise()
     ])
-      .then(([games, entryData]) => {
-        console.log('Games data:', games);
-        console.log('Entry with picks response:', entryData);
-        console.log('Entry data structure:', JSON.stringify(entryData, null, 2));
-        
+      .then(([games, completedEntry]) => {
         this.games = games || [];
-        this.entry = entryData;
-        this.processPicks(entryData?.picks || []);
+        this.entry = completedEntry as unknown as Entry;
+        this.processPicks(completedEntry?.picks || []);
         this.waitService.endNonBlockingPageWait();
         this.isLoading = false;
       })
@@ -93,20 +90,13 @@ export class ViewEntryComponent implements OnInit {
   /**
    * Process picks to add game information and formatting
    */
-  private processPicks(picks: PickModel[]): void {
+  private processPicks(picks: CompletedPick[]): void {
     this.picks = picks.map(pick => {
-      const game = this.games.find(g => g.ID === pick.game_id);
-      
-      console.log('Processing pick:', pick);
-      console.log('  team_1:', pick.team_1_picked, 'team_2:', pick.team_2_picked);
-      console.log('  team_1_name:', pick.team_1_name, 'team_2_name:', pick.team_2_name);
-      console.log('  points:', pick.points);
-      
       return {
         ...pick,
         gameLabel: this.getGameLabel(pick),
-        gameTime: game?.GameTime ? dayjs(game.GameTime).format('MMM DD, YYYY h:mm A') : 'TBD',
-        isPicked: !!(pick.team_1_picked || pick.team_2_picked)
+        gameTime: 'TBD',
+        isPicked: !!(pick.team_1 || pick.team_2)
       };
     });
   }
@@ -114,7 +104,7 @@ export class ViewEntryComponent implements OnInit {
   /**
    * Get a readable game label (e.g., "Team1 vs Team2 - Bowl Name")
    */
-  private getGameLabel(pick: PickModel): string {
+  private getGameLabel(pick: CompletedPick): string {
     const vs = ' vs ';
     const team1 = pick.team_1_name || 'Team 1';
     const team2 = pick.team_2_name || 'Team 2';
@@ -126,18 +116,12 @@ export class ViewEntryComponent implements OnInit {
   /**
    * Get the picked team name
    */
-  public getPickedTeam(pick: PickModel): string {
-    console.log('getPickedTeam called with:', pick);
-    console.log('  Checking team_1:', pick.team_1_picked, 'team_2:', pick.team_2_picked);
-    
-    if (pick.team_1_picked) {
-      console.log('  -> Returning team_1_name:', pick.team_1_name);
-      return pick.team_1_name || 'Team 1';
-    } else if (pick.team_2_picked) {
-      console.log('  -> Returning team_2_name:', pick.team_2_name);
-      return pick.team_2_name || 'Team 2';
+  public getPickedTeam(pick: CompletedPick): string {
+    if (pick.team_1 && pick.team_1_name) {
+      return pick.team_1_name;
+    } else if (pick.team_2 && pick.team_2_name) {
+      return pick.team_2_name;
     }
-    console.log('  -> Returning Not Picked');
     return 'Not Picked';
   }
 

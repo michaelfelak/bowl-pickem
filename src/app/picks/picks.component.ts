@@ -10,10 +10,7 @@ import {
   PlayoffSchool,
 } from '../shared/services/bowl.model';
 import { Title } from '@angular/platform-browser';
-import {
-  SkyAlertModule,
-  SkyWaitService,
-} from '@skyux/indicators';
+import { SkyAlertModule, SkyWaitService } from '@skyux/indicators';
 import { mergeMap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import {
@@ -29,6 +26,7 @@ import { SkyCheckboxModule, SkyInputBoxModule } from '@skyux/forms';
 import { SettingsService } from '../shared/services/settings.service';
 import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
+import { SubmissionConfirmationComponent } from './submission-confirmation/submission-confirmation.component';
 
 @Component({
   standalone: true,
@@ -41,6 +39,7 @@ import { Router } from '@angular/router';
     SkyAlertModule,
     SkyCheckboxModule,
     SkyInputBoxModule,
+    SubmissionConfirmationComponent,
   ],
   providers: [SettingsService],
   templateUrl: './picks.component.html',
@@ -86,6 +85,10 @@ export class PicksComponent implements OnInit {
   public tiebreaker1Id!: number;
   @Input() public tiebreaker2 = 0;
   public isLoading = true;
+
+  public showConfirmation = false;
+  public confirmationData: any = null;
+  private pendingSubmission: any = null;
 
   private championshipGameError: boolean = false;
   private championError: boolean = true;
@@ -279,11 +282,9 @@ export class PicksComponent implements OnInit {
         this.showSubmitError = true;
         return;
       }
-      if (
-        !this.email ||
-        this.email.indexOf('@') === -1
-      ) {
-        this.submitErrorMsg = 'You must be logged in with a valid email address.';
+      if (!this.email || this.email.indexOf('@') === -1) {
+        this.submitErrorMsg =
+          'You must be logged in with a valid email address.';
         this.showSubmitError = true;
         return;
       }
@@ -315,12 +316,6 @@ export class PicksComponent implements OnInit {
         this.submitErrorMsg = 'Select the national champion.';
         this.showSubmitError = true;
       }
-      if (!this.tiebreakerForm.value.tiebreaker2) {
-        this.submitErrorMsg =
-          'Please enter the number of total points that will be scored across all games in the bowl season.';
-        this.showSubmitError = true;
-        return;
-      }
 
       this.pickFormArray.value.forEach((element: any) => {
         if (element.team1picked === element.team2picked) {
@@ -335,6 +330,58 @@ export class PicksComponent implements OnInit {
       }
     }
 
+    // All validation passed, show confirmation dialog
+    this.showConfirmationDialog();
+  }
+
+  private showConfirmationDialog(): void {
+    const threePointGames = this.getBonusGames(3);
+    const fivePointGames = this.getBonusGames(5);
+    const tenPointGames = this.getBonusGames(10);
+
+    this.confirmationData = {
+      entryName: this.pickForm.value.name,
+      totalPossiblePoints: this.calculateTotalPoints(),
+      threePointGames: threePointGames,
+      fivePointGames: fivePointGames,
+      tenPointGames: tenPointGames,
+      allGamesPicked: this.gamesPicked === this.totalGames,
+      totalGamesPicked: this.gamesPicked,
+      totalGames: this.totalGames,
+      onConfirm: () => this.confirmSubmission(),
+      onCancel: () => this.cancelSubmission(),
+    };
+
+    this.showConfirmation = true;
+  }
+
+  private getBonusGames(points: number): PickModel[] {
+    const bonusGames: PickModel[] = [];
+    this.pickFormArray.controls.forEach((control, index) => {
+      if (
+        control.get('points')?.value === points &&
+        index < this.picks.length
+      ) {
+        const pick = this.picks[index];
+        if (pick) {
+          bonusGames.push(pick);
+        }
+      }
+    });
+    return bonusGames;
+  }
+
+  private confirmSubmission(): void {
+    this.showConfirmation = false;
+    this.performActualSubmission();
+  }
+
+  private cancelSubmission(): void {
+    this.showConfirmation = false;
+  }
+
+  private performActualSubmission(): void {
+    const isTesting = this.pickForm.value.name === 'test';
     this.disableSubmit = true;
     const userId = this.authService.getCurrentUserId();
     const r: EntryRequest = {
@@ -353,7 +400,6 @@ export class PicksComponent implements OnInit {
       .pipe(
         mergeMap((returnEntryId: string) => {
           entryId = returnEntryId;
-          const pickRequest = {} as PickRequest;
           const allPicks: PickModel[] = [];
 
           this.pickForm.value.newpicks!.forEach((pick: any) => {
@@ -380,8 +426,11 @@ export class PicksComponent implements OnInit {
             allPicks.push(newPick);
           });
 
-          pickRequest.picks = allPicks;
-
+          const pickRequest: PickRequest = {
+            entry_id: returnEntryId,
+            picks: allPicks,
+          };
+          
           this.allPicks = allPicks;
           return this.svc.submit(pickRequest);
         }),
@@ -439,10 +488,7 @@ export class PicksComponent implements OnInit {
   }
 
   public validatePicks(): boolean {
-    if (
-      this.pickForm.value.name === 'test' &&
-      this.email === 'test'
-    ) {
+    if (this.pickForm.value.name === 'test' && this.email === 'test') {
       return true;
     }
     let isValid = true;
@@ -525,14 +571,14 @@ export class PicksComponent implements OnInit {
 
   public updateSelection(gameId?: string, teamNumber?: number) {
     // Find the index of the pick in the form array
-    const pickIndex = this.pickFormArray.controls.findIndex(control => {
+    const pickIndex = this.pickFormArray.controls.findIndex((control) => {
       return control.get('gameId')?.value === gameId;
     });
 
     if (pickIndex === -1) return;
 
     const pickGroup = this.pickFormArray.at(pickIndex);
-    
+
     if (teamNumber === 1) {
       // If team 1 is being selected, deselect team 2
       if (pickGroup.get('team1picked')?.value) {
@@ -640,7 +686,7 @@ export class PicksComponent implements OnInit {
       control.patchValue({
         team1picked: false,
         team2picked: false,
-        points: 1
+        points: 1,
       });
     });
 
@@ -690,14 +736,20 @@ export class PicksComponent implements OnInit {
 
   public calculateMaxPossiblePoints(): number {
     const totalGames = this.picks.length;
-    // 1 point for each game (base)
-    let maxPoints = totalGames;
-    // 5 games with 3 bonus points (so +3 additional per game)
-    maxPoints += this.maxThreePointGames * 3;
-    // 5 games with 5 bonus points (so +5 additional per game)
+    // Calculate points using highest values first
+    // 1 game worth 10 points
+    let maxPoints = this.maxTenPointGames * 10;
+    // 5 games worth 5 points each
     maxPoints += this.maxFivePointGames * 5;
-    // 1 game with 10 bonus points (so +10 additional)
-    maxPoints += this.maxTenPointGames * 10;
+    // 5 games worth 3 points each
+    maxPoints += this.maxThreePointGames * 3;
+    // Remaining games worth 1 point each
+    const remainingGames =
+      totalGames -
+      this.maxTenPointGames -
+      this.maxFivePointGames -
+      this.maxThreePointGames;
+    maxPoints += Math.max(0, remainingGames);
     // Playoff selections: 2 points each for 2 teams
     maxPoints += 4;
     // Champion selection: 5 points
@@ -727,14 +779,14 @@ export class PicksComponent implements OnInit {
 
   private isBonusGame(game: Game, name: string): boolean {
     const bonusGameNames = [
-      'Fenway',
+      'Military',
       'Pinstripe',
-      'New Mexico',
+      'Fenway',
       'Pop-Tarts',
       'Arizona',
-      'Military',
-      'Alamo',
-      'Independence',
+      'New Mexico',
+      'Gator',
+      'Texas',
     ];
 
     return bonusGameNames.includes(name);
@@ -748,38 +800,59 @@ export class PicksComponent implements OnInit {
     // Collect non-playoff games to assign bonus points
     const nonPlayoffGameIndices: number[] = [];
     const playoffGameIndices: number[] = [];
+    const bonusEligibleIndices: number[] = [];
 
     this.pickFormArray.controls.forEach((control, index) => {
-      const isPlayoff = control.get('gameId')?.value && 
-        this.picks[index] && 
+      // Safely check if this pick exists and is a playoff game
+      const isPlayoff =
+        control.get('gameId')?.value &&
+        this.picks &&
+        index < this.picks.length &&
+        this.picks[index] &&
         this.picks[index].is_playoff;
-      
+
       if (isPlayoff) {
         playoffGameIndices.push(index);
       } else {
         nonPlayoffGameIndices.push(index);
+        // Check if this game is bonus-eligible (can receive 10 points)
+        if (index < this.picks.length && this.picks[index].is_new_years_game) {
+          bonusEligibleIndices.push(index);
+        }
       }
     });
 
-    // Randomly select 5 games for 3-point bonus from non-playoff games
-    const threePointIndices = this.getRandomIndices(nonPlayoffGameIndices, this.maxThreePointGames);
-    // Randomly select 5 games for 5-point bonus from remaining non-playoff games
-    const remainingIndices = nonPlayoffGameIndices.filter(i => !threePointIndices.includes(i));
-    const fivePointIndices = this.getRandomIndices(remainingIndices, this.maxFivePointGames);
-    // Randomly select 1 bonus game for 10-point bonus from remaining non-playoff games
+    // Safely select bonus point games (account for fewer games than expected)
+    const threePointIndices = this.getRandomIndices(
+      nonPlayoffGameIndices,
+      Math.min(this.maxThreePointGames, nonPlayoffGameIndices.length)
+    );
+
+    const remainingIndices = nonPlayoffGameIndices.filter(
+      (i) => !threePointIndices.includes(i)
+    );
+    const fivePointIndices = this.getRandomIndices(
+      remainingIndices,
+      Math.min(this.maxFivePointGames, remainingIndices.length)
+    );
+
+    // Only select 10-point games from bonus-eligible games
+    const tenPointCandidates = remainingIndices.filter(
+      (i) => !fivePointIndices.includes(i) && bonusEligibleIndices.includes(i)
+    );
     const tenPointIndices = this.getRandomIndices(
-      remainingIndices.filter(i => !fivePointIndices.includes(i)), 
-      this.maxTenPointGames
+      tenPointCandidates,
+      Math.min(this.maxTenPointGames, tenPointCandidates.length)
     );
 
     // Pick a random winner for each game and assign bonus points
     this.pickFormArray.controls.forEach((control, index) => {
       // Randomly pick team 1 or team 2 (50/50 chance)
       const pickTeam1 = Math.random() < 0.5;
-      
+
       control.patchValue({
         team1picked: pickTeam1,
-        team2picked: !pickTeam1
+        team2picked: !pickTeam1,
       });
 
       // Assign bonus points
@@ -794,26 +867,44 @@ export class PicksComponent implements OnInit {
       control.patchValue({ points });
     });
 
-    // Randomly pick playoff teams
+    // Randomly pick playoff teams if available
+    // Use separate arrays for playoff1 and playoff2 to match the dropdown options
+    const playoffSchoolsA = this.playoffSchoolsA;
+    const playoffSchoolsB = this.playoffSchoolsB;
     const playoffSchools = this.playoffSchools;
-    if (playoffSchools && playoffSchools.length > 0) {
-      const randomPlayoff1Index = Math.floor(Math.random() * playoffSchools.length);
-      let randomPlayoff2Index = Math.floor(Math.random() * playoffSchools.length);
-      
-      // Ensure we pick two different teams
-      while (randomPlayoff2Index === randomPlayoff1Index) {
-        randomPlayoff2Index = Math.floor(Math.random() * playoffSchools.length);
+
+    if (
+      playoffSchoolsA &&
+      playoffSchoolsA.length >= 1 &&
+      playoffSchoolsB &&
+      playoffSchoolsB.length >= 1 &&
+      playoffSchools &&
+      playoffSchools.length >= 2
+    ) {
+      // Pick from left side (playoffSchoolsA)
+      const randomPlayoff1Index = Math.floor(
+        Math.random() * playoffSchoolsA.length
+      );
+      const playoff1TeamId = playoffSchoolsA[randomPlayoff1Index].school_id;
+
+      // Pick from right side (playoffSchoolsB)
+      const randomPlayoff2Index = Math.floor(
+        Math.random() * playoffSchoolsB.length
+      );
+      const playoff2TeamId = playoffSchoolsB[randomPlayoff2Index].school_id;
+
+      // Pick champion from all playoff schools
+      const randomChampionIndex = Math.floor(
+        Math.random() * playoffSchools.length
+      );
+      const championTeamId = playoffSchools[randomChampionIndex].school_id;
+
+      // Ensure all values are set properly (not null or undefined)
+      if (playoff1TeamId && playoff2TeamId && championTeamId) {
+        this.pickForm.get('playoff1')?.setValue(playoff1TeamId);
+        this.pickForm.get('playoff2')?.setValue(playoff2TeamId);
+        this.pickForm.get('champion')?.setValue(championTeamId);
       }
-
-      const playoff1TeamId = playoffSchools[randomPlayoff1Index].school_id;
-      const playoff2TeamId = playoffSchools[randomPlayoff2Index].school_id;
-
-      this.pickForm.get('playoff1')?.setValue(playoff1TeamId);
-      this.pickForm.get('playoff2')?.setValue(playoff2TeamId);
-
-      // Pick champion - any random team from all playoff schools
-      const randomChampionIndex = Math.floor(Math.random() * playoffSchools.length);
-      this.pickForm.get('champion')?.setValue(playoffSchools[randomChampionIndex].school_id);
     }
 
     // Validate championship selections to clear any error states
@@ -823,8 +914,15 @@ export class PicksComponent implements OnInit {
   }
 
   private getRandomIndices(indices: number[], count: number): number[] {
-    if (indices.length === 0) return [];
-    const shuffled = [...indices].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, Math.min(count, indices.length));
+    if (indices.length === 0 || count === 0) return [];
+    if (count >= indices.length) return indices;
+
+    // Fisher-Yates shuffle for better randomness and performance
+    const shuffled = [...indices];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled.slice(0, count);
   }
 }

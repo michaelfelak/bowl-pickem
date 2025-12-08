@@ -1,20 +1,58 @@
-<sky-alert *ngIf="hasError" alertType="danger">
-  {{ errorMsg }}
-</sky-alert>
-<sky-alert *ngIf="added" alertType="success">
-  {{ addedMsg }}
-</sky-alert>
-<div style="max-width: 300px">
-  <form [formGroup]="addBowlForm">
-    <sky-input-box labelText="Bowl Name">
-      <input style="display: inline-block" formControlName="bowlName" />
-    </sky-input-box>
-    <sky-input-box labelText="City">
-      <input style="display: inline-block" formControlName="city" />
-    </sky-input-box>
-    <sky-input-box labelText="State">
-      <input style="display: inline-block" formControlName="state" />
-    </sky-input-box>
+<div class="add-bowl-container">
+  <!-- Error Alert -->
+  <sky-alert *ngIf="hasError" alertType="danger" class="alert">
+    <strong>Error:</strong> {{ errorMsg }}
+  </sky-alert>
+
+  <!-- Success Alert -->
+  <sky-alert *ngIf="added" alertType="success" class="alert">
+    <strong>Success:</strong> {{ addedMsg }}
+  </sky-alert>
+
+  <!-- Form Section -->
+  <form [formGroup]="addBowlForm" class="form-section">
+    <div class="form-group">
+      <label class="form-label">Bowl Name</label>
+      <input 
+        type="text" 
+        formControlName="bowlName" 
+        class="form-input"
+        placeholder="e.g., Rose Bowl"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">City</label>
+      <input 
+        type="text" 
+        formControlName="city" 
+        class="form-input"
+        placeholder="e.g., Pasadena"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">State</label>
+      <input 
+        type="text" 
+        formControlName="state" 
+        class="form-input"
+        placeholder="e.g., CA"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Stadium Name</label>
+      <input 
+        type="text" 
+        formControlName="stadium" 
+        class="form-input"
+        placeholder="e.g., Rose Bowl Stadium"
+      />
+    </div>
+
+    <button (click)="addBowl()" type="button" class="submit-button">
+      Add Bowl
+    </button>
   </form>
 </div>
-<button (click)="addBowl()">Add Bowl</button>

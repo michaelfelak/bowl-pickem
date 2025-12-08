@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web&display=swap');
+
 main {
   margin-left: 5%;
   margin-right: 5%;
@@ -6,23 +7,192 @@ main {
   font-family: 'Titillium Web', sans-serif;
 }
 
+.add-bowl-game-container {
+  max-width: 600px;
+  padding: 20px;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.form-section {
+  background-color: white;
+  padding: 20px;
+  border-radius: 4px;
+  border: 1px solid #e0e0e0;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+
+  &:last-of-type {
+    margin-bottom: 10px;
+  }
+}
+
+.form-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-dropdown {
+  width: 100% !important;
+  display: block !important;
+
+  ::ng-deep {
+    .sky-dropdown {
+      width: 100% !important;
+    }
+
+    .sky-dropdown-button {
+      width: 100% !important;
+      padding: 10px 12px;
+      border: 1px solid #ccc !important;
+      border-radius: 4px;
+      font-family: 'Titillium Web', sans-serif;
+      background-color: white;
+      transition: border-color 0.2s ease;
+      display: block !important;
+
+      &:hover {
+        border-color: #999;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: #014d0e;
+        box-shadow: 0 0 0 3px rgba(1, 77, 14, 0.1);
+      }
+    }
+  }
+}
+
+.dropdown-item-btn {
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 14px;
+  color: #333;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+}
+
+.datetime-inputs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.datetime-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.datetime-label {
+  font-weight: 600;
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.form-input {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Titillium Web', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: #014d0e;
+    box-shadow: 0 0 0 3px rgba(1, 77, 14, 0.1);
+  }
+
+  &.small {
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+}
+
+.submit-button {
+  background-color: #014d0e;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+  width: 100%;
+
+  &:hover {
+    background-color: #003008;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
 label {
   padding: 5px;
 }
 
 .delete-button {
-  background-color: maroon;
-  border-color: maroon;
+  background-color: #d32f2f;
+  border-color: #d32f2f;
   color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #b71c1c;
+  }
 }
 
 .create-button {
-  padding-left: 35px;
-  padding-top: 30px;
-}
+  background-color: #014d0e;
+  color: white;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 15px 0;
 
-.navbar {
-  font-size: 14pt;
+  &:hover {
+    background-color: #003008;
+  }
 }
 
 //  /deep/ .sky-section-heading {

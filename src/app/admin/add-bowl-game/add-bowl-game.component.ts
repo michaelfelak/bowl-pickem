@@ -13,9 +13,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { SkyRepeaterModule } from '@skyux/lists';
 import { SkyDropdownModule } from '@skyux/popovers';
-import { SkyCheckboxModule, SkyInputBoxModule } from '@skyux/forms';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from 'src/app/shared/services/settings.service';
 
@@ -25,10 +23,7 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    SkyCheckboxModule,
     SkyDropdownModule,
-    SkyInputBoxModule,
-    
   ],
   providers: [SettingsService],
   templateUrl: './add-bowl-game.component.html',
