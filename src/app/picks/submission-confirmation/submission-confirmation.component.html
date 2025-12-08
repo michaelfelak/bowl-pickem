@@ -1,0 +1,104 @@
+<div class="confirmation-modal-overlay" (click)="onCancel()">
+  <div class="confirmation-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Confirm Your Entry Submission</h2>
+      <button class="close-btn" (click)="onCancel()">&times;</button>
+    </div>
+    
+    <div class="modal-content">
+      <!-- Entry Name -->
+      <div class="section">
+        <h3>Entry Name</h3>
+        <p class="entry-name">{{ entryName }}</p>
+      </div>
+
+      <!-- Games Picked Summary -->
+      <div class="section">
+        <h3>Games Picked</h3>
+        <p class="game-summary">{{ totalGamesPicked }} of {{ totalGames }} games selected ({{ calculatePickedPoints() }} possible points)</p>
+        <div *ngIf="!allGamesPicked" class="warning">
+          ⚠️ You have not picked all games
+        </div>
+      </div>
+
+      <!-- Championship Game Selection -->
+      <div *ngIf="championshipParticipant1 || championshipParticipant2 || champion" class="section">
+        <h3>Championship Picks</h3>
+        <div class="championship-picks">
+          <!-- Championship Game Participants -->
+          <div class="championship-category" *ngIf="championshipParticipant1 || championshipParticipant2">
+            <h4>Championship Game Participants</h4>
+            <ul>
+              <li *ngIf="championshipParticipant1">
+                <strong>{{ championshipParticipant1 }}</strong>
+              </li>
+              <li *ngIf="championshipParticipant2">
+                <strong>{{ championshipParticipant2 }}</strong>
+              </li>
+            </ul>
+          </div>
+
+          <!-- National Champion -->
+          <div class="championship-category" *ngIf="champion">
+            <h4>National Champion</h4>
+            <ul>
+              <li>
+                <strong>{{ champion }}</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <h3>Bonus Point Winners</h3>
+        <div class="bonus-games">
+          <!-- 10 Point Winner (singular) -->
+          <div class="bonus-category" *ngIf="tenPointGames.length > 0">
+            <h4>10-Point Winner</h4>
+            <ul>
+              <li *ngFor="let game of tenPointGames">
+                {{ game.bowl_name }} Bowl: <strong>{{ game.team_1_picked ? game.team_1_name : game.team_2_name }}</strong>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 5 Point Winners -->
+          <div class="bonus-category" *ngIf="fivePointGames.length > 0">
+            <h4>5-Point Winners ({{ fivePointGames.length }})</h4>
+            <ul>
+              <li *ngFor="let game of fivePointGames">
+                {{ game.bowl_name }} Bowl: <strong>{{ game.team_1_picked ? game.team_1_name : game.team_2_name }}</strong>
+              </li>
+            </ul>
+          </div>
+
+          <!-- 3 Point Winners -->
+          <div class="bonus-category" *ngIf="threePointGames.length > 0">
+            <h4>3-Point Winners ({{ threePointGames.length }})</h4>
+            <ul>
+              <li *ngFor="let game of threePointGames">
+                {{ game.bowl_name }} Bowl: <strong>{{ game.team_1_picked ? game.team_1_name : game.team_2_name }}</strong>
+              </li>
+            </ul>
+          </div>
+
+          <!-- No bonus games message -->
+          <p *ngIf="tenPointGames.length === 0 && fivePointGames.length === 0 && threePointGames.length === 0" class="no-bonus">
+            No bonus point games selected
+          </p>
+        </div>
+      </div>
+
+      <!-- Total Points -->
+      <div class="section total-points">
+        <h3>Total Possible Points</h3>
+        <p class="points-value">{{ totalPossiblePoints }}</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-cancel" (click)="onCancel()">Cancel</button>
+      <button class="btn btn-confirm" (click)="onConfirm()">Confirm & Submit</button>
+    </div>
+  </div>
+</div>

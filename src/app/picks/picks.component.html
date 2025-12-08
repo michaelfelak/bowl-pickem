@@ -13,6 +13,9 @@
   [allGamesPicked]="confirmationData?.allGamesPicked"
   [totalGamesPicked]="confirmationData?.totalGamesPicked"
   [totalGames]="confirmationData?.totalGames"
+  [championshipParticipant1]="confirmationData?.championshipParticipant1"
+  [championshipParticipant2]="confirmationData?.championshipParticipant2"
+  [champion]="confirmationData?.champion"
   [onConfirm]="confirmationData?.onConfirm"
   [onCancel]="confirmationData?.onCancel"
 >
@@ -110,7 +113,7 @@
       </tr>
       <ng-container [formGroup]="pickForm">
         <ng-container formArrayName="newpicks">
-          <tr [formGroupName]="i" *ngFor="let pick of picks; let i = index">
+          <tr [formGroupName]="i" *ngFor="let pick of picks; let i = index" [class.alt-row]="i % 2 === 1">
             <td class="team-date">
               {{ pick.game_time | date : "EEE MMM dd" }}
             </td>

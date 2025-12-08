@@ -80,11 +80,11 @@
             <button 
               (click)="editEntry(entry)"
               class="action-btn"
-              [class.edit-btn]="entry.isEditable"
-              [class.view-btn]="!entry.isEditable"
-              [title]="entry.isEditable ? 'Edit this entry' : 'View this entry (read-only)'"
+              [class.edit-btn]="isAdmin && entry.isEditable"
+              [class.view-btn]="!isAdmin || !entry.isEditable"
+              [title]="isAdmin ? (entry.isEditable ? 'Edit this entry' : 'View this entry (read-only)') : 'View this entry'"
             >
-              {{ entry.isEditable ? 'Edit' : 'View' }}
+              {{ isAdmin ? (entry.isEditable ? 'Edit' : 'View') : 'View' }}
             </button>
           </td>
         </tr>

@@ -38,14 +38,14 @@
             <div class="game-time">{{ pick.gameTime }}</div>
           </td>
           <td class="pick-cell">
-            <div class="team-pick-item">
-              <app-status-indicator [value]="pick.correct1"></app-status-indicator>
+            <div class="team-pick-item" [class.picked]="pick.team_1" [class.correct]="pick.team_1 && pick.correct1 === true" [class.incorrect]="pick.team_1 && pick.correct1 === false">
+              <app-status-indicator [value]="pick.correct1" [showCheck]="pick.team_1"></app-status-indicator>
               <span>{{ pick.team_1_name }}</span>
             </div>
           </td>
           <td class="pick-cell">
-            <div class="team-pick-item">
-              <app-status-indicator [value]="pick.correct2"></app-status-indicator>
+            <div class="team-pick-item" [class.picked]="pick.team_2" [class.correct]="pick.team_2 && pick.correct2 === true" [class.incorrect]="pick.team_2 && pick.correct2 === false">
+              <app-status-indicator [value]="pick.correct2" [showCheck]="pick.team_2"></app-status-indicator>
               <span>{{ pick.team_2_name }}</span>
             </div>
           </td>
