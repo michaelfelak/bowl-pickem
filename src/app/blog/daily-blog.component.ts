@@ -34,7 +34,8 @@ export class DailyBlogComponent implements OnInit {
   ) {
     // Check if user is admin
     const userId = this.authService.getCurrentUserId();
-    this.isAdmin = userId === '2' || userId === '3';
+    const userIdStr = userId ? userId.toString() : null;
+    this.isAdmin = userIdStr === '2' || userIdStr === '3';
   }
 
   public ngOnInit() {
