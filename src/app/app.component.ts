@@ -54,11 +54,12 @@ export class AppComponent {
    * Update admin status based on logged-in user
    */
   private updateAdminStatus(): void {
-    const userId = this.authService.getCurrentUserId()?.toString();
+    const userId = this.authService.getCurrentUserId();
+    const userIdStr = userId ? userId.toString() : null;
 
     // Show admin tab if logged in as userid = 2 or 3
-    this.showAdmin = userId === '2' || userId === '3';
-    this.isAdmin = userId === '2' || userId === '3';
+    this.showAdmin = userIdStr === '2' || userIdStr === '3';
+    this.isAdmin = userIdStr === '2' || userIdStr === '3';
     if (this.showAdmin) {
       console.log('Logged in as administrator');
     }

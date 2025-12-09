@@ -52,7 +52,8 @@ export class StandingsComponent implements OnInit {
     this.currentYear = this.settings.currentYear;
     // Check admin status
     const userId = this.authService.getCurrentUserId();
-    this.isAdmin = userId === '2' || userId === '3';
+    const userIdStr = userId ? userId.toString() : null;
+    this.isAdmin = userIdStr === '2' || userIdStr === '3';
   }
 
   public ngOnInit() {
