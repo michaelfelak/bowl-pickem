@@ -45,12 +45,8 @@ export class MyEntriesComponent implements OnInit {
     private settings: SettingsService
   ) {
     this.currentYear = this.settings.currentYear;
-    const userEmail = this.authService.getCurrentUserEmail();
     const userId = this.authService.getCurrentUserId();
-    this.isAdmin =
-      userEmail === 'michaelfelak@gmail.com' ||
-      userId === '2' ||
-      userId === '3';
+    this.isAdmin = userId === '2' || userId === '3';
   }
 
   ngOnInit(): void {

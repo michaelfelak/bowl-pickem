@@ -8,11 +8,10 @@ export class AdminRouteGuard implements CanActivate {
   constructor(private authService: AuthService) {}
 
   public canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-    // Check if user is logged in as michaelfelak@gmail.com (userid = 2) or user id 3
-    const userEmail = this.authService.getCurrentUserEmail();
+    // Check if user is logged in as userid = 2 or 3
     const userId = this.authService.getCurrentUserId();
 
-    if (userEmail === 'michaelfelak@gmail.com' || userId === '2' || userId === '3') {
+    if (userId === '2' || userId === '3') {
       return of(true);
     }
     return of(false);

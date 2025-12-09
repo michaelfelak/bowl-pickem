@@ -33,12 +33,8 @@ export class DailyBlogComponent implements OnInit {
     private authService: AuthService
   ) {
     // Check if user is admin
-    const userEmail = this.authService.getCurrentUserEmail();
     const userId = this.authService.getCurrentUserId();
-    this.isAdmin =
-      userEmail === 'michaelfelak@gmail.com' ||
-      userId === '2' ||
-      userId === '3';
+    this.isAdmin = userId === '2' || userId === '3';
   }
 
   public ngOnInit() {

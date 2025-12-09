@@ -376,6 +376,10 @@ export class PicksComponent implements OnInit {
       ) {
         const pick = this.picks[index];
         if (pick) {
+          // Update pick with current form values
+          const formValue = control.value;
+          pick.team_1_picked = formValue.team1picked;
+          pick.team_2_picked = formValue.team2picked;
           bonusGames.push(pick);
         }
       }

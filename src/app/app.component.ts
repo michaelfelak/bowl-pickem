@@ -54,7 +54,6 @@ export class AppComponent {
    * Update admin status based on logged-in user
    */
   private updateAdminStatus(): void {
-    const userEmail = this.authService.getCurrentUserEmail();
     const userId = this.authService.getCurrentUserId()?.toString();
 
     // Show admin tab if logged in as userid = 2 or 3

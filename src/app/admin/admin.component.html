@@ -2,10 +2,10 @@
   <h1 class="header">Admin Dashboard - Year {{ currentYear }}</h1>
   <div class="admin-container">
     <sky-repeater expandMode="single">
-      <sky-repeater-item [isExpanded]="true">
-        <sky-repeater-item-title>Update Scores</sky-repeater-item-title>
+      <sky-repeater-item>
+        <sky-repeater-item-title>Post Blog</sky-repeater-item-title>
         <sky-repeater-item-content>
-          <app-update-scores></app-update-scores>
+          <app-add-blog></app-add-blog>
         </sky-repeater-item-content>
       </sky-repeater-item>
       <sky-repeater-item>
@@ -25,6 +25,12 @@
           ></app-paid-status>
         </sky-repeater-item-content>
       </sky-repeater-item>
+      <sky-repeater-item [isExpanded]="true">
+        <sky-repeater-item-title>Update Scores</sky-repeater-item-title>
+        <sky-repeater-item-content>
+          <app-update-scores></app-update-scores>
+        </sky-repeater-item-content>
+      </sky-repeater-item>
 
       <sky-repeater-item>
         <sky-repeater-item-title>Championship Results</sky-repeater-item-title>
@@ -37,13 +43,6 @@
         <sky-repeater-item-title>Tiebreakers</sky-repeater-item-title>
         <sky-repeater-item-content>
           <app-tiebreakers></app-tiebreakers>
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-
-      <sky-repeater-item>
-        <sky-repeater-item-title>Post Blog</sky-repeater-item-title>
-        <sky-repeater-item-content>
-          <app-add-blog></app-add-blog>
         </sky-repeater-item-content>
       </sky-repeater-item>
 
