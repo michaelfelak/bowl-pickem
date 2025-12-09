@@ -68,14 +68,14 @@
             <td class="rank-col" data-label="Rank">{{ pick.rank }}</td>
             <td class="name-col" data-label="Entry Name">
               <button
-                *ngIf="showStandingsLink"
+                *ngIf="showStandingsLink || isAdmin"
                 class="sky-btn sky-btn-link-inline entry-link"
                 type="button"
                 (click)="onNameClick(pick.entry_id!)"
               >
                 {{ pick.entry_name }}
               </button>
-              <span *ngIf="!showStandingsLink">{{ pick.entry_name }}</span>
+              <span *ngIf="!showStandingsLink && !isAdmin">{{ pick.entry_name }}</span>
             </td>
             <td class="points-col" data-label="Current Points">{{ pick.current_points }}</td>
             <td class="points-col" data-label="Correct Picks">{{ pick.correct_picks }}</td>

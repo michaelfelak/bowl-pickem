@@ -13,6 +13,7 @@ import { SkyWaitService } from '@skyux/indicators';
 import { SkyDropdownModule } from '@skyux/popovers';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from '../shared/services/settings.service';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   standalone: true,
@@ -26,6 +27,7 @@ export class StandingsComponent implements OnInit {
   public standings: StandingsEntry[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
   public showStandingsLink = false; // this shows the flyout links, only enable after bowls start
+  public isAdmin = false;
   public currentYear: number;
   public years: number[] = [2025, 2024, 2023, 2022, 2021, 2020, 2019];
 
@@ -44,9 +46,13 @@ export class StandingsComponent implements OnInit {
     private svc: BowlService,
     private flyoutService: SkyFlyoutService,
     private waitSvc: SkyWaitService,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private authService: AuthService
   ) {
     this.currentYear = this.settings.currentYear;
+    // Check admin status
+    const userId = this.authService.getCurrentUserId();
+    this.isAdmin = userId === '2' || userId === '3';
   }
 
   public ngOnInit() {
