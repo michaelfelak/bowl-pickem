@@ -459,6 +459,7 @@ export class PicksComponent implements OnInit {
                 school1_id: Number(this.pickForm.value.playoff1!),
                 school2_id: Number(this.pickForm.value.playoff2!),
                 champion_school_id: Number(this.pickForm.value.champion!),
+                year: this.settings.currentYear
               },
             ],
           });

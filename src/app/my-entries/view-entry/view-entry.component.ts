@@ -95,22 +95,17 @@ export class ViewEntryComponent implements OnInit {
       return {
         ...pick,
         gameLabel: this.getGameLabel(pick),
-        gameTime: 'TBD',
+        gameTime: this.formatGameTime(pick.game_time),
         isPicked: !!(pick.team_1 || pick.team_2)
       };
     });
   }
 
   /**
-   * Get a readable game label (e.g., "Team1 vs Team2 - Bowl Name")
+   * Get a readable game label (just the bowl name)
    */
   private getGameLabel(pick: CompletedPick): string {
-    const vs = ' vs ';
-    const team1 = pick.team_1_name || 'Team 1';
-    const team2 = pick.team_2_name || 'Team 2';
-    const bowl = pick.bowl_name ? ` - ${pick.bowl_name}` : '';
-    
-    return `${team1}${vs}${team2}${bowl}`;
+    return pick.bowl_name || 'TBD';
   }
 
   /**
@@ -157,5 +152,18 @@ export class ViewEntryComponent implements OnInit {
   public formatDate(dateString: string | undefined): string {
     if (!dateString) return 'N/A';
     return dayjs(dateString).format('MMM DD, YYYY');
+  }
+
+  public formatGameTime(gameTime: string | undefined): string {
+    if (!gameTime) return 'TBD';
+    return dayjs(gameTime).format('MMM DD, YYYY h:mm A');
+  }
+
+  /**
+   * Check if a pick has negative points
+   */
+  public isNegativePoints(pick: PickDisplay): boolean {
+    const points = pick.earned_points ?? pick.points ?? 0;
+    return points < 0;
   }
 }

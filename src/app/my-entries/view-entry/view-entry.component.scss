@@ -156,15 +156,22 @@
     gap: 8px;
     padding: 6px 8px;
     border-radius: 4px;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
 
     &.picked {
       &.correct {
-        background-color: #c8e6c9;
+        background-color: transparent;
         color: #1b5e20;
+        border-color: #4caf50;
       }
 
       &.incorrect {
+        background-color: #ffcdd2;
+        color: #b71c1c;
+      }
+
+      &.negative {
         background-color: #ffcdd2;
         color: #b71c1c;
       }
