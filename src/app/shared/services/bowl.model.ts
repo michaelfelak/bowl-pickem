@@ -20,6 +20,7 @@ export interface PlayoffPick {
   school1_id: number;
   school2_id: number;
   champion_school_id: number
+  year: number;
 }
 
 export interface PlayoffPickFlyout{
@@ -161,6 +162,7 @@ export interface CompletedEntry {
 
 export interface CompletedPick {
   bowl_name?: string;
+  game_time?: string;
   team_1?: boolean;
   team_1_won?: boolean;
   team_1_name?: string;
