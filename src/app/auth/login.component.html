@@ -1,5 +1,17 @@
 <div class="login-container">
-  <div class="login-card">
+  <!-- Error Only View -->
+  <div *ngIf="showOnlyError" class="error-only-view">
+    <div class="error-box">
+      <h1>Authentication Error</h1>
+      <p class="error-code">{{ errorMessage }}</p>
+      <button type="button" class="retry-btn" (click)="toggleMode(); toggleMode()">
+        Try Again
+      </button>
+    </div>
+  </div>
+
+  <!-- Login/Register Form View -->
+  <div *ngIf="!showOnlyError" class="login-card">
     <h1>{{ isLoginMode ? 'Login' : 'Register' }}</h1>
 
     <form [formGroup]="currentForm" (ngSubmit)="onSubmit()" class="form">
