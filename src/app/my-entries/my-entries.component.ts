@@ -11,7 +11,6 @@ import { SettingsService } from '../shared/services/settings.service';
 
 interface EntryWithEditable extends Entry {
   isEditable?: boolean;
-  gameCount?: number;
 }
 
 @Component({
@@ -100,8 +99,7 @@ export class MyEntriesComponent implements OnInit {
       next: (entries) => {
         this.entries = entries.map(entry => ({
           ...entry,
-          isEditable: this.isEntryEditable(entry),
-          gameCount: this.games?.length
+          isEditable: this.isEntryEditable(entry)
         }));
         this.totalEntries = this.entries.length;
         this.updateCompetingSince();
@@ -118,25 +116,12 @@ export class MyEntriesComponent implements OnInit {
   }
 
   /**
-   * Determine if an entry is editable based on year and game start times
+   * Determine if an entry is editable based on year
    * Entries from previous years are read-only
    */
   private isEntryEditable(entry: Entry): boolean {
-    // Block editing/deleting for entries from previous years
-    if (entry.year && entry.year !== this.currentYear) {
-      return false;
-    }
-    
-    // TODO: Remove this for production - currently making all current year entries editable for testing
-    return true;
-    
-    // Production logic: An entry is editable if at least one game hasn't started yet
-    // const now = dayjs();
-    // 
-    // return this.games.some(game => {
-    //   const gameTime = dayjs(game.GameTime);
-    //   return now.isBefore(gameTime);
-    // });
+    // Only allow editing entries from the current year
+    return entry.year === this.currentYear;
   }
 
   public editEntry(entry: EntryWithEditable): void {

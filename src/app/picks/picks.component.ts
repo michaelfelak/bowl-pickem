@@ -27,6 +27,7 @@ import { SettingsService } from '../shared/services/settings.service';
 import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { SubmissionConfirmationComponent } from './submission-confirmation/submission-confirmation.component';
+import { SkyToastService, SkyToastType } from '@skyux/toast';
 
 @Component({
   standalone: true,
@@ -41,7 +42,7 @@ import { SubmissionConfirmationComponent } from './submission-confirmation/submi
     SkyInputBoxModule,
     SubmissionConfirmationComponent,
   ],
-  providers: [SettingsService],
+  providers: [SettingsService, SkyToastService],
   templateUrl: './picks.component.html',
   styleUrls: ['./picks.component.scss'],
 })
@@ -86,6 +87,10 @@ export class PicksComponent implements OnInit {
   @Input() public tiebreaker2 = 0;
   public isLoading = true;
 
+  public championshipParticipant1 = '';
+  public championshipParticipant2 = '';
+  public champion = '';
+
   public showConfirmation = false;
   public confirmationData: any = null;
   private pendingSubmission: any = null;
@@ -119,9 +124,10 @@ export class PicksComponent implements OnInit {
     private waitSvc: SkyWaitService,
     private titleService: Title,
     private formBuilder: FormBuilder,
-    private settings: SettingsService,
+    private settingsService: SettingsService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private skyToastService: SkyToastService
   ) {
     this.isAuthenticated = this.authService.isAuthenticated();
   }
@@ -178,7 +184,7 @@ export class PicksComponent implements OnInit {
     }
 
     this.svc
-      .getPlayoffSchools(this.settings.currentYear)
+      .getPlayoffSchools(this.settingsService.currentYear)
       .subscribe((result) => {
         const leftSeeds = [1, 4, 5, 12, 8, 9];
         const rightSeeds = [2, 3, 6, 7, 10, 11];
@@ -204,7 +210,7 @@ export class PicksComponent implements OnInit {
         mergeMap((result: School[]) => {
           this.schools = result;
           this.errorMsg = 'get schools';
-          return this.svc.getGames(this.settings.currentYear);
+          return this.svc.getGames(this.settingsService.currentYear);
         }),
         mergeMap((result: Game[]) => {
           this.games = result;
@@ -344,9 +350,15 @@ export class PicksComponent implements OnInit {
     const playoff2Id = this.pickForm.value.playoff2;
     const championId = this.pickForm.value.champion;
 
-    const playoff1School = this.playoffSchools.find(s => s.school_id === playoff1Id);
-    const playoff2School = this.playoffSchools.find(s => s.school_id === playoff2Id);
-    const championSchool = this.playoffSchools.find(s => s.school_id === championId);
+    const playoff1School = this.playoffSchools.find(
+      (s) => s.school_id === playoff1Id
+    );
+    const playoff2School = this.playoffSchools.find(
+      (s) => s.school_id === playoff2Id
+    );
+    const championSchool = this.playoffSchools.find(
+      (s) => s.school_id === championId
+    );
 
     this.confirmationData = {
       entryName: this.pickForm.value.name,
@@ -407,7 +419,7 @@ export class PicksComponent implements OnInit {
       tiebreaker_1: this.tiebreakerForm.value.tiebreaker1Id as number,
       tiebreaker_2: this.tiebreakerForm.value.tiebreaker2 as number,
       testing: isTesting,
-      year: this.settings.currentYear,
+      year: this.settingsService.currentYear,
     };
 
     let entryId: string;
@@ -446,7 +458,7 @@ export class PicksComponent implements OnInit {
             entry_id: returnEntryId,
             picks: allPicks,
           };
-          
+
           this.allPicks = allPicks;
           return this.svc.submit(pickRequest);
         }),
@@ -459,18 +471,55 @@ export class PicksComponent implements OnInit {
                 school1_id: Number(this.pickForm.value.playoff1!),
                 school2_id: Number(this.pickForm.value.playoff2!),
                 champion_school_id: Number(this.pickForm.value.champion!),
-                year: this.settings.currentYear
+                year: this.settingsService.currentYear,
               },
             ],
           });
         })
       )
-      .subscribe(() => {
-        this.calculateTotalPoints();
-        this.disableSubmit = false;
-        this.submitted = true;
-        this.name = this.pickForm.value.name as string;
-        this.picks = this.allPicks;
+      .subscribe({
+        next: () => {
+          this.calculateTotalPoints();
+          this.disableSubmit = false;
+          this.submitted = true;
+          this.name = this.pickForm.value.name as string;
+          this.picks = this.allPicks;
+
+          // Store championship data for display
+          const playoff1School = this.playoffSchools.find(
+            (s) => s.school_id === this.pickForm.value.playoff1
+          );
+          const playoff2School = this.playoffSchools.find(
+            (s) => s.school_id === this.pickForm.value.playoff2
+          );
+          const championSchool = this.playoffSchools.find(
+            (s) => s.school_id === this.pickForm.value.champion
+          );
+
+          this.championshipParticipant1 =
+            (playoff1School?.school_name as any) || '';
+          this.championshipParticipant2 =
+            (playoff2School?.school_name as any) || '';
+          this.champion = (championSchool?.school_name as any) || '';
+
+          this.skyToastService.openMessage(
+            'Your picks have been updated successfully!',
+            {
+              type: SkyToastType.Success,
+              autoClose: true,
+            }
+          );
+        },
+        error: (error) => {
+          this.disableSubmit = false;
+          this.skyToastService.openMessage(
+            'An error occurred while submitting your picks. ' + error,
+            {
+              type: SkyToastType.Danger,
+              autoClose: false,
+            }
+          );
+        },
       });
   }
 
@@ -486,7 +535,7 @@ export class PicksComponent implements OnInit {
         p.team_2_picked = false;
         p.bowl_name = bowl.name;
         p.game_time = dayjs(game.GameTime).format('MM/DD/YYYY hh:mm:ss');
-        p.is_new_years_game = this.isBonusGame(game, bowl.name!);
+        p.is_new_years_game = this.settingsService.isBonusGame(bowl.name!);
         p.points = 1;
         p.is_playoff = game.IsPlayoff;
         p.is_championship = game.IsChampionship;
@@ -792,21 +841,6 @@ export class PicksComponent implements OnInit {
         return +new Date(a.GameTime!) - +new Date(b.GameTime!);
       });
     }
-  }
-
-  private isBonusGame(game: Game, name: string): boolean {
-    const bonusGameNames = [
-      'Military',
-      'Pinstripe',
-      'Fenway',
-      'Pop-Tarts',
-      'Arizona',
-      'New Mexico',
-      'Gator',
-      'Texas',
-    ];
-
-    return bonusGameNames.includes(name);
   }
 
   login(): void {

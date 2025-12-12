@@ -1,45 +1,50 @@
 <main>
-  <h2 class="header">
-    Thank you for submitting! You may print out for your records.
-  </h2>
-  <div>
-    <h3 class="header">Entry Name: {{ name }}</h3>
-    <h3 class="header">E-mail Address: {{ email }}</h3>
-    <table class="center">
-      <tr>
-        <th class="team-date">Date</th>
-        <th class="team-name" style="border-left: 1px solid black">
-          Bowl Game
-        </th>
-        <th class="team-check" style="border-left: 1px solid black"></th>
-        <th class="team-name">Team 1</th>
-        <th class="team-check" style="border-left: 1px solid black"></th>
-        <th class="team-name" style="border-right: 1px solid black">Team 2</th>
-        <th class="team-points">Points</th>
-      </tr>
-      <tr *ngFor="let pick of picks">
-        <td class="team-date">
-          {{ pick.game_time | date }}
-        </td>
-        <td class="team-name" style="border-left: 1px solid black">
-          {{ pick.bowl_name }}
-        </td>
-        <td class="team-check" style="border-left: 1px solid black">
-          <sky-icon icon="check-circle" *ngIf="pick.team_1_picked"></sky-icon>
-        </td>
-        <td class="team-name" style="border-right: 1px solid black">
-          {{ pick.team_1_name }}
-        </td>
-        <td class="team-check" style="border-left: 1px solid black">
-          <sky-icon icon="check-circle" *ngIf="pick.team_2_picked"></sky-icon>
-        </td>
-        <td class="team-name" style="border-right: 1px solid black">
-          {{ pick.team_2_name }}
-        </td>
-        <td>
-          {{ pick.points }}
-        </td>
-      </tr>
+  <div class="completion-container">
+    <h1 class="header">Submission Confirmation</h1>
+    
+    <div class="entry-info">
+      <div class="info-item">
+        <div class="info-label">Entry:</div>
+        <div class="info-value">{{ name }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Email:</div>
+        <div class="info-value">{{ email }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Championship:</div>
+        <div class="info-value">{{ championshipParticipant1 || '—' }} vs {{ championshipParticipant2 || '—' }}</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">Champion:</div>
+        <div class="info-value">{{ champion || '—' }}</div>
+      </div>
+    </div>
+
+    <h2 class="section-header">Picks</h2>
+    <table class="center picks-table">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Bowl</th>
+          <th></th>
+          <th>Team 1</th>
+          <th></th>
+          <th>Team 2</th>
+          <th>Pts</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let pick of picks; let i = index" [class.alt-row]="i % 2 === 1">
+          <td class="team-date">{{ pick.game_time | date : "MMM dd" }}</td>
+          <td class="team-name-short">{{ pick.bowl_name }}</td>
+          <td class="team-check"><sky-icon icon="check-circle" *ngIf="pick.team_1_picked"></sky-icon></td>
+          <td class="team-name-short">{{ pick.team_1_name }}</td>
+          <td class="team-check"><sky-icon icon="check-circle" *ngIf="pick.team_2_picked"></sky-icon></td>
+          <td class="team-name-short">{{ pick.team_2_name }}</td>
+          <td class="team-points">{{ pick.points }}</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 </main>

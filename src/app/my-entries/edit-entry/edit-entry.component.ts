@@ -19,6 +19,11 @@ import {
 import { SkyWaitService, SkyAlertModule } from '@skyux/indicators';
 import * as dayjs from 'dayjs';
 import { SettingsService } from '../../shared/services/settings.service';
+import {
+  EditConfirmationComponent,
+  EditChange,
+} from './edit-confirmation/edit-confirmation.component';
+import { SkyToastModule, SkyToastService, SkyToastType } from '@skyux/toast';
 
 interface EditablePick extends PickModel {
   gameLabel?: string;
@@ -37,8 +42,10 @@ interface EditablePick extends PickModel {
     FormsModule,
     ReactiveFormsModule,
     SkyAlertModule,
+    EditConfirmationComponent,
+    SkyToastModule,
   ],
-  providers: [SettingsService, PicksValidationService],
+  providers: [SettingsService, PicksValidationService, SkyToastService],
   templateUrl: './edit-entry.component.html',
   styleUrls: ['./edit-entry.component.scss'],
 })
@@ -54,12 +61,25 @@ export class EditEntryComponent implements OnInit {
   public successMsg: string = '';
   public entryId: string = '';
   public currentYear: number;
+  public showConfirmationModal = false;
+  public confirmationChanges: EditChange[] = [];
 
   // Validation state
   public validationResult: ValidationResult | null = null;
   public pointValues: number[] = [1, 3, 5];
   public newYearsPointValues: number[] = [1, 3, 5, 10];
   public availablePointValues: Record<number, boolean> = {};
+
+  // Game count header properties
+  public gamesPicked: number = 0;
+  public totalGames: number = 0;
+  public threePointGames: number = 0;
+  public fivePointGames: number = 0;
+  public tenPointGames: number = 0;
+  public maxThreePointGames: number = 5;
+  public maxFivePointGames: number = 5;
+  public maxTenPointGames: number = 1;
+  public totalPossiblePoints: number = 0;
 
   // Form
   pickForm = this.formBuilder.group({
@@ -83,7 +103,8 @@ export class EditEntryComponent implements OnInit {
     private waitService: SkyWaitService,
     private settings: SettingsService,
     private validationService: PicksValidationService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private skyToastService: SkyToastService
   ) {
     this.currentYear = this.settings.currentYear;
   }
@@ -110,6 +131,25 @@ export class EditEntryComponent implements OnInit {
     this.pickForm.valueChanges.subscribe(() => {
       if (!this.isLoading) {
         this.validatePicks();
+      }
+    });
+
+    // Also watch for points changes on individual controls (including disabled ones)
+    this.pickFormArray.controls.forEach((control) => {
+      const pointsControl = control.get('points');
+      if (pointsControl) {
+        // Monitor statusChanges to catch disabled control updates
+        pointsControl.statusChanges.subscribe(() => {
+          if (!this.isLoading) {
+            this.validatePicks();
+          }
+        });
+
+        pointsControl.valueChanges.subscribe(() => {
+          if (!this.isLoading) {
+            this.validatePicks();
+          }
+        });
       }
     });
   }
@@ -156,12 +196,15 @@ export class EditEntryComponent implements OnInit {
   private processPicks(picks: PickModel[]): void {
     this.picks = picks.map((pick) => {
       const game = this.games.find((g) => g.ID === pick.game_id);
-      const gameTime = game?.GameTime ? dayjs(game.GameTime) : null;
-      const now = dayjs();
+      // Try to get game time from games array first, then fall back to pick's game_time
+      const gameTimeStr = game?.GameTime || pick.game_time;
+      const gameTime = gameTimeStr ? dayjs(gameTimeStr) : null;
+      // TODO: REMOVE FOR PRODUCTION - Using 12/23/2024 as test date instead of current date
+      const now = dayjs('2024-12-23');
       const hasStarted = gameTime ? now.isAfter(gameTime) : false;
 
-      // TODO: Remove this for production - currently making all entries editable for testing
-      const isEditable = true; // !hasStarted;
+      // Allow editing only if game time is in the future
+      const isEditable = !hasStarted;
 
       return {
         ...pick,
@@ -169,7 +212,7 @@ export class EditEntryComponent implements OnInit {
         gameTime: gameTime?.format('MMM DD, YYYY h:mm A') || 'TBD',
         isPicked: !!(pick.team_1_picked || pick.team_2_picked),
         isEditable: isEditable,
-        hasStarted: false, // hasStarted
+        hasStarted: hasStarted,
       };
     });
   }
@@ -182,16 +225,24 @@ export class EditEntryComponent implements OnInit {
       this.pickFormArray.push(
         this.formBuilder.group({
           game_id: new FormControl(pick.game_id),
-          team_1: new FormControl(pick.team_1_picked || false),
-          team_2: new FormControl(pick.team_2_picked || false),
+          team_1_picked: new FormControl({
+            value: pick.team_1_picked || false,
+            disabled: !pick.isEditable,
+          }),
+          team_2_picked: new FormControl({
+            value: pick.team_2_picked || false,
+            disabled: !pick.isEditable,
+          }),
           team_1_name: new FormControl(pick.team_1_name),
           team_2_name: new FormControl(pick.team_2_name),
-          points: new FormControl(pick.points || 1),
+          points: new FormControl({
+            value: pick.points || 1,
+            disabled: !pick.isEditable,
+          }),
           gameLabel: new FormControl(pick.gameLabel),
           gameTime: new FormControl(pick.gameTime),
           isEditable: new FormControl(pick.isEditable),
-          //   hasStarted: new FormControl(pick.hasStarted),
-          hasStarted: new FormControl(false),
+          hasStarted: new FormControl(pick.hasStarted),
         })
       );
     });
@@ -201,12 +252,7 @@ export class EditEntryComponent implements OnInit {
    * Get a readable game label (e.g., "Team1 vs Team2 - Bowl Name")
    */
   private getGameLabel(pick: PickModel): string {
-    const vs = ' vs ';
-    const team1 = pick.team_1_name || 'Team 1';
-    const team2 = pick.team_2_name || 'Team 2';
-    const bowl = pick.bowl_name ? ` - ${pick.bowl_name}` : '';
-
-    return `${team1}${vs}${team2}${bowl}`;
+    return `${pick.bowl_name} Bowl`;
   }
 
   /**
@@ -229,16 +275,16 @@ export class EditEntryComponent implements OnInit {
     if (!pickControl.get('isEditable')?.value) return;
 
     if (teamNumber === 1) {
-      const team1Value = pickControl.get('team_1')?.value;
+      const team1Value = pickControl.get('team_1_picked')?.value;
       pickControl.patchValue({
-        team_1: !team1Value,
-        team_2: false,
+        team_1_picked: !team1Value,
+        team_2_picked: false,
       });
     } else {
-      const team2Value = pickControl.get('team_2')?.value;
+      const team2Value = pickControl.get('team_2_picked')?.value;
       pickControl.patchValue({
-        team_2: !team2Value,
-        team_1: false,
+        team_2_picked: !team2Value,
+        team_1_picked: false,
       });
     }
   }
@@ -249,21 +295,87 @@ export class EditEntryComponent implements OnInit {
   public isTeamSelected(formIndex: number, teamNumber: 1 | 2): boolean {
     const pickControl = this.pickFormArray.at(formIndex);
     return teamNumber === 1
-      ? pickControl.get('team_1')?.value
-      : pickControl.get('team_2')?.value;
+      ? pickControl.get('team_1_picked')?.value
+      : pickControl.get('team_2_picked')?.value;
   }
 
   /**
    * Validate picks and update validation state
    */
   private validatePicks(): void {
-    const picksFromForm = this.pickFormArray.value as PickModel[];
+    const picksFromForm = this.pickFormArray.getRawValue() as PickModel[];
+
+    // Create a combined picks array that includes locked game data from original picks
+    const picksToValidate = picksFromForm.map((pick, index) => {
+      const original = this.picks[index];
+      // For locked games, use the original pick's points
+      // For editable games, use the form's current values
+      let points = original.isEditable
+        ? pick.points || 1
+        : original.points || 1;
+      return {
+        ...pick,
+        points: Number(points) || 1,
+      };
+    });
+
     this.validationResult =
-      this.validationService.validateBonusPoints(picksFromForm);
+      this.validationService.validateBonusPoints(picksToValidate);
     this.availablePointValues = this.validationService.getAvailablePointValues(
-      picksFromForm,
+      picksToValidate,
       this.pointValues
     );
+
+    // Update game count header statistics
+    this.totalGames = this.picks.length;
+    this.gamesPicked = picksToValidate.filter(
+      (p) => p.team_1_picked || p.team_2_picked
+    ).length;
+    this.threePointGames = picksToValidate.filter((p) => p.points === 3).length;
+    this.fivePointGames = picksToValidate.filter((p) => p.points === 5).length;
+    this.tenPointGames = picksToValidate.filter((p) => p.points === 10).length;
+
+    // Calculate and cache total possible points
+    this.totalPossiblePoints = picksToValidate.reduce(
+      (sum, pick) => sum + pick.points,
+      0
+    );
+  }
+
+  /**
+   * Calculate the total points value for all picks in the form
+   */
+  public calculateTotalPoints(): number {
+    if (!this.pickFormArray) return 0;
+
+    let total = 0;
+    this.pickFormArray.controls.forEach((control, index) => {
+      const original = this.picks[index];
+      // For editable games, use the form's current value
+      // For locked games, use the original value
+      let points = original.isEditable
+        ? control.get('points')?.value || 1
+        : original.points || 1;
+      // Ensure points is a number (form values come as strings)
+      total += Number(points) || 1;
+    });
+
+    return total;
+  }
+
+  /**
+   * Calculate the maximum possible points for all games
+   */
+  public calculateMaxPossiblePoints(): number {
+    if (!this.pickFormArray) return 0;
+
+    let total = 0;
+    this.pickFormArray.controls.forEach((control) => {
+      const points = control.get('points')?.value || 1;
+      total += points;
+    });
+
+    return total;
   }
 
   /**
@@ -271,17 +383,17 @@ export class EditEntryComponent implements OnInit {
    */
   public getAvailablePoints(formIndex: number): number[] {
     const pickControl = this.pickFormArray.at(formIndex);
-    const currentPoints = pickControl.get('points')?.value || 1;
-    const isNewYearsGame = false; // TODO: determine from pick data if needed
+    const pick = this.picks[formIndex];
+
+    // Check if this is a bonus game by checking the bowl name
+    const bowlName = pick?.bowl_name || '';
+    const isNewYearsGame = this.settings.isBonusGame(bowlName);
 
     const basePoints = isNewYearsGame
       ? this.newYearsPointValues
       : this.pointValues;
 
-    return basePoints.filter((points) => {
-      if (points === currentPoints) return true; // Always allow current selection
-      return this.availablePointValues[points] || false;
-    });
+    return basePoints; // Return all available points without filtering
   }
 
   /**
@@ -293,38 +405,123 @@ export class EditEntryComponent implements OnInit {
       return;
     }
 
-    if (confirm('Are you sure you want to save these changes?')) {
-      this.isSaving = true;
-      this.showError = false;
-      this.showSuccess = false;
+    // Get all picks from form
+    const picksFromForm = this.pickFormArray.value as PickModel[];
 
-      // Map form values back to PickModel format
-      const picksToUpdate = this.pickFormArray.value as PickModel[];
-      console.log(picksToUpdate);
-      // Prepare entry data with picks and entry ID (as required by /entry/save endpoint)
-      const entryData = {
-        entry_id: Number(this.entryId),
-        picks: picksToUpdate,
+    // Track changes between original and current state
+    const changes: EditChange[] = [];
+    picksFromForm.forEach((pick, index) => {
+      const original = this.picks[index];
+      // Only track changes for editable picks
+      if (!original.isEditable) return;
+
+      let hasChanged = false;
+      const change: EditChange = {
+        game:
+          original.bowl_name ||
+          original.gameLabel ||
+          `${original.team_1_name} vs ${original.team_2_name}`,
+        team1Name: original.team_1_name,
+        team2Name: original.team_2_name,
+        gameTime: original.gameTime,
       };
 
-      this.bowlService.saveEntry(entryData).subscribe({
-        next: (response) => {
-          this.isSaving = false;
-          this.successMsg = 'Your picks have been updated successfully!';
-          this.showSuccess = true;
+      // Check for team changes
+      if (
+        original.team_1_picked !== pick.team_1_picked ||
+        original.team_2_picked !== pick.team_2_picked
+      ) {
+        const originalTeam = original.team_1_picked
+          ? original.team_1_name
+          : original.team_2_picked
+          ? original.team_2_name
+          : 'No pick';
+        const newTeam = pick.team_1_picked
+          ? pick.team_1_name
+          : pick.team_2_picked
+          ? pick.team_2_name
+          : 'No pick';
+        if (originalTeam !== newTeam) {
+          change.teamChange = newTeam;
+          hasChanged = true;
+        }
+      }
 
-          // Wait 2 seconds then navigate back
-          setTimeout(() => {
-            this.router.navigate(['/my-entries']);
-          }, 2000);
-        },
-        error: (error) => {
-          console.error('Error updating picks:', error);
-          this.isSaving = false;
-          this.handleError('Failed to save your picks. Please try again.');
-        },
-      });
-    }
+      // Check for point changes
+      if ((original.points || 1) !== (pick.points || 1)) {
+        change.pointChange = {
+          from: original.points || 1,
+          to: pick.points || 1,
+        };
+        hasChanged = true;
+      }
+
+      if (hasChanged) {
+        changes.push(change);
+      }
+    });
+
+    // Store changes and show confirmation modal
+    this.confirmationChanges = changes;
+    this.showConfirmationModal = true;
+  }
+
+  /**
+   * Handle confirmation modal confirm action
+   */
+  public confirmChanges(): void {
+    this.showConfirmationModal = false;
+    this.performSave();
+  }
+
+  /**
+   * Handle confirmation modal cancel action
+   */
+  public cancelChanges(): void {
+    this.showConfirmationModal = false;
+  }
+
+  /**
+   * Perform the actual save operation
+   */
+  private performSave(): void {
+    const picksFromForm = this.pickFormArray.value as PickModel[];
+
+    this.isSaving = true;
+    this.showError = false;
+    this.showSuccess = false;
+
+    // Filter to only editable picks for the payload
+    const editablePicks = picksFromForm.filter(
+      (pick, index) => this.picks[index].isEditable
+    );
+
+    // Prepare entry data with only editable picks
+    const entryData = {
+      entry_id: Number(this.entryId),
+      picks: editablePicks,
+    };
+
+    this.bowlService.saveEntry(entryData).subscribe({
+      next: (response) => {
+        this.isSaving = false;
+        this.successMsg = 'Your picks have been updated successfully!';
+        this.showSuccess = true;
+
+        this.skyToastService.openMessage(
+          'Your picks have been updated successfully!',
+          {
+            type: SkyToastType.Success,
+            autoClose: true,
+          }
+        );
+      },
+      error: (error) => {
+        console.error('Error updating picks:', error);
+        this.isSaving = false;
+        this.handleError('Failed to save your picks. Please try again.');
+      },
+    });
   }
 
   /**

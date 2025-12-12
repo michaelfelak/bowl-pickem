@@ -20,7 +20,7 @@
     <a *ngIf="showSubmit" routerLink="picks" (click)="closeMenu()"
       >Submit Entry</a
     >
-    <a *ngIf="isAdmin" routerLink="my-entries" (click)="closeMenu()"
+    <a routerLink="my-entries" (click)="closeMenu()"
       >My Profile</a
     >
     <a routerLink="scores" (click)="closeMenu()">Scores</a>
@@ -35,7 +35,7 @@
     <a *ngIf="showSubmit" routerLink="picks" (click)="closeMenu()"
       >Submit Entry</a
     >
-    <a *ngIf="isAdmin" routerLink="my-entries" (click)="closeMenu()"
+    <a routerLink="my-entries" (click)="closeMenu()"
       >My Profile</a
     >
     <a routerLink="scores" (click)="closeMenu()">Scores</a>
@@ -63,7 +63,6 @@
         <div class="user-dropdown" *ngIf="showUserDropdown">
           <div class="dropdown-username">{{ currentUser$ | async }}</div>
           <button
-            *ngIf="isAdmin"
             class="dropdown-item"
             (click)="navigateToMyProfile()"
           >

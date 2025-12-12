@@ -8,9 +8,9 @@
   </div>
 
   <!-- Championship Game Section -->
-  <div *ngIf="playoffPicks" class="championship-section">
+  <div *ngIf="playoffPicks && (allBowlGamesPlayed || isAdmin)" class="championship-section">
     <h3 class="section-title">Championship Game</h3>
-    
+
     <div class="playoff-pick">
       <div class="playoff-matchup">
         <div class="team-pick">
@@ -39,7 +39,7 @@
   <!-- Bowl Picks Table -->
   <div class="picks-section">
     <h3 class="section-title">Bowl Game Picks</h3>
-    
+
     <div class="table-wrapper">
       <table class="picks-table">
         <thead>
@@ -51,36 +51,62 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let pick of picks; let i = index" [class.alt-row]="i % 2 === 1">
-            <td class="bowl-col">
-              <span class="bowl-name">{{ pick.bowl_name }}</span>
-              <span *ngIf="pick.not_played" class="canceled-badge">Canceled</span>
-            </td>
-            <td class="pick-col">
-              <div class="team-pick-item">
-                <app-status-indicator
-                  [value]="pick.team_1 ? (pick.correct1 !== false ? pick.correct1 : false) : undefined"
-                  [showCheck]="pick.team_1"
-                ></app-status-indicator>
-                <span>{{ pick.team_1_name }} {{pick.correct1}}</span>
-              </div>
-            </td>
-            <td class="pick-col">
-              <div class="team-pick-item">
-                <app-status-indicator
-                  [value]="pick.team_2 ? (pick.correct2 !== false ? pick.correct2 : false) : undefined"
-                  [showCheck]="pick.team_2"
-                ></app-status-indicator>
-                <span>{{ pick.team_2_name }}{{pick.correct2}}</span>
-              </div>
-            </td>
-            <td class="points-col">
-              <span *ngIf="!pick.earned_points" class="pending-points">{{ pick.points }}</span>
-              <span *ngIf="pick.earned_points" class="earned-points">{{ pick.earned_points }}</span>
-            </td>
-          </tr>
+          <ng-container *ngFor="let pick of picks; let i = index">
+            <tr
+              *ngIf="isAdmin || !isGameInFuture(pick.game_time)"
+              [class.alt-row]="i % 2 === 1"
+            >
+              <td class="bowl-col">
+                <span class="bowl-name">{{ pick.bowl_name }}</span>
+                <span *ngIf="pick.not_played" class="canceled-badge"
+                  >Canceled</span
+                >
+              </td>
+              <td class="pick-col">
+                <div class="team-pick-item">
+                  <app-status-indicator
+                    [value]="
+                      pick.team_1
+                        ? pick.correct1 !== false
+                          ? pick.correct1
+                          : false
+                        : undefined
+                    "
+                    [showCheck]="pick.team_1"
+                  ></app-status-indicator>
+                  <span>{{ pick.team_1_name }} {{ pick.correct1 }}</span>
+                </div>
+              </td>
+              <td class="pick-col">
+                <div class="team-pick-item">
+                  <app-status-indicator
+                    [value]="
+                      pick.team_2
+                        ? pick.correct2 !== false
+                          ? pick.correct2
+                          : false
+                        : undefined
+                    "
+                    [showCheck]="pick.team_2"
+                  ></app-status-indicator>
+                  <span>{{ pick.team_2_name }}{{ pick.correct2 }}</span>
+                </div>
+              </td>
+              <td class="points-col">
+                <span *ngIf="!pick.earned_points" class="pending-points">{{
+                  pick.points
+                }}</span>
+                <span *ngIf="pick.earned_points" class="earned-points">{{
+                  pick.earned_points
+                }}</span>
+              </td>
+            </tr>
+          </ng-container>
         </tbody>
       </table>
+      <div *ngIf="picks.length === 0" class="no-games-message">
+        <p>No bowl games have been played yet.</p>
+      </div>
     </div>
   </div>
 </main>

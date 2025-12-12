@@ -19,4 +19,13 @@ export class PicksCompletedComponent {
 
   @Input()
   public email = '';
+
+  @Input()
+  public championshipParticipant1 = '';
+
+  @Input()
+  public championshipParticipant2 = '';
+
+  @Input()
+  public champion = '';
 }
