@@ -18,14 +18,20 @@ export class LoginComponent implements OnInit {
   isLoginMode = true;
   isLoading = false;
   errorMessage = '';
+  showOnlyError = false;
   returnUrl = '';
+  isAdmin = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    const userId = this.authService.getCurrentUserId();
+    const userIdStr = userId ? userId.toString() : null;
+    this.isAdmin = userIdStr === '2' || userIdStr === '3';
+  }
 
   ngOnInit(): void {
     this.initializeForms();
@@ -59,6 +65,7 @@ export class LoginComponent implements OnInit {
   toggleMode(): void {
     this.isLoginMode = !this.isLoginMode;
     this.errorMessage = '';
+    this.showOnlyError = false;
   }
 
   onSubmit(): void {
@@ -76,6 +83,7 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
     this.errorMessage = '';
+    this.showOnlyError = false;
     const { username, password } = this.loginForm.value;
 
     this.authService.login(username, password).subscribe({
@@ -85,7 +93,11 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.message || 'Login failed. Please try again.';
+        this.showOnlyError = true;
+        // Extract status code and message
+        const statusCode = err.status || 'Error';
+        const statusText = err.statusText || 'Unknown error';
+        this.errorMessage = `${statusCode} ${statusText}`;
       }
     });
   }
@@ -97,6 +109,7 @@ export class LoginComponent implements OnInit {
 
     this.isLoading = true;
     this.errorMessage = '';
+    this.showOnlyError = false;
     const { username, email, password } = this.registerForm.value;
 
     this.authService.register(username, email, password).subscribe({
@@ -106,7 +119,11 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.message || 'Registration failed. Please try again.';
+        this.showOnlyError = true;
+        // Extract status code and message
+        const statusCode = err.status || 'Error';
+        const statusText = err.statusText || 'Unknown error';
+        this.errorMessage = `${statusCode} ${statusText}`;
       }
     });
   }
