@@ -108,6 +108,9 @@ MIT
 @skyux/theme
 MIT
 
+@skyux/toast
+MIT
+
 animation-frame-polyfill
 MIT
 MIT License

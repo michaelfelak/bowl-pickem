@@ -12,15 +12,34 @@
     <strong>Success!</strong> {{ successMsg }}
   </div>
 
-  <!-- Validation Error Alert -->
-  <div *ngIf="validationResult && !validationResult.isValid" class="validation-alert">
-    <strong>Validation Error:</strong> {{ validationResult | json }}
-  </div>
-
   <!-- Entry Summary -->
   <div *ngIf="entry && !isLoading" class="entry-summary">
     <span class="summary-item"><strong>{{ entry.name || entry.entry_name }}</strong></span>
     <span class="summary-item">Submitted: {{ formatDate(entry.timestamp || entry.created_date) }}</span>
+  </div>
+
+  <!-- Game Count Header -->
+  <div class="game-count-header" *ngIf="!isLoading && picks.length > 0">
+    <div class="game-count-item">
+      <span class="game-count-label">Games Picked:</span>
+      <span class="game-count-value">{{ gamesPicked }}/{{ totalGames }}</span>
+    </div>
+    <div class="game-count-item">
+      <span class="game-count-label">3-Point Games:</span>
+      <span class="game-count-value" [class.error]="threePointGames > maxThreePointGames">{{ threePointGames }}/{{ maxThreePointGames }}</span>
+    </div>
+    <div class="game-count-item">
+      <span class="game-count-label">5-Point Games:</span>
+      <span class="game-count-value" [class.error]="fivePointGames > maxFivePointGames">{{ fivePointGames }}/{{ maxFivePointGames }}</span>
+    </div>
+    <div class="game-count-item">
+      <span class="game-count-label">10-Point Games:</span>
+      <span class="game-count-value" [class.error]="tenPointGames > maxTenPointGames">{{ tenPointGames }}/{{ maxTenPointGames }}</span>
+    </div>
+    <div class="game-count-item">
+      <span class="game-count-label">Total Possible Points:</span>
+      <span class="game-count-value" style="font-weight: bold;">{{ totalPossiblePoints }} / {{ totalPossiblePoints }}</span>
+    </div>
   </div>
 
   <!-- Picks Edit Table -->
@@ -39,8 +58,9 @@
           <tr *ngFor="let pickControl of pickFormControls; let i = index" [formGroup]="pickControl" [class.locked-row]="!pickControl.get('isEditable')?.value">
             <td class="pick-number">{{ i + 1 }}</td>
             <td class="game-cell">
-              <div class="game-label">{{ pickControl.get('gameLabel')?.value }}</div>
-              <div class="game-time">{{ pickControl.get('gameTime')?.value }}</div>
+              <div class="bowl-name">{{ pickControl.get('gameLabel')?.value }}</div>
+              <div class="game-teams">{{ pickControl.get('team_1_name')?.value }} vs {{ pickControl.get('team_2_name')?.value }}</div>
+              <div class="game-time" *ngIf="pickControl.get('gameTime')?.value">{{ pickControl.get('gameTime')?.value }}</div>
               <div *ngIf="!pickControl.get('isEditable')?.value" class="status-badge">Game Started</div>
             </td>
             
@@ -99,22 +119,6 @@
     </form>
   </div>
 
-  <!-- Bonus Points Summary -->
-  <div *ngIf="validationResult && !isLoading" class="bonus-summary">
-    <div class="summary-row" [class.error]="validationResult.threePointError">
-      <span>3-point games:</span>
-      <span><strong>{{ validationResult.threePointGames }}/5</strong></span>
-    </div>
-    <div class="summary-row" [class.error]="validationResult.fivePointError">
-      <span>5-point games:</span>
-      <span><strong>{{ validationResult.fivePointGames }}/5</strong></span>
-    </div>
-    <div class="summary-row" [class.error]="validationResult.tenPointError">
-      <span>10-point games:</span>
-      <span><strong>{{ validationResult.tenPointGames }}/1</strong></span>
-    </div>
-  </div>
-
   <!-- Save Button -->
   <div *ngIf="!isLoading && picks.length > 0" class="button-group">
     <button class="save-btn" (click)="saveChanges()" [disabled]="isSaving || !validationResult?.isValid">
@@ -134,4 +138,12 @@
   <div *ngIf="!isLoading && picks.length === 0" class="empty-state">
     <p>No picks found for this entry.</p>
   </div>
+
+  <!-- Confirmation Modal -->
+  <app-edit-confirmation 
+    *ngIf="showConfirmationModal"
+    [changes]="confirmationChanges"
+    [onConfirm]="confirmChanges.bind(this)"
+    [onCancel]="cancelChanges.bind(this)">
+  </app-edit-confirmation>
 </div>

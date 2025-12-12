@@ -1,0 +1,40 @@
+<div class="confirmation-modal-overlay" (click)="onCancel()">
+  <div class="confirmation-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Confirm Your Changes</h2>
+      <button class="close-btn" (click)="onCancel()">&times;</button>
+    </div>
+    
+    <div class="modal-content">
+      <!-- Changes Summary -->
+      <div class="section" *ngIf="hasChanges()">
+        <h3>Changes to Save</h3>
+        <div class="changes-list">
+          <div class="change-item" *ngFor="let change of changes">
+            <div class="change-header">{{ change.game }}</div>
+            <div class="change-teams">{{ change.team1Name }} vs {{ change.team2Name }}</div>
+            <div class="change-time" *ngIf="change.gameTime">{{ change.gameTime }}</div>
+            <div class="change-details">
+              <div class="detail" *ngIf="change.teamChange">
+                Winner changed to <strong>{{ change.teamChange }}</strong>
+              </div>
+              <div class="detail" *ngIf="change.pointChange">
+                Points: <strong>{{ change.pointChange.from }} → {{ change.pointChange.to }}</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- No Changes Message -->
+      <div class="section" *ngIf="!hasChanges()">
+        <p class="no-changes">No changes detected.</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-cancel" (click)="onCancel()">Cancel</button>
+      <button class="btn btn-confirm" (click)="onConfirm()" [disabled]="!hasChanges()">Save Changes</button>
+    </div>
+  </div>
+</div>

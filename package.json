@@ -28,6 +28,7 @@
     "@skyux/lists": "9.17.0",
     "@skyux/modals": "9.17.0",
     "@skyux/popovers": "9.17.0",
+    "@skyux/toast": "9.17.0",
     "ag-grid-angular": "^31.0.1",
     "dayjs": "^1.11.10",
     "rxjs": "~7.8.0",

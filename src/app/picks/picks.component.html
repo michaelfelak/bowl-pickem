@@ -398,7 +398,14 @@
     <br />
   </div>
   <div *ngIf="submitted">
-    <app-picks-completed [picks]="allPicks" [name]="name" [email]="email">
+    <app-picks-completed 
+      [picks]="allPicks" 
+      [name]="name" 
+      [email]="email"
+      [championshipParticipant1]="championshipParticipant1"
+      [championshipParticipant2]="championshipParticipant2"
+      [champion]="champion"
+    >
     </app-picks-completed>
     <br />
   </div>

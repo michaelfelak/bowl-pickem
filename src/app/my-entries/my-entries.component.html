@@ -57,7 +57,6 @@
           <th>Year</th>
           <th>Entry Name</th>
           <th>Submitted Date</th>
-          <th>Games</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
@@ -67,24 +66,30 @@
           <td class="entry-year">{{ entry.year }}</td>
           <td class="entry-name">{{ entry.name }}</td>
           <td class="entry-date">{{ formatDate(entry.created_date) }}</td>
-          <td class="entry-games">{{ entry.gameCount }} Games</td>
           <td class="entry-status">
             <span *ngIf="entry.isEditable" class="status-badge editable">
               ✓ Editable
             </span>
             <span *ngIf="!entry.isEditable" class="status-badge locked">
-              🔒 Locked
+              Read-only
             </span>
           </td>
           <td class="entry-actions">
             <button 
+              *ngIf="entry.isEditable"
               (click)="editEntry(entry)"
-              class="action-btn"
-              [class.edit-btn]="isAdmin && entry.isEditable"
-              [class.view-btn]="!isAdmin || !entry.isEditable"
-              [title]="isAdmin ? (entry.isEditable ? 'Edit this entry' : 'View this entry (read-only)') : 'View this entry'"
+              class="action-btn edit-btn"
+              title="Edit this entry"
             >
-              {{ isAdmin ? (entry.isEditable ? 'Edit' : 'View') : 'View' }}
+              Edit
+            </button>
+            <button 
+              *ngIf="!entry.isEditable"
+              (click)="editEntry(entry)"
+              class="action-btn view-btn"
+              title="View this entry"
+            >
+              View
             </button>
           </td>
         </tr>
