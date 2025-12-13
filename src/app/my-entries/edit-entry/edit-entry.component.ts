@@ -199,8 +199,8 @@ export class EditEntryComponent implements OnInit {
       // Try to get game time from games array first, then fall back to pick's game_time
       const gameTimeStr = game?.GameTime || pick.game_time;
       const gameTime = gameTimeStr ? dayjs(gameTimeStr) : null;
-      // TODO: REMOVE FOR PRODUCTION - Using 12/23/2024 as test date instead of current date
-      const now = dayjs('2024-12-23');
+      // Add 4 hours to current time to account for timezone offset
+      const now = dayjs().add(4, 'hours');
       const hasStarted = gameTime ? now.isAfter(gameTime) : false;
 
       // Allow editing only if game time is in the future
