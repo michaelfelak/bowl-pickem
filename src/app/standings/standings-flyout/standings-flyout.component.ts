@@ -10,6 +10,8 @@ import { StandingsFlyoutContext } from './standings-flyout.context';
 import { CommonModule } from '@angular/common';
 import { mergeMap } from 'rxjs';
 import { StatusIndicatorComponent } from '../../shared/status-indicator/status-indicator.component';
+import * as dayjs from 'dayjs';
+
 
 @Component({
   standalone: true,
@@ -42,9 +44,10 @@ export class StandingsFlyoutComponent implements OnInit {
     if (!gameTime) {
       return false; // Show picks without game_time
     }
-    const now = new Date();
-    const gameDate = new Date(gameTime);
-    return gameDate > now;
+    // Add 4 hours to current time to account for timezone offset
+    const now = dayjs().add(4, 'hours');
+    const gameDate = dayjs(gameTime);
+    return gameDate.isAfter(now);
   }
 
   public checkIfAllBowlGamesPlayed(): boolean {
@@ -53,10 +56,10 @@ export class StandingsFlyoutComponent implements OnInit {
     }
     
     // Check if all picks have been played (no future games)
-    const now = new Date();
+    const now = dayjs().add(4, 'hours');
     const allPlayed = this.entry.picks.every((pick: CompletedPick) => {
-      const gameTime = pick.game_time ? new Date(pick.game_time) : null;
-      return gameTime ? gameTime <= now : true;
+      const gameTime = pick.game_time ? dayjs(pick.game_time) : null;
+      return gameTime ? gameTime.isBefore(now) || gameTime.isSame(now, 'minute') : true;
     });
     
     return allPlayed;
@@ -80,10 +83,10 @@ export class StandingsFlyoutComponent implements OnInit {
           this.picks = this.entry.picks || [];
         } else {
           // Filter picks to only show those that have already happened
-          const now = new Date();
+          const now = dayjs().add(4, 'hours');
           this.picks = this.entry.picks!.filter((pick: CompletedPick) => {
-            const gameTime = pick.game_time ? new Date(pick.game_time) : null;
-            return gameTime ? gameTime <= now : true; // Show picks with no game_time as fallback
+            const gameTime = pick.game_time ? dayjs(pick.game_time) : null;
+            return gameTime ? gameTime.isBefore(now) || gameTime.isSame(now, 'minute') : true; // Show picks with no game_time as fallback
           });
         }
         
