@@ -9,6 +9,7 @@ import { BowlService } from '../shared/services/bowl.service';
 import { AddPlayoffSchoolComponent } from './add-playoff-school/add-playoff-school.component';
 import { SettingsService } from '../shared/services/settings.service';
 import { AddPlayoffResultComponent } from './add-playoff-result/add-playoff-result.component';
+import { PageVisitsComponent } from './page-visits/page-visits.component';
 
 interface AdminSection {
   id: string;
@@ -28,6 +29,7 @@ interface AdminSection {
     UpdateScoresComponent,
     AddPlayoffResultComponent,
     AddBlogComponent,
+    PageVisitsComponent,
   ],
   providers: [BowlService, SettingsService],
   templateUrl: './admin.component.html',
@@ -47,6 +49,7 @@ export class AdminComponent {
     { id: 'add-bowl', title: 'Add Bowl', component: AddBowlComponent },
     { id: 'add-game', title: 'Add Bowl Game', component: AddBowlGameComponent },
     { id: 'add-school', title: 'Add Playoff School', component: AddPlayoffSchoolComponent },
+    { id: 'page-visits', title: 'Page Visits', component: PageVisitsComponent },
   ];
 
   constructor(private settingsSvc: SettingsService) {

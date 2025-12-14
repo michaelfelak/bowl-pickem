@@ -1,0 +1,202 @@
+<div class="page-visits-container">
+  <div class="header">
+    <h2>Page Visits Analytics</h2>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <h3 class="filter-title">Filters</h3>
+    <div class="filter-row">
+      <div class="filter-group">
+        <label>User ID</label>
+        <input
+          type="number"
+          [(ngModel)]="userId"
+          placeholder="Enter user ID"
+          class="filter-input"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Page</label>
+        <input
+          type="text"
+          [(ngModel)]="page"
+          placeholder="Enter page name"
+          class="filter-input"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Action</label>
+        <input
+          type="text"
+          [(ngModel)]="action"
+          placeholder="Enter action"
+          class="filter-input"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>Start Date</label>
+        <input
+          type="date"
+          [(ngModel)]="startDateString"
+          class="filter-input"
+        />
+      </div>
+
+      <div class="filter-group">
+        <label>End Date</label>
+        <input
+          type="date"
+          [(ngModel)]="endDateString"
+          class="filter-input"
+        />
+      </div>
+    </div>
+
+    <div class="filter-actions">
+      <button (click)="applyFilters()" class="btn btn-primary">
+        Apply Filters
+      </button>
+      <button (click)="clearFilters()" class="btn btn-secondary">
+        Clear Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Summaries View -->
+  <div *ngIf="!showFiltered && !showUserVisits && !isLoading" class="summaries-section">
+    <h3>Visit Summary</h3>
+    <div *ngIf="summaries.length === 0" class="no-data">
+      <p>No page visit data available.</p>
+    </div>
+    <div *ngIf="summaries.length > 0" class="table-wrapper">
+      <table class="summaries-table">
+        <thead>
+          <tr>
+            <th>Page</th>
+            <th>Action</th>
+            <th>Total Visits</th>
+            <th>Last Visit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let summary of summaries">
+            <td>{{ summary.page }}</td>
+            <td>{{ summary.action }}</td>
+            <td class="text-center">{{ summary.number_of_visits }}</td>
+            <td>{{ summary.last_visit | date : "short" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- User Summary Section -->
+  <div *ngIf="!showFiltered && !showUserVisits && !isLoading" class="user-summary-section">
+    <h3>User Activity Summary</h3>
+    <div *ngIf="userSummaries.length === 0" class="no-data">
+      <p>No user activity data available.</p>
+    </div>
+    <div *ngIf="userSummaries.length > 0" class="table-wrapper">
+      <table class="user-summary-table">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>Total Visits</th>
+            <th>First Visit</th>
+            <th>Last Visit</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of userSummaries">
+            <td class="text-center">{{ user.user_id }}</td>
+            <td class="text-center">{{ user.total_visits }}</td>
+            <td>{{ user.first_visit | date : "short" }}</td>
+            <td>{{ user.last_visit | date : "short" }}</td>
+            <td class="text-center">
+              <button 
+                (click)="loadUserVisits(user.user_id!)" 
+                class="btn btn-small"
+                type="button">
+                View Visits
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Filtered Results View -->
+  <div *ngIf="showFiltered && !showUserVisits && !isLoading" class="filtered-section">
+    <h3>Filtered Results</h3>
+    <button (click)="clearFilters()" class="btn btn-secondary" type="button">
+      ← Back to Summaries
+    </button>
+    <div *ngIf="filteredVisits.length === 0" class="no-data">
+      <p>No page visits match your filters.</p>
+    </div>
+    <div *ngIf="filteredVisits.length > 0" class="table-wrapper">
+      <table class="visits-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Page</th>
+            <th>Action</th>
+            <th>User ID</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let visit of filteredVisits">
+            <td>{{ visit.id }}</td>
+            <td>{{ visit.page }}</td>
+            <td>{{ visit.action }}</td>
+            <td class="text-center">{{ visit.user_id || '-' }}</td>
+            <td>{{ visit.action_date | date : "short" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- User Visits View -->
+  <div *ngIf="showUserVisits && !isLoading" class="user-visits-section">
+    <h3>Visits for User ID: {{ selectedUserId }}</h3>
+    <button (click)="hideUserVisits()" class="btn btn-secondary" type="button">
+      ← Back to User Summary
+    </button>
+    <div *ngIf="userVisits.length === 0" class="no-data">
+      <p>No visits found for this user.</p>
+    </div>
+    <div *ngIf="userVisits.length > 0" class="table-wrapper">
+      <table class="visits-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Page</th>
+            <th>Action</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let visit of userVisits">
+            <td>{{ visit.id }}</td>
+            <td>{{ visit.page }}</td>
+            <td>{{ visit.action }}</td>
+            <td>{{ visit.action_date | date : "short" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading">
+    <p>Loading...</p>
+  </div>
+</div>
