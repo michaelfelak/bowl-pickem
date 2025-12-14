@@ -23,7 +23,7 @@
           <tr *ngFor="let bowl of todaysGames" class="today-game">
             <td class="game-date">{{ bowl.game_time | date:"MMM dd - h:mm a"}}</td>
             <td class="game-bowl">
-              <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id!)">
+              <button class="sky-btn sky-btn-link-inline" type="button" [disabled]="!isAdmin" (click)="onNameClick(bowl.game_id!)">
                 {{ bowl.bowl_name }}
               </button>
             </td>
@@ -59,7 +59,7 @@
           <tr *ngFor="let bowl of upcomingGames">
             <td class="game-date">{{ bowl.game_time | date:"MMM dd - h:mm a"}}</td>
             <td class="game-bowl">
-              <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id!)">
+              <button class="sky-btn sky-btn-link-inline" type="button" [disabled]="!isAdmin" (click)="onNameClick(bowl.game_id!)">
                 {{ bowl.bowl_name }}
               </button>
             </td>

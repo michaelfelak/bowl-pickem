@@ -32,7 +32,6 @@
         <thead>
           <tr>
             <th class="entry-col">Entry</th>
-            <th class="points-col">Current Points</th>
             <th class="pick-col">{{ team1name }}</th>
             <th class="pick-col">{{ team2name }}</th>
             <th class="points-col">Points</th>
@@ -42,9 +41,6 @@
           <tr *ngFor="let pick of picks; let i = index" [class.alt-row]="i % 2 === 1">
             <td class="entry-col">
               <span class="entry-name">{{ pick.name }}</span>
-            </td>
-            <td class="points-col">
-              <span class="current-points">{{ pick.totalPoints }}</span>
             </td>
             <td class="pick-col">
               <div class="team-pick-item" *ngIf="pick.team_1_picked">

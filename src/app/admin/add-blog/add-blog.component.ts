@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { BowlService } from '../../shared/services/bowl.service';
 import { SettingsService } from '../../shared/services/settings.service';
 import { BlogEntry } from '../../shared/services/bowl.model';
@@ -18,11 +24,17 @@ export class AddBlogComponent implements OnInit {
   public successMessage = '';
   public errorMessage = '';
 
+  private currentYear: number = 0;
+
   constructor(
     private fb: FormBuilder,
     private bowlService: BowlService,
-    private settingsService: SettingsService
-  ) {}
+    private settings: SettingsService
+  ) {
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+    });
+  }
 
   public ngOnInit() {
     this.initializeForm();
@@ -38,7 +50,8 @@ export class AddBlogComponent implements OnInit {
 
   public submitBlog() {
     if (this.blogForm.invalid) {
-      this.errorMessage = 'Please fill in all required fields and ensure the blog content is at least 10 characters.';
+      this.errorMessage =
+        'Please fill in all required fields and ensure the blog content is at least 10 characters.';
       return;
     }
 
@@ -54,7 +67,7 @@ export class AddBlogComponent implements OnInit {
       id: '', // Will be assigned by backend
     };
 
-    this.bowlService.addBlogEntry(blogEntry, this.settingsService.currentYear).subscribe({
+    this.bowlService.addBlogEntry(blogEntry, this.currentYear).subscribe({
       next: (response: BlogEntry) => {
         this.isSubmitting = false;
         this.successMessage = 'Blog entry posted successfully!';

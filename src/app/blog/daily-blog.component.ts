@@ -25,6 +25,7 @@ export class DailyBlogComponent implements OnInit {
   public blogs: ProcessedBlogEntry[] = [];
   public isLoading = true;
   public isAdmin = false;
+  private currentYear: number = 0;
 
   constructor(
     private svc: BowlService,
@@ -39,12 +40,15 @@ export class DailyBlogComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.loadBlogs();
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+      this.loadBlogs();
+    });
   }
 
   private loadBlogs() {
     this.isLoading = true;
-    this.svc.getBlogEntries(this.settings.currentYear).subscribe({
+    this.svc.getBlogEntries(this.currentYear).subscribe({
       next: (result: BlogEntry[]) => {
         if (result && result.length > 0) {
           // Process and sort blogs by date in descending order

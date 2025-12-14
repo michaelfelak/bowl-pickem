@@ -37,6 +37,8 @@ export class AddPlayoffSchoolComponent implements OnInit {
   public errorMsg = '';
   public showError = false;
 
+  private currentYear: number = 0;
+
   public schoolForm: FormGroup<{
     school: FormControl<School | null>;
     seed: FormControl<number | null>;
@@ -50,6 +52,10 @@ export class AddPlayoffSchoolComponent implements OnInit {
     this.schoolForm = this.formBuilder.group({
       school: new FormControl({}),
       seed: new FormControl(1),
+    });
+    
+    this.settingsSvc.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
     });
   }
 
@@ -67,7 +73,7 @@ export class AddPlayoffSchoolComponent implements OnInit {
 
   private loadPlayoffSchools(): void {
     this.svc
-      .getPlayoffSchools(this.settingsSvc.currentYear)
+      .getPlayoffSchools(this.currentYear)
       .subscribe((result) => {
         this.playoffSchools = result;
       });
@@ -84,7 +90,7 @@ export class AddPlayoffSchoolComponent implements OnInit {
     }
 
     const request: PlayoffSchoolRequest = {
-      year: this.settingsSvc.currentYear,
+      year: this.currentYear,
       school_id: this.schoolForm.value.school.ID!,
       school_name: this.schoolForm.value.school.Name!,
       seed_number: this.schoolForm.value.seed,

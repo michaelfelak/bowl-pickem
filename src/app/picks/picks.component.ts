@@ -74,6 +74,7 @@ export class PicksComponent implements OnInit {
   public showRulesSection = false;
   public gamesPicked = 0;
   public totalGames = 0;
+  public currentYear: number = 0;
 
   public showError = false;
   public errorMsg!: string;
@@ -129,6 +130,11 @@ export class PicksComponent implements OnInit {
     private router: Router,
     private skyToastService: SkyToastService
   ) {
+    
+    this.settingsService.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+    });
+
     this.isAuthenticated = this.authService.isAuthenticated();
   }
 
@@ -184,7 +190,7 @@ export class PicksComponent implements OnInit {
     }
 
     this.svc
-      .getPlayoffSchools(this.settingsService.currentYear)
+      .getPlayoffSchools(this.currentYear)
       .subscribe((result) => {
         const leftSeeds = [1, 4, 5, 12, 8, 9];
         const rightSeeds = [2, 3, 6, 7, 10, 11];
@@ -210,7 +216,7 @@ export class PicksComponent implements OnInit {
         mergeMap((result: School[]) => {
           this.schools = result;
           this.errorMsg = 'get schools';
-          return this.svc.getGames(this.settingsService.currentYear);
+          return this.svc.getGames(this.currentYear);
         }),
         mergeMap((result: Game[]) => {
           this.games = result;
@@ -419,7 +425,7 @@ export class PicksComponent implements OnInit {
       tiebreaker_1: this.tiebreakerForm.value.tiebreaker1Id as number,
       tiebreaker_2: this.tiebreakerForm.value.tiebreaker2 as number,
       testing: isTesting,
-      year: this.settingsService.currentYear,
+      year: this.currentYear,
     };
 
     let entryId: string;
@@ -471,7 +477,7 @@ export class PicksComponent implements OnInit {
                 school1_id: Number(this.pickForm.value.playoff1!),
                 school2_id: Number(this.pickForm.value.playoff2!),
                 champion_school_id: Number(this.pickForm.value.champion!),
-                year: this.settingsService.currentYear,
+                year: this.currentYear,
               },
             ],
           });

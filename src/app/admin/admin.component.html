@@ -1,71 +1,48 @@
 <main>
   <h1 class="header">Admin Dashboard - Year {{ currentYear }}</h1>
   <div class="admin-container">
-    <sky-repeater expandMode="single">
-      <sky-repeater-item>
-        <sky-repeater-item-title>Post Blog</sky-repeater-item-title>
-        <sky-repeater-item-content>
+    <!-- Main menu view -->
+    <div *ngIf="selectedSection === null" class="admin-menu">
+      <div class="section-buttons">
+        <button 
+          *ngFor="let section of sections" 
+          class="section-btn"
+          (click)="selectSection(section.id)"
+          type="button"
+        >
+          {{ section.title }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Component view -->
+    <div *ngIf="selectedSection !== null" class="admin-content">
+      <button class="back-btn" (click)="goBack()" type="button">← Back</button>
+      
+      <ng-container [ngSwitch]="selectedSection">
+        <ng-container *ngSwitchCase="'blog'">
           <app-add-blog></app-add-blog>
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-      <sky-repeater-item>
-        <sky-repeater-item-title>
-          <div class="pull-left">
-            <span class="label">Update Paid Status</span>
-          </div>
-          <div class="pull-right">
-            <span class="label">
-              {{ entrantsMessage }}
-            </span>
-          </div>
-        </sky-repeater-item-title>
-        <sky-repeater-item-content>
-          <app-paid-status
-            (numberOfEntrants)="(entrantsMessage)"
-          ></app-paid-status>
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-      <sky-repeater-item [isExpanded]="true">
-        <sky-repeater-item-title>Update Scores</sky-repeater-item-title>
-        <sky-repeater-item-content>
+        </ng-container>
+        <ng-container *ngSwitchCase="'paid-status'">
+          <app-paid-status (numberOfEntrants)="(entrantsMessage)"></app-paid-status>
+        </ng-container>
+        <ng-container *ngSwitchCase="'scores'">
           <app-update-scores></app-update-scores>
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-
-      <sky-repeater-item>
-        <sky-repeater-item-title>Championship Results</sky-repeater-item-title>
-        <sky-repeater-item-content>
+        </ng-container>
+        <ng-container *ngSwitchCase="'playoff-result'">
           <app-add-playoff-result></app-add-playoff-result>
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-<!-- 
-      <sky-repeater-item>
-        <sky-repeater-item-title>Tiebreakers</sky-repeater-item-title>
-        <sky-repeater-item-content>
-          <app-tiebreakers></app-tiebreakers>
-        </sky-repeater-item-content>
-      </sky-repeater-item> -->
-
-      <sky-repeater-item>
-        <sky-repeater-item-title>Add Bowl</sky-repeater-item-title>
-        <sky-repeater-item-content>
+        </ng-container>
+        <ng-container *ngSwitchCase="'add-bowl'">
           <app-add-bowl></app-add-bowl>
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-
-      <sky-repeater-item>
-        <sky-repeater-item-title>Add Bowl Game</sky-repeater-item-title>
-        <sky-repeater-item-content>
+        </ng-container>
+        <ng-container *ngSwitchCase="'add-game'">
           <app-add-bowl-game></app-add-bowl-game>
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-
-      <sky-repeater-item>
-        <sky-repeater-item-title>Add Playoff School</sky-repeater-item-title>
-        <sky-repeater-item-content>
+        </ng-container>
+        <ng-container *ngSwitchCase="'add-school'">
           <app-add-playoff-school></app-add-playoff-school>
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-    </sky-repeater>
+        </ng-container>
+      </ng-container>
+    </div>
   </div>
 </main>
+

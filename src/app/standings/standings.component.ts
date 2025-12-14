@@ -26,9 +26,8 @@ import { AuthService } from '../shared/services/auth.service';
 export class StandingsComponent implements OnInit {
   public standings: StandingsEntry[] = [];
   public flyout: SkyFlyoutInstance<any> | undefined;
-  public showStandingsLink = false; // this shows the flyout links, only enable after bowls start
   public isAdmin = false;
-  public currentYear: number;
+  public currentYear: number = 0;
   public years: number[] = [2025, 2024, 2023, 2022, 2021, 2020, 2019];
 
   public sortCurrentPoints = false;
@@ -49,7 +48,6 @@ export class StandingsComponent implements OnInit {
     private settings: SettingsService,
     private authService: AuthService
   ) {
-    this.currentYear = this.settings.currentYear;
     // Check admin status
     const userId = this.authService.getCurrentUserId();
     const userIdStr = userId ? userId.toString() : null;
@@ -58,10 +56,12 @@ export class StandingsComponent implements OnInit {
 
   public ngOnInit() {
     this.titleService.setTitle("Bowl Pick'em - Standings");
-    this.retrieveStandings(this.currentYear);
-    this.showStandingsLink = this.settings.showStandingsFlyout;
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+      this.retrieveStandings(this.currentYear);
+    });
   }
-
+  
   public retrieveStandings(year: number) {
     // this.waitSvc.beginNonBlockingPageWait();
 

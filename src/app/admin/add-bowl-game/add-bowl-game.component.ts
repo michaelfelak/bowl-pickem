@@ -20,11 +20,7 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
 @Component({
   standalone: true,
   selector: 'app-add-bowl-game',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    SkyDropdownModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, SkyDropdownModule],
   providers: [SettingsService],
   templateUrl: './add-bowl-game.component.html',
   styleUrls: ['./add-bowl-game.component.scss'],
@@ -44,24 +40,34 @@ export class AddBowlGameComponent implements OnInit {
   public schools: School[] = [];
   public addMessage!: string;
 
+  private currentYear: number = 0;
+
   protected formGroup: FormGroup<{
     hour: FormControl<number | null>;
     minute: FormControl<number | null>;
     year: FormControl<number | null>;
     month: FormControl<number | null>;
     day: FormControl<number | null>;
-  }>;
+  }> = new FormGroup({
+    hour: new FormControl(12),
+    minute: new FormControl(0),
+    year: new FormControl(this.currentYear),
+    month: new FormControl(12),
+    day: new FormControl(16),
+  });
 
-  constructor(private svc: BowlService,
-    private settings: SettingsService) {
-    this.formGroup = inject(FormBuilder).group({
-      hour: new FormControl(12),
-      minute: new FormControl(0),
-      year: new FormControl(this.settings.currentYear),
-      month: new FormControl(12),
-      day: new FormControl(16),
+  constructor(private svc: BowlService, private settings: SettingsService) {
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+      this.formGroup = inject(FormBuilder).group({
+        hour: new FormControl(12),
+        minute: new FormControl(0),
+        year: new FormControl(this.currentYear),
+        month: new FormControl(12),
+        day: new FormControl(16),
+      });
     });
-    this.year = this.settings.currentYear;
+    this.year = this.currentYear;
   }
 
   public ngOnInit() {

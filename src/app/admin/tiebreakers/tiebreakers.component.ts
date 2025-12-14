@@ -15,18 +15,23 @@ import { SettingsService } from 'src/app/shared/services/settings.service';
 })
 export class TiebreakersComponent implements OnInit {
   public tiebreakers: Tiebreaker[] = [];
+
+  private currentYear: number = 0;
+
   constructor(
     private bowlService: BowlService,
     private settings: SettingsService
-  ) {}
+  ) {
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+    });
+  }
 
   ngOnInit() {
-    this.bowlService
-      .getTiebreakers(this.settings.currentYear)
-      .subscribe((result) => {
-        this.tiebreakers = result.sort((a: Tiebreaker, b: Tiebreaker)=>{
-          return a.tiebreaker_2! > b.tiebreaker_2! ? -1 : 1;
-        });
+    this.bowlService.getTiebreakers(this.currentYear).subscribe((result) => {
+      this.tiebreakers = result.sort((a: Tiebreaker, b: Tiebreaker) => {
+        return a.tiebreaker_2! > b.tiebreaker_2! ? -1 : 1;
       });
+    });
   }
 }

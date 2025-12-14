@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { SettingsService } from './settings.service';
+import { API_CONSTANTS } from '../constants/api.constants';
 
 export interface LoginRequest {
   username: string;
@@ -35,8 +36,8 @@ export class AuthService {
   public currentUser$: Observable<string | null>;
   public jwtHelper = new JwtHelperService();
 
-  constructor(private http: HttpClient, private settingsService: SettingsService) {
-    this.apiUrl = this.settingsService.authApiUrl;
+  constructor(private http: HttpClient) {
+    this.apiUrl = API_CONSTANTS.AUTH_API_URL;
     this.currentUserSubject = new BehaviorSubject<string | null>(this.getUsernameFromToken());
     this.currentUser$ = this.currentUserSubject.asObservable();
   }

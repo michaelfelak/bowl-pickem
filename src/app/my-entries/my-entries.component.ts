@@ -25,7 +25,7 @@ export class MyEntriesComponent implements OnInit {
   public entries: EntryWithEditable[] = [];
   public isAuthenticated = false;
   public isAdmin = false;
-  public currentYear: number;
+  public currentYear: number = 0;
   public isLoading = true;
   public showError = false;
   public errorMsg: string = '';
@@ -43,15 +43,17 @@ export class MyEntriesComponent implements OnInit {
     private waitService: SkyWaitService,
     private settings: SettingsService
   ) {
-    this.currentYear = this.settings.currentYear;
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+    });
     const userId = this.authService.getCurrentUserId();
     const userIdStr = userId ? userId.toString() : null;
     this.isAdmin = userIdStr === '2' || userIdStr === '3';
   }
 
   ngOnInit(): void {
-    this.titleService.setTitle('My Profile - Bowl Pick\'em');
-    
+    this.titleService.setTitle("My Profile - Bowl Pick'em");
+
     this.isAuthenticated = this.authService.isAuthenticated();
     if (!this.isAuthenticated) {
       this.router.navigate(['/login']);
@@ -69,7 +71,7 @@ export class MyEntriesComponent implements OnInit {
 
   private loadData(): void {
     this.waitService.beginNonBlockingPageWait();
-    
+
     // Load games first to check which are editable
     this.bowlService.getGames(this.currentYear).subscribe({
       next: (games) => {
@@ -80,13 +82,13 @@ export class MyEntriesComponent implements OnInit {
         this.handleError('Failed to load games');
         this.waitService.endNonBlockingPageWait();
         this.isLoading = false;
-      }
+      },
     });
   }
 
   private loadEntries(): void {
     const userId = this.authService.getCurrentUserId();
-    
+
     if (!userId) {
       this.handleError('User ID not found. Please log in again.');
       this.waitService.endNonBlockingPageWait();
@@ -97,9 +99,9 @@ export class MyEntriesComponent implements OnInit {
     // Load user's entries from API
     this.bowlService.getUserEntries(userId).subscribe({
       next: (entries) => {
-        this.entries = entries.map(entry => ({
+        this.entries = entries.map((entry) => ({
           ...entry,
-          isEditable: this.isEntryEditable(entry)
+          isEditable: this.isEntryEditable(entry),
         }));
         this.totalEntries = this.entries.length;
         this.updateCompetingSince();
@@ -111,7 +113,7 @@ export class MyEntriesComponent implements OnInit {
         console.error('Error loading entries:', error);
         this.waitService.endNonBlockingPageWait();
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -137,7 +139,9 @@ export class MyEntriesComponent implements OnInit {
   public deleteEntry(entry: EntryWithEditable): void {
     // Prevent deletion of entries from previous years
     if (entry.year && entry.year !== this.currentYear) {
-      this.handleError('Cannot delete entries from previous years. Only current year entries can be deleted.');
+      this.handleError(
+        'Cannot delete entries from previous years. Only current year entries can be deleted.'
+      );
       return;
     }
 
@@ -145,13 +149,13 @@ export class MyEntriesComponent implements OnInit {
       this.waitService.beginNonBlockingPageWait();
       this.bowlService.deleteEntry(entry.id!).subscribe({
         next: () => {
-          this.entries = this.entries.filter(e => e.id !== entry.id);
+          this.entries = this.entries.filter((e) => e.id !== entry.id);
           this.waitService.endNonBlockingPageWait();
         },
         error: (error) => {
           this.handleError('Failed to delete entry');
           this.waitService.endNonBlockingPageWait();
-        }
+        },
       });
     }
   }
@@ -177,7 +181,7 @@ export class MyEntriesComponent implements OnInit {
     }
 
     const years = this.entries
-      .map(entry => entry.year)
+      .map((entry) => entry.year)
       .filter((year): year is number => year !== undefined && year !== null);
 
     if (years.length === 0) {
