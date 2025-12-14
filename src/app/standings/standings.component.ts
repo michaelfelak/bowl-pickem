@@ -49,9 +49,7 @@ export class StandingsComponent implements OnInit {
     private authService: AuthService
   ) {
     // Check admin status
-    const userId = this.authService.getCurrentUserId();
-    const userIdStr = userId ? userId.toString() : null;
-    this.isAdmin = userIdStr === '2' || userIdStr === '3';
+    this.isAdmin = this.authService.isAdmin();
   }
 
   public ngOnInit() {
@@ -116,7 +114,7 @@ export class StandingsComponent implements OnInit {
           useValue: record,
         },
       ],
-      defaultWidth: 500,
+      defaultWidth: 700,
     };
     this.flyout = this.flyoutService.open(
       StandingsFlyoutComponent,

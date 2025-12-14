@@ -28,9 +28,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    const userId = this.authService.getCurrentUserId();
-    const userIdStr = userId ? userId.toString() : null;
-    this.isAdmin = userIdStr === '2' || userIdStr === '3';
+    this.isAdmin = this.authService.isAdmin();
   }
 
   ngOnInit(): void {

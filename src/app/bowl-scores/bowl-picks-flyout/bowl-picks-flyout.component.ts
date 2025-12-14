@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BowlService } from '../../shared/services/bowl.service';
+import { AuthService } from '../../shared/services/auth.service';
 import {
   Bowl,
   BowlPick,
@@ -13,11 +14,12 @@ import { mergeMap } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from 'src/app/shared/services/settings.service';
 import { StatusIndicatorComponent } from '../../shared/status-indicator/status-indicator.component';
+import { SchoolLogoComponent } from '../../shared/school-logo/school-logo.component';
 
 @Component({
   standalone: true,
   selector: 'app-bowl-picks-flyout',
-  imports: [CommonModule, StatusIndicatorComponent],
+  imports: [CommonModule, StatusIndicatorComponent, SchoolLogoComponent],
   providers: [SettingsService],
   templateUrl: './bowl-picks-flyout.component.html',
   styleUrls: ['./bowl-picks-flyout.component.scss'],
@@ -33,11 +35,14 @@ export class BowlPicksFlyoutComponent implements OnInit {
   public gameTime: Date = new Date();
   public team1name = '';
   public team2name = '';
+  public team1logo_id = '';
+  public team2logo_id = '';
   public team1score = 0;
   public team2score = 0;
   public schoolList: School[] = [];
   public gameResults: GameResultModel[] = [];
   public gameHasResult = false;
+  public isAdmin = false;
 
   public team1picks = 0;
   public team2picks = 0;
@@ -46,8 +51,10 @@ export class BowlPicksFlyoutComponent implements OnInit {
   constructor(
     public context: BowlPicksFlyoutContext,
     private svc: BowlService,
+    private authService: AuthService,
     private settings: SettingsService
   ) {
+    this.isAdmin = this.authService.isAdmin();
     this.settings.settings$.subscribe((settings) => {
       this.currentYear = settings.current_year;
     });
@@ -77,7 +84,9 @@ export class BowlPicksFlyoutComponent implements OnInit {
           this.gameList = games;
           const game = this.getGameById(this.context.gameId);
           this.team1name = this.getSchoolById(game.School1ID!);
+          this.team1logo_id = this.getSchoolLogoById(game.School1ID!);
           this.team2name = this.getSchoolById(game.School2ID!);
+          this.team2logo_id = this.getSchoolLogoById(game.School2ID!);
           this.gameTime = game.GameTime!;
           this.setBowlName(game.BowlID!);
           return this.svc.getBowlPicks(this.context.gameId);
@@ -108,6 +117,16 @@ export class BowlPicksFlyoutComponent implements OnInit {
     });
     if (school) {
       return school.Name!;
+    }
+    return '';
+  }
+
+  private getSchoolLogoById(schoolId: string): string {
+    const school = this.schoolList.find((school) => {
+      return school.ID === schoolId;
+    });
+    if (school && school.logo_id) {
+      return school.logo_id;
     }
     return '';
   }

@@ -128,7 +128,7 @@
               </sky-checkbox>
             </td>
             <td class="team-name" style="border-right: 1px solid black">
-              {{ pick.team_1_name }}
+              <app-school-logo [schoolName]="pick.team_1_name!" [logoId]="pick.team_1_logo_id"></app-school-logo>
             </td>
             <td class="team-check" style="border-left: 1px solid black">
               <sky-checkbox
@@ -138,7 +138,7 @@
               </sky-checkbox>
             </td>
             <td class="team-name" style="border-right: 1px solid black">
-              {{ pick.team_2_name }}
+              <app-school-logo [schoolName]="pick.team_2_name!" [logoId]="pick.team_2_logo_id"></app-school-logo>
             </td>
             <td *ngIf="!pick.is_new_years_game">
               <select formControlName="points" style="width: 50px">
@@ -255,7 +255,7 @@
               </sky-checkbox>
             </td>
             <td class="team-name" style="border-right: 1px solid black">
-              {{ pick.team_1_name }}
+              <app-school-logo [schoolName]="pick.team_1_name!" [logoId]="pick.team_1_logo_id"></app-school-logo>
             </td>
             <td class="team-check" style="border-left: 1px solid black">
               <sky-checkbox
@@ -265,7 +265,7 @@
               </sky-checkbox>
             </td>
             <td class="team-name" style="border-right: 1px solid black">
-              {{ pick.team_2_name }}
+              <app-school-logo [schoolName]="pick.team_2_name!" [logoId]="pick.team_2_logo_id"></app-school-logo>
             </td>
             <td *ngIf="!pick.is_new_years_game">
               <select formControlName="points">
@@ -337,7 +337,7 @@
                 </sky-checkbox>
               </td>
               <td class="team-name" style="border-right: 1px solid black">
-                {{ pick.team_1_name }}
+                <app-school-logo [schoolName]="pick.team_1_name!" [logoId]="pick.team_1_logo_id"></app-school-logo>
               </td>
               <td class="team-check" style="border-left: 1px solid black">
                 <sky-checkbox
@@ -347,7 +347,7 @@
                 </sky-checkbox>
               </td>
               <td class="team-name" style="border-right: 1px solid black">
-                {{ pick.team_2_name }}
+                <app-school-logo [schoolName]="pick.team_2_name!" [logoId]="pick.team_2_logo_id"></app-school-logo>
               </td>
               <td *ngIf="!pick.is_new_years_game">
                 <select formControlName="points">

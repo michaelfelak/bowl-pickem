@@ -25,10 +25,13 @@ export interface PlayoffPick {
 
 export interface PlayoffPickFlyout{
   school_1?: string;
+  school_1_logo_id?: string;
   school_1_correct?: boolean;
   school_2?: string;
+  school_2_logo_id?: string;
   school_2_correct?: boolean;
   champion?: string;
+  champion_logo_id?: string;
   champion_correct?: boolean;
 }
 export interface PlayoffResult {
@@ -51,6 +54,8 @@ export interface PickModel {
   team_2_picked?: boolean;
   team_1_name?: string;
   team_2_name?: string;
+  team_1_logo_id?: string;
+  team_2_logo_id?: string;
   score_1?: number;
   score_2?: number;
   game_time?: string;
@@ -69,6 +74,7 @@ export interface PickResponse {
 export interface School {
   ID?: string;
   Name?: string;
+  logo_id?: string;
 }
 
 export interface PlayoffSchool {
@@ -138,6 +144,8 @@ export interface GameResultModel {
   game_id?: string;
   team_1_name?: string;
   team_2_name?: string;
+  team_1_logo_id?: string;
+  team_2_logo_id?: string;
   score_1?: number;
   score_2?: number;
   winning_school_id?: string;
@@ -166,9 +174,11 @@ export interface CompletedPick {
   team_1?: boolean;
   team_1_won?: boolean;
   team_1_name?: string;
+  school_1_logo_id?: string;
   team_2?: boolean;
   team_2_won?: boolean;
   team_2_name?: string;
+  school_2_logo_id?: string;
   points?: number;
   earned_points?: number;
   correct1?: boolean;
@@ -215,6 +225,8 @@ export interface BowlPick {
   name?: string;
   team_1_picked?: boolean;
   team_2_picked?: boolean;
+  team_1_logo_id?: string;
+  team_2_logo_id?: string;
   points?: number;
   totalPoints?: number;
   team_1_won?: boolean;

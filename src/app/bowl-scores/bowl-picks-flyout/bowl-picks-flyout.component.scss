@@ -8,6 +8,22 @@ main {
   font-family: 'Titillium Web', sans-serif;
 }
 
+.admin-badge {
+  position: sticky;
+  top: 0;
+  background-color: #ff9800;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  margin-bottom: 12px;
+  z-index: 100;
+}
+
 .flyout-header {
   margin-bottom: 25px;
   padding-bottom: 20px;

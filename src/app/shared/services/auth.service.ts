@@ -141,6 +141,15 @@ export class AuthService {
   }
 
   /**
+   * Check if the current user is an admin (user ID 2 or 3)
+   */
+  isAdmin(): boolean {
+    const userId = this.getCurrentUserId();
+    const userIdStr = userId ? userId.toString() : '';
+    return userIdStr === '2' || userIdStr === '3';
+  }
+
+  /**
    * Get the current user's ID from JWT token
    */
   getCurrentUserId(): string | null {

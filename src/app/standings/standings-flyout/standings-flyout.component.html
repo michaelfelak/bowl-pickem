@@ -1,4 +1,6 @@
 <main>
+  <div *ngIf="isAdmin" class="admin-badge">ADMIN VIEW</div>
+  
   <div class="flyout-header">
     <h2 class="entry-name">{{ name }}</h2>
     <div class="total-points">
@@ -15,12 +17,12 @@
       <div class="playoff-matchup">
         <div class="team-pick">
           <app-status-indicator [value]="playoffPicks.school_1_correct" />
-          <span class="team-name">{{ playoffPicks.school_1 }}</span>
+          <app-school-logo [schoolName]="playoffPicks.school_1" [logoId]="playoffPicks.school_1_logo_id"></app-school-logo>
         </div>
         <span class="vs-text">vs</span>
         <div class="team-pick">
           <app-status-indicator [value]="playoffPicks.school_2_correct" />
-          <span class="team-name">{{ playoffPicks.school_2 }}</span>
+          <app-school-logo [schoolName]="playoffPicks.school_2" [logoId]="playoffPicks.school_2_logo_id"></app-school-logo>
         </div>
       </div>
     </div>
@@ -30,7 +32,7 @@
       <div class="champion-matchup">
         <div class="team-pick">
           <app-status-indicator [value]="playoffPicks.champion_correct" />
-          <span class="team-name">{{ playoffPicks.champion }}</span>
+          <app-school-logo [schoolName]="playoffPicks.champion" [logoId]="playoffPicks.champion_logo_id"></app-school-logo>
         </div>
       </div>
     </div>
@@ -74,7 +76,7 @@
                     "
                     [showCheck]="pick.team_1"
                   ></app-status-indicator>
-                  <span>{{ pick.team_1_name }}</span>
+                  <app-school-logo [schoolName]="pick.team_1_name!" [logoId]="pick.school_1_logo_id"></app-school-logo>
                 </div>
               </td>
               <td class="pick-col">
@@ -89,7 +91,7 @@
                     "
                     [showCheck]="pick.team_2"
                   ></app-status-indicator>
-                  <span>{{ pick.team_2_name }}</span>
+                  <app-school-logo [schoolName]="pick.team_2_name!" [logoId]="pick.school_2_logo_id"></app-school-logo>
                 </div>
               </td>
               <td class="points-col">

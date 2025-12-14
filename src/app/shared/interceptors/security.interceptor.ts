@@ -15,7 +15,7 @@ export class SecurityInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     // Ensure all requests use HTTPS
-    if (request.url.startsWith('http://')) {
+    if (request.url.startsWith('http://') && !request.url.startsWith('http://localhost')) {
       console.warn(`⚠️ WARNING: Non-HTTPS request detected: ${request.url}`);
       // In production, you could throw an error here to prevent insecure requests
       // throw new Error('All requests must use HTTPS');
