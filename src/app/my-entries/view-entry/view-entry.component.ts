@@ -4,7 +4,13 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { BowlService } from '../../shared/services/bowl.service';
 import { AuthService } from '../../shared/services/auth.service';
-import { Entry, PickModel, Game, CompletedEntry, CompletedPick } from '../../shared/services/bowl.model';
+import {
+  Entry,
+  PickModel,
+  Game,
+  CompletedEntry,
+  CompletedPick,
+} from '../../shared/services/bowl.model';
 import { SkyWaitService, SkyAlertModule } from '@skyux/indicators';
 import { StatusIndicatorComponent } from '../../shared/status-indicator/status-indicator.component';
 import * as dayjs from 'dayjs';
@@ -19,7 +25,12 @@ interface PickDisplay extends CompletedPick {
 @Component({
   standalone: true,
   selector: 'app-view-entry',
-  imports: [CommonModule, RouterModule, SkyAlertModule, StatusIndicatorComponent],
+  imports: [
+    CommonModule,
+    RouterModule,
+    SkyAlertModule,
+    StatusIndicatorComponent,
+  ],
   providers: [SettingsService],
   templateUrl: './view-entry.component.html',
   styleUrls: ['./view-entry.component.scss'],
@@ -32,7 +43,7 @@ export class ViewEntryComponent implements OnInit {
   public showError = false;
   public errorMsg: string = '';
   public entryId: string = '';
-  public currentYear: number;
+  public currentYear: number = 0;
 
   constructor(
     private titleService: Title,
@@ -43,19 +54,21 @@ export class ViewEntryComponent implements OnInit {
     private waitService: SkyWaitService,
     private settings: SettingsService
   ) {
-    this.currentYear = this.settings.currentYear;
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+    });
   }
 
   ngOnInit(): void {
     this.entryId = this.route.snapshot.paramMap.get('id') || '';
-    
+
     if (!this.entryId) {
       this.handleError('Entry ID not found');
       return;
     }
 
-    this.titleService.setTitle('View Entry - Bowl Pick\'em');
-    
+    this.titleService.setTitle("View Entry - Bowl Pick'em");
+
     if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
       return;
@@ -66,11 +79,11 @@ export class ViewEntryComponent implements OnInit {
 
   private loadData(): void {
     this.waitService.beginNonBlockingPageWait();
-    
+
     // Load games and completed entry data in parallel
     Promise.all([
       this.bowlService.getGames(this.currentYear).toPromise(),
-      this.bowlService.getStandingsEntry(this.entryId).toPromise()
+      this.bowlService.getStandingsEntry(this.entryId).toPromise(),
     ])
       .then(([games, completedEntry]) => {
         this.games = games || [];
@@ -91,12 +104,12 @@ export class ViewEntryComponent implements OnInit {
    * Process picks to add game information and formatting
    */
   private processPicks(picks: CompletedPick[]): void {
-    this.picks = picks.map(pick => {
+    this.picks = picks.map((pick) => {
       return {
         ...pick,
         gameLabel: this.getGameLabel(pick),
         gameTime: this.formatGameTime(pick.game_time),
-        isPicked: !!(pick.team_1 || pick.team_2)
+        isPicked: !!(pick.team_1 || pick.team_2),
       };
     });
   }

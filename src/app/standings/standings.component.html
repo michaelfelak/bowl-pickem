@@ -1,12 +1,12 @@
 <main>
   <h1 class="header">Standings</h1>
-  
+
   <div class="header-info">
     <p class="info-text">
       Click an entry name to see the entry's selections. The numbers include
       points from the championship game picks.
     </p>
-    
+
     <div class="year-selector">
       <label for="year-dropdown">Year:</label>
       <sky-dropdown>
@@ -26,7 +26,10 @@
 
   <div class="standings-container">
     <!-- Empty State -->
-    <div *ngIf="standings === null || standings.length === 0" class="empty-state">
+    <div
+      *ngIf="standings === null || standings.length === 0"
+      class="empty-state"
+    >
       <p>No entries submitted</p>
     </div>
 
@@ -40,47 +43,56 @@
             <th class="points-col sortable" (click)="sortByCurrentPoints()">
               Current<br />Points
               <span class="sort-indicator" *ngIf="sortCurrentPoints">
-                {{ currentPointsDesc ? '▼' : '▲' }}
+                {{ currentPointsDesc ? "▼" : "▲" }}
               </span>
             </th>
             <th class="points-col sortable" (click)="sortByCorrectPicks()">
               Correct<br />Picks
               <span class="sort-indicator" *ngIf="sortCorrectPicks">
-                {{ correctPicksDesc ? '▼' : '▲' }}
+                {{ correctPicksDesc ? "▼" : "▲" }}
               </span>
             </th>
             <th class="points-col sortable" (click)="sortByRemainingPoints()">
               Remaining<br />Points
               <span class="sort-indicator" *ngIf="sortRemainingPoints">
-                {{ remainingPointsDesc ? '▼' : '▲' }}
+                {{ remainingPointsDesc ? "▼" : "▲" }}
               </span>
             </th>
             <th class="points-col sortable" (click)="sortByPossiblePoints()">
               Possible<br />Points
               <span class="sort-indicator" *ngIf="sortPossiblePoints">
-                {{ possiblePointsDesc ? '▼' : '▲' }}
+                {{ possiblePointsDesc ? "▼" : "▲" }}
               </span>
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let pick of standings; let i = index" [class.alt-row]="i % 2 === 1">
+          <tr
+            *ngFor="let pick of standings; let i = index"
+            [class.alt-row]="i % 2 === 1"
+          >
             <td class="rank-col" data-label="Rank">{{ pick.rank }}</td>
             <td class="name-col" data-label="Entry Name">
               <button
-                *ngIf="showStandingsLink || isAdmin"
                 class="sky-btn sky-btn-link-inline entry-link"
                 type="button"
                 (click)="onNameClick(pick.entry_id!)"
               >
                 {{ pick.entry_name }}
               </button>
-              <span *ngIf="!showStandingsLink && !isAdmin">{{ pick.entry_name }}</span>
             </td>
-            <td class="points-col" data-label="Current Points">{{ pick.current_points }}</td>
-            <td class="points-col" data-label="Correct Picks">{{ pick.correct_picks }}</td>
-            <td class="points-col" data-label="Remaining Points">{{ pick.remaining_points }}</td>
-            <td class="points-col" data-label="Possible Points">{{ pick.possible_points }}</td>
+            <td class="points-col" data-label="Current Points">
+              {{ pick.current_points }}
+            </td>
+            <td class="points-col" data-label="Correct Picks">
+              {{ pick.correct_picks }}
+            </td>
+            <td class="points-col" data-label="Remaining Points">
+              {{ pick.remaining_points }}
+            </td>
+            <td class="points-col" data-label="Possible Points">
+              {{ pick.possible_points }}
+            </td>
           </tr>
         </tbody>
       </table>

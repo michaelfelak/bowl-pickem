@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BowlService } from '../shared/services/bowl.service';
+import { AuthService } from '../shared/services/auth.service';
 import {
   Bowl,
   Game,
@@ -35,25 +36,36 @@ export class BowlScoresComponent implements OnInit {
   public todaysDate = '';
   public flyout: SkyFlyoutInstance<any> | undefined;
   @Input() public hideAllScores = false;
+  public isAdmin = false;
+  private currentYear: number = 0;
 
   constructor(
     private svc: BowlService,
     private flyoutService: SkyFlyoutService,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private authService: AuthService
   ) {}
 
   public ngOnInit() {
-    this.refresh();
+    // Check admin status
+    const userId = this.authService.getCurrentUserId();
+    const userIdStr = userId ? userId.toString() : '';
+    this.isAdmin = userIdStr === '2' || userIdStr === '3';
+
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+      this.refresh();
+    });
   }
 
   public refresh() {
     this.svc
-      .getGames(this.settings.currentYear)
+      .getGames(this.currentYear)
       .pipe(
         mergeMap((result: Game[]) => {
           this.games = result;
           this.sortGamesByDate();
-          return this.svc.getGameResults(this.settings.currentYear);
+          return this.svc.getGameResults(this.currentYear);
         }),
         mergeMap((result: GameResultModel[]) => {
           this.gameResults = result.filter((game) => {

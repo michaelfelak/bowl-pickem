@@ -8,13 +8,14 @@ import {
   SkyConfirmType,
 } from '@skyux/modals';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SettingsService } from 'src/app/shared/services/settings.service';
 import { StatusIndicatorComponent } from 'src/app/shared/status-indicator/status-indicator.component';
 
 @Component({
   standalone: true,
   selector: 'app-paid-status',
-  imports: [CommonModule, StatusIndicatorComponent],
+  imports: [CommonModule, FormsModule, StatusIndicatorComponent],
   providers: [SettingsService],
   templateUrl: './paid-status.component.html',
   styleUrls: ['./paid-status.component.scss'],
@@ -28,6 +29,9 @@ export class PaidStatusComponent implements OnInit {
   public numPaidEntries = 0;
   public selectedAction: any;
   public selectedText: any;
+  public showPaidEntries = false;
+  private currentYear: number = 0;
+
   constructor(
     private svc: BowlService,
     private confirmService: SkyConfirmService,
@@ -35,18 +39,19 @@ export class PaidStatusComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.refresh();
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+      this.refresh();
+    });
   }
 
   public refresh() {
-    this.svc
-      .getEntries(this.settings.currentYear)
-      .subscribe((result: Entry[]) => {
-        this.entries = result;
+    this.svc.getEntries(this.currentYear).subscribe((result: Entry[]) => {
+      this.entries = result;
 
-        this.sortEntriesByPaidStatus();
-        this.calculatePaidTotal();
-      });
+      this.sortEntriesByPaidStatus();
+      this.calculatePaidTotal();
+    });
   }
 
   // sorts entries by paid status, unpaid then paid
@@ -58,12 +63,19 @@ export class PaidStatusComponent implements OnInit {
     }
   }
 
+  public getDisplayedEntries(): Entry[] {
+    if (this.showPaidEntries) {
+      return this.entries;
+    }
+    return this.entries.filter((entry) => entry.paid === false);
+  }
+
   public togglePaid(id: string) {
     this.svc
       .togglePaid(id)
       .pipe(
         mergeMap(() => {
-          return this.svc.getEntries(this.settings.currentYear);
+          return this.svc.getEntries(this.currentYear);
         })
       )
       .subscribe((result: Entry[]) => {

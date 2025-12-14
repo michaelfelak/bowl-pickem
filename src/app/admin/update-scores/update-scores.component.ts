@@ -19,6 +19,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { SkyRepeaterModule } from '@skyux/lists';
 import { SettingsService } from 'src/app/shared/services/settings.service';
+import { SkyToastService, SkyToastType } from '@skyux/toast';
 
 @Component({
   standalone: true,
@@ -36,6 +37,8 @@ export class UpdateScoresComponent implements OnInit {
   public schools: School[] = [];
   public entries: Entry[] = [];
 
+  private currentYear: number = 0;
+
   scoresForm = this.formBuilder.group({
     games: new FormArray([]),
   });
@@ -47,8 +50,13 @@ export class UpdateScoresComponent implements OnInit {
   constructor(
     private svc: BowlService,
     private formBuilder: FormBuilder,
-    private settings: SettingsService
-  ) {}
+    private settings: SettingsService,
+    private toastService: SkyToastService
+  ) {
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+    });
+  }
 
   public ngOnInit() {
     this.refresh();
@@ -60,15 +68,15 @@ export class UpdateScoresComponent implements OnInit {
       .pipe(
         mergeMap((result: School[]) => {
           this.schools = result;
-          return this.svc.getGames(this.settings.currentYear);
+          return this.svc.getGames(this.currentYear);
         }),
         mergeMap((result: Game[]) => {
           this.games = result;
-          return this.svc.getEntries(this.settings.currentYear);
+          return this.svc.getEntries(this.currentYear);
         }),
         mergeMap((result: Entry[]) => {
           this.entries = result;
-          return this.svc.getGameResults(this.settings.currentYear);
+          return this.svc.getGameResults(this.currentYear);
         }),
         mergeMap((result: GameResultModel[]) => {
           this.gameResults = result;
@@ -137,6 +145,7 @@ export class UpdateScoresComponent implements OnInit {
     });
     let score1 = gameA.score1;
     let score2 = gameA.score2;
+    const bowlName = gameA.bowlName;
 
     const r = {} as GameResultModel;
     r.game_id = id;
@@ -156,7 +165,14 @@ export class UpdateScoresComponent implements OnInit {
       r.losing_school_id = game.School1ID;
       r.winning_school_id = game.School2ID;
     }
-    this.svc.addGameResult(r).subscribe();
+    this.svc.addGameResult(r).subscribe(() => {
+      this.toastService.openMessage(
+        `${bowlName} Bowl was successfully updated`,
+        {
+          type: SkyToastType.Success,
+        }
+      );
+    });
   }
 
   private getGameFromID(id: string): Game {

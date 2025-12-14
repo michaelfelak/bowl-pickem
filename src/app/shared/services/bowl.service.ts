@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { SettingsService } from './settings.service';
+import { API_CONSTANTS } from '../constants/api.constants';
 import {
   Bowl,
   Game,
@@ -24,15 +24,14 @@ import {
   PlayoffResult as AddPlayoffResultRequest,
   PlayoffPick,
   PlayoffPickFlyout,
+  Settings,
 } from './bowl.model';
 
 @Injectable()
 export class BowlService {
-  private baseUrl: string;
+  private baseUrl: string = API_CONSTANTS.BOWL_API_URL;
 
-  constructor(private http: HttpClient, private settingsService: SettingsService) {
-    this.baseUrl = this.settingsService.bowlApiUrl;
-  }
+  constructor(private http: HttpClient) {}
 
   // ============================================
   // Schools endpoints
@@ -353,5 +352,16 @@ export class BowlService {
    */
   public getTodaysGames(): Observable<TodaysGame[]> {
     return this.http.get<TodaysGame[]>(`${this.baseUrl}todaysgames`);
+  }
+
+  // ============================================
+  // Settings endpoints
+  // ============================================
+
+  /**
+   * Get application settings
+   */
+  public getSettings(): Observable<Settings> {
+    return this.http.get<Settings>(`${this.baseUrl}settings`);
   }
 }

@@ -229,3 +229,8 @@ export interface Tiebreaker {
   tiebreaker_1?: string; // bowl game
   tiebreaker_2?: string; // highest total
 }
+
+export interface Settings {
+  current_year: number;
+  submit_entry_enabled: boolean;
+}

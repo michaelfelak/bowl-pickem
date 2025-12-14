@@ -60,7 +60,7 @@ export class EditEntryComponent implements OnInit {
   public errorMsg: string = '';
   public successMsg: string = '';
   public entryId: string = '';
-  public currentYear: number;
+  public currentYear: number = 0;
   public showConfirmationModal = false;
   public confirmationChanges: EditChange[] = [];
 
@@ -106,7 +106,9 @@ export class EditEntryComponent implements OnInit {
     private formBuilder: FormBuilder,
     private skyToastService: SkyToastService
   ) {
-    this.currentYear = this.settings.currentYear;
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+    });
   }
 
   ngOnInit(): void {

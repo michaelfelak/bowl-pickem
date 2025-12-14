@@ -12,7 +12,7 @@
     <span></span>
   </button>
 
-  <p>Bowl Pick'em</p>
+  <p>Bowl Pick'em <span *ngIf="isAdmin" class="admin-badge">Admin</span></p>
 
   <!-- Desktop Navigation -->
   <nav class="nav-menu">
@@ -61,7 +61,10 @@
 
         <!-- Dropdown Menu -->
         <div class="user-dropdown" *ngIf="showUserDropdown">
-          <div class="dropdown-username">{{ currentUser$ | async }}</div>
+          <div class="dropdown-username">
+            {{ currentUser$ | async }}
+            <span *ngIf="isAdmin" class="admin-badge">Admin</span>
+          </div>
           <button
             class="dropdown-item"
             (click)="navigateToMyProfile()"

@@ -41,16 +41,21 @@ export class BowlPicksFlyoutComponent implements OnInit {
 
   public team1picks = 0;
   public team2picks = 0;
+  private currentYear: number = 0;
 
   constructor(
     public context: BowlPicksFlyoutContext,
     private svc: BowlService,
     private settings: SettingsService
-  ) {}
+  ) {
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+    });
+  }
 
   public ngOnInit() {
     this.svc
-      .getStandings(this.settings.currentYear)
+      .getStandings(this.currentYear)
       .pipe(
         mergeMap((standings: any) => {
           this.standings = standings;
@@ -58,7 +63,7 @@ export class BowlPicksFlyoutComponent implements OnInit {
         }),
         mergeMap((bowlList: any) => {
           this.bowlList = bowlList;
-          return this.svc.getGameResults(this.settings.currentYear);
+          return this.svc.getGameResults(this.currentYear);
         }),
         mergeMap((gameResults: GameResultModel[]) => {
           this.gameResults = gameResults;
@@ -66,7 +71,7 @@ export class BowlPicksFlyoutComponent implements OnInit {
         }),
         mergeMap((schoolList: any) => {
           this.schoolList = schoolList;
-          return this.svc.getGames(this.settings.currentYear);
+          return this.svc.getGames(this.currentYear);
         }),
         mergeMap((games: Game[]) => {
           this.gameList = games;
@@ -89,11 +94,11 @@ export class BowlPicksFlyoutComponent implements OnInit {
 
   private calculateTotalPicks() {
     this.team1picks = this.picks.filter((pick) => {
-      return pick.team_1_picked;
+      return pick.team_1_picked === true;
     }).length;
 
     this.team2picks = this.picks.filter((pick) => {
-      return pick.team_2_picked;
+      return pick.team_2_picked === true;
     }).length;
   }
 
@@ -125,9 +130,10 @@ export class BowlPicksFlyoutComponent implements OnInit {
       if (pickEntry) {
         pick.totalPoints = pickEntry.current_points;
       }
-      this.picks.sort((a: BowlPick, b: BowlPick) => {
-        return a.totalPoints! > b.totalPoints! ? -1 : 1;
-      });
+    });
+    
+    this.picks.sort((a: BowlPick, b: BowlPick) => {
+      return a.totalPoints! > b.totalPoints! ? -1 : 1;
     });
   }
 

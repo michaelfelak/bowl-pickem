@@ -1,16 +1,30 @@
 import { Injectable } from '@angular/core';
+import { BowlService } from './bowl.service';
+import { Settings } from './bowl.model';
+import { API_CONSTANTS } from '../constants/api.constants';
+import { BONUS_GAMES } from '../constants/bowl.constants';
+import { Observable } from 'rxjs';
+import { shareReplay } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class SettingsService {
-  public currentYear: number = 2025;
-  public showSubmitEntry: boolean = true;
-  public showStandingsFlyout: boolean = true;
+  // public currentYear: number = 0;
+  // public showSubmitEntry: boolean = false;
+  // public showStandingsFlyout: boolean = true;
 
-  // Base URLs for API endpoints
-  public authApiUrl: string = 'https://bowl-pickem-144ffdd934e7.herokuapp.com/api/auth'; // prod
-  public bowlApiUrl = 'https://bowl-pickem-144ffdd934e7.herokuapp.com/api/v1/'; // prod
-  // public authApiUrl: string = 'http://localhost:8081/api/auth';
-  // public bowlApiUrl: string = 'http://localhost:8081/api/v1/';
+  public settings$: Observable<Settings>;
+
+  constructor(private bowlService: BowlService) {
+    // Cache the settings observable so it's only fetched once
+    this.settings$ = this.bowlService.getSettings().pipe(shareReplay(1));
+
+    // this.settings$.subscribe((settings: Settings) => {
+    //   this.currentYear = settings.current_year;
+    //   this.showSubmitEntry = settings.submit_entry_enabled;
+    // });
+  }
 
   /**
    * Determines if a bowl game is a bonus game (eligible for 10-point assignment)
@@ -18,17 +32,6 @@ export class SettingsService {
    * @returns true if the bowl is a bonus game
    */
   public isBonusGame(name: string): boolean {
-    const bonusGameNames = [
-      'Military',
-      'Pinstripe',
-      'Fenway',
-      'Pop-Tarts',
-      'Arizona',
-      'New Mexico',
-      'Gator',
-      'Texas',
-    ];
-
-    return bonusGameNames.includes(name);
+    return BONUS_GAMES.includes(name);
   }
 }

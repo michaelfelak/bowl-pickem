@@ -36,7 +36,9 @@ export class AppComponent {
       this.currentUserEmail = this.authService.getCurrentUserEmail() || '';
       this.updateAdminStatus();
     });
-    this.showSubmit = this.settingService.showSubmitEntry;
+    this.settingService.settings$.subscribe((settings) => {
+      this.showSubmit = settings.submit_entry_enabled;
+    });
     this.titleService.setTitle("Bowl Pick'em - Home");
 
     // Check admin status on initialization

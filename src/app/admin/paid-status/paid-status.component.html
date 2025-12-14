@@ -1,41 +1,52 @@
 <h3 style="text-align: center">
   <span class="label">
     {{ numUnpaidEntries }} Unpaid - {{ numPaidEntries }} Paid -
-    {{ numPaidEntries + numUnpaidEntries }} Total
+    {{ numPaidEntries + numUnpaidEntries }} Total Entries
   </span>
 </h3>
 
+<div class="checkbox-container">
+  <label>
+    <input type="checkbox" [(ngModel)]="showPaidEntries" />
+    <span>Show paid entries</span>
+  </label>
+</div>
+
 <table class="center">
-  <tr>
-    <th class="team-check">Entry ID</th>
-    <th class="team-check">Submission Time</th>
-    <th class="team-check">Mark as Paid</th>
-    <th class="team-check">Paid</th>
-    <th class="team-name">Entry</th>
-    <th class="team-name">Email</th>
-    <th class="team-check">Delete Entry</th>
-  </tr>
-  <tr *ngFor="let entry of entries">
-    <td class="team-check">
-      {{ entry.id }}
-    </td>
-    <td class="team-name">
-      {{ entry.created_date | date : "short" }}
-    </td>
-    <td class="team-check">
-      <button type="button" (click)="togglePaid(entry.id!)">Mark</button>
-    </td>
-    <td class="team-check">
-      <app-status-indicator [value]="entry.paid" />
-    </td>
-    <td class="team-name">
-      {{ entry.name }}
-    </td>
-    <td class="team-name">
-      {{ entry.email }}
-    </td>
-    <td class="team-name">
-      <button type="button" (click)="deleteEntry(entry.id!)">Delete</button>
-    </td>
-  </tr>
+  <thead>
+    <tr>
+      <th class="team-check hide-mobile">Entry ID</th>
+      <th class="team-check hide-mobile">Submission Time</th>
+      <th class="team-check">Mark as Paid</th>
+      <th class="team-check hide-mobile">Paid</th>
+      <th class="team-name">Entry</th>
+      <th class="team-name">Email</th>
+      <th class="team-check hide-mobile">Delete Entry</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let entry of getDisplayedEntries()">
+      <td class="team-check hide-mobile" data-label="Entry ID">
+        {{ entry.id }}
+      </td>
+      <td class="team-name hide-mobile" data-label="Submission Time">
+        {{ entry.created_date | date : "short" }}
+      </td>
+      <td class="team-check" data-label="Mark as Paid">
+        <button type="button" (click)="togglePaid(entry.id!)">Mark</button>
+      </td>
+      <td class="team-check hide-mobile" data-label="Paid">
+        <app-status-indicator [value]="entry.paid" />
+      </td>
+      <td class="team-name" data-label="Entry">
+        {{ entry.name }}
+      </td>
+      <td class="team-name" data-label="Email">
+        {{ entry.email }}
+      </td>
+      <td class="team-name hide-mobile" data-label="Delete">
+        <button type="button" (click)="deleteEntry(entry.id!)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
 </table>

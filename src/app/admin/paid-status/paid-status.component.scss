@@ -2,27 +2,38 @@
   display: block;
 }
 
-.stats-summary {
-  text-align: center;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  margin-bottom: 20px;
-
-  h3 {
-    margin: 0;
-    color: #333;
+h3 {
+  @media (max-width: 768px) {
     font-size: 16px;
-    font-weight: 600;
+  }
 
-    span.label {
-      display: inline-block;
-      background-color: #e8f5e9;
-      color: #2e7d32;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-size: 14px;
-      margin: 5px 5px;
+  @media (max-width: 480px) {
+    font-size: 14px;
+  }
+}
+
+.checkbox-container {
+  margin: 20px 0;
+  text-align: center;
+
+  label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    span {
+      cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 5px;
     }
   }
 }
@@ -35,6 +46,12 @@ table {
   border-radius: 8px;
   overflow: hidden;
 
+  @media (max-width: 768px) {
+    font-size: 13px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Desktop header */
   thead {
     background-color: #014d0e;
     color: white;
@@ -46,16 +63,24 @@ table {
       font-size: 14px;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+
+      @media (max-width: 768px) {
+        padding: 12px;
+        font-size: 12px;
+      }
     }
   }
 
+  /* Desktop rows */
   tbody {
     tr {
       border-bottom: 1px solid #e0e0e0;
       transition: background-color 0.2s ease;
 
-      &:hover {
-        background-color: #f5f5f5;
+      @media (min-width: 481px) {
+        &:hover {
+          background-color: #f5f5f5;
+        }
       }
 
       &:last-child {
@@ -68,21 +93,90 @@ table {
         color: #333;
         text-align: center;
         vertical-align: middle;
+
+        @media (max-width: 768px) {
+          padding: 12px;
+          font-size: 13px;
+        }
       }
+    }
+
+    /* Mobile card layout */
+    @media (max-width: 480px) {
+      display: block;
+
+      tr {
+        display: block;
+        border: 1px solid #e0e0e0;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        overflow: hidden;
+        background-color: white;
+
+        td {
+          display: block;
+          padding: 12px;
+          text-align: right;
+          position: relative;
+          padding-left: 55%;
+
+          &::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 0;
+            width: 55%;
+            padding: 12px;
+            background-color: #f5f5f5;
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+            box-sizing: border-box;
+          }
+
+          &.hide-mobile {
+            display: none;
+
+            &::before {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /* Hide header on mobile */
+  @media (max-width: 480px) {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+
+    thead {
+      display: none;
     }
   }
 }
 
+/* Column widths */
 .team-check {
   width: 12%;
   text-align: center;
+
+  @media (max-width: 768px) {
+    width: 14%;
+  }
 }
 
 .team-name {
   width: 20%;
   text-align: left;
+
+  @media (max-width: 768px) {
+    width: 22%;
+  }
 }
 
+/* Buttons */
 button[type="button"] {
   background-color: #014d0e;
   color: white;
@@ -94,11 +188,27 @@ button[type="button"] {
   transition: all 0.2s ease;
   font-size: 13px;
   margin: 0 6px;
+  white-space: nowrap;
+
+  @media (max-width: 768px) {
+    padding: 6px 12px;
+    font-size: 12px;
+    margin: 0 4px;
+  }
+
+  @media (max-width: 480px) {
+    display: block;
+    padding: 8px 4px;
+    font-size: 12px;
+  }
 
   &:hover {
     background-color: #003008;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+    @media (min-width: 481px) {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
   }
 }
 
@@ -108,4 +218,8 @@ button.delete-btn {
   &:hover {
     background-color: #b71c1c;
   }
+}
+
+.center {
+  margin: 0 auto;
 }
