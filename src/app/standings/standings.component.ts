@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { StandingsEntry } from '../shared/services/bowl.model';
 import { BowlService } from '../shared/services/bowl.service';
+import { PageVisitService } from '../shared/services/page-visit.service';
 import {
   SkyFlyoutService,
   SkyFlyoutInstance,
@@ -46,7 +47,8 @@ export class StandingsComponent implements OnInit {
     private flyoutService: SkyFlyoutService,
     private waitSvc: SkyWaitService,
     private settings: SettingsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private pageVisitService: PageVisitService
   ) {
     // Check admin status
     this.isAdmin = this.authService.isAdmin();
@@ -54,9 +56,25 @@ export class StandingsComponent implements OnInit {
 
   public ngOnInit() {
     this.titleService.setTitle("Bowl Pick'em - Standings");
+
+    // Log page visit
+    this.logPageVisit();
+
     this.settings.settings$.subscribe((settings) => {
       this.currentYear = settings.current_year;
       this.retrieveStandings(this.currentYear);
+    });
+  }
+
+  private logPageVisit() {
+    const userId = this.authService.getCurrentUserId();
+    this.pageVisitService.addPageVisit({
+      page: 'Standings',
+      action: 'view',
+      action_date: new Date(),
+      user_id: userId ? parseInt(userId, 10) : undefined,
+    }).subscribe({
+      error: (err) => console.error('Error logging page visit:', err),
     });
   }
   
