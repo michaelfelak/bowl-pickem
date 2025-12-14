@@ -10,13 +10,14 @@ import { StandingsFlyoutContext } from './standings-flyout.context';
 import { CommonModule } from '@angular/common';
 import { mergeMap } from 'rxjs';
 import { StatusIndicatorComponent } from '../../shared/status-indicator/status-indicator.component';
+import { SchoolLogoComponent } from '../../shared/school-logo/school-logo.component';
 import * as dayjs from 'dayjs';
 
 
 @Component({
   standalone: true,
   selector: 'app-standings-flyout',
-  imports: [CommonModule, StatusIndicatorComponent],
+  imports: [CommonModule, StatusIndicatorComponent, SchoolLogoComponent],
   templateUrl: './standings-flyout.component.html',
   styleUrls: ['./standings-flyout.component.scss'],
 })
@@ -33,9 +34,7 @@ export class StandingsFlyoutComponent implements OnInit {
     private svc: BowlService,
     private authService: AuthService
   ) {
-    const userId = this.authService.getCurrentUserId();
-    const userIdStr = userId ? userId.toString() : null;
-    this.isAdmin = userIdStr === '2' || userIdStr === '3';
+    this.isAdmin = this.authService.isAdmin();
   }
 
   public playoffPicks: PlayoffPickFlyout = {};

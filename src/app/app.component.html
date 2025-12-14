@@ -26,7 +26,7 @@
     <a routerLink="scores" (click)="closeMenu()">Scores</a>
     <a routerLink="standings" (click)="closeMenu()">Standings</a>
     <a routerLink="about" (click)="closeMenu()">About</a>
-    <a *ngIf="showAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
+    <a *ngIf="isAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
   </nav>
 
   <!-- Mobile Navigation -->
@@ -41,7 +41,7 @@
     <a routerLink="scores" (click)="closeMenu()">Scores</a>
     <a routerLink="standings" (click)="closeMenu()">Standings</a>
     <a routerLink="about" (click)="closeMenu()">About</a>
-    <a *ngIf="showAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
+    <a *ngIf="isAdmin" routerLink="admin" (click)="closeMenu()">Admin</a>
   </nav>
 
   <!-- Auth Section -->

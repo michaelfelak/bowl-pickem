@@ -28,6 +28,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { Router } from '@angular/router';
 import { SubmissionConfirmationComponent } from './submission-confirmation/submission-confirmation.component';
 import { SkyToastService, SkyToastType } from '@skyux/toast';
+import { SchoolLogoComponent } from '../shared/school-logo/school-logo.component';
 
 @Component({
   standalone: true,
@@ -41,6 +42,7 @@ import { SkyToastService, SkyToastType } from '@skyux/toast';
     SkyCheckboxModule,
     SkyInputBoxModule,
     SubmissionConfirmationComponent,
+    SchoolLogoComponent,
   ],
   providers: [SettingsService, SkyToastService],
   templateUrl: './picks.component.html',

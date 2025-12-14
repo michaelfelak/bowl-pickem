@@ -1,4 +1,6 @@
 <main>
+  <div *ngIf="isAdmin" class="admin-badge">ADMIN VIEW</div>
+  
   <div class="flyout-header">
     <h2 class="entry-name">{{ bowlName }} Bowl</h2>
     <div class="game-info">
@@ -10,15 +12,23 @@
   <div class="summary-section">
     <h3 class="section-title">Selection Breakdown</h3>
     <div class="summary-content">
-      <span class="summary-stat">{{ team1name }}: <strong>{{ team1picks }}</strong></span>
-      <span class="summary-stat">{{ team2name }}: <strong>{{ team2picks }}</strong></span>
+      <span class="summary-stat">
+        <app-school-logo [schoolName]="team1name" [logoId]="team1logo_id"></app-school-logo>: <strong>{{ team1picks }}</strong>
+      </span>
+      <span class="summary-stat">
+        <app-school-logo [schoolName]="team2name" [logoId]="team2logo_id"></app-school-logo>: <strong>{{ team2picks }}</strong>
+      </span>
     </div>
     
     <div *ngIf="gameHasResult" class="final-score">
       <h3 class="section-title">Final Score</h3>
       <div class="summary-content">
-        <span class="summary-stat">{{ team1name }}: <strong>{{ team1score }}</strong></span>
-        <span class="summary-stat">{{ team2name }}: <strong>{{ team2score }}</strong></span>
+        <span class="summary-stat">
+          <app-school-logo [schoolName]="team1name" [logoId]="team1logo_id"></app-school-logo>: <strong>{{ team1score }}</strong>
+        </span>
+        <span class="summary-stat">
+          <app-school-logo [schoolName]="team2name" [logoId]="team2logo_id"></app-school-logo>: <strong>{{ team2score }}</strong>
+        </span>
       </div>
     </div>
   </div>
@@ -48,7 +58,7 @@
                   [value]="pick.correct1"
                   [showCheck]="pick.team_1_picked"
                 ></app-status-indicator>
-                <span>{{ team1name }}</span>
+                <app-school-logo [schoolName]="team1name" [logoId]="team1logo_id"></app-school-logo>
               </div>
             </td>
             <td class="pick-col">
@@ -57,7 +67,7 @@
                   [value]="pick.correct2"
                   [showCheck]="pick.team_2_picked"
                 ></app-status-indicator>
-                <span>{{ team2name }}</span>
+                <app-school-logo [schoolName]="team2name" [logoId]="team2logo_id"></app-school-logo>
               </div>
             </td>
             <td class="points-col">

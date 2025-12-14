@@ -39,9 +39,9 @@
           <td class="team-date">{{ pick.game_time | date : "MMM dd" }}</td>
           <td class="team-name-short">{{ pick.bowl_name }}</td>
           <td class="team-check"><sky-icon icon="check-circle" *ngIf="pick.team_1_picked"></sky-icon></td>
-          <td class="team-name-short">{{ pick.team_1_name }}</td>
+          <td class="team-name-short"><app-school-logo [schoolName]="pick.team_1_name!" [logoId]="pick.team_1_logo_id"></app-school-logo></td>
           <td class="team-check"><sky-icon icon="check-circle" *ngIf="pick.team_2_picked"></sky-icon></td>
-          <td class="team-name-short">{{ pick.team_2_name }}</td>
+          <td class="team-name-short"><app-school-logo [schoolName]="pick.team_2_name!" [logoId]="pick.team_2_logo_id"></app-school-logo></td>
           <td class="team-points">{{ pick.points }}</td>
         </tr>
       </tbody>

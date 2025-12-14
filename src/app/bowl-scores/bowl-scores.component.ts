@@ -17,11 +17,12 @@ import { BowlPicksFlyoutComponent } from './bowl-picks-flyout/bowl-picks-flyout.
 import { BowlPicksFlyoutContext } from './bowl-picks-flyout/bowl-picks-flyout.context';
 import { CommonModule } from '@angular/common';
 import { SettingsService } from '../shared/services/settings.service';
+import { SchoolLogoComponent } from '../shared/school-logo/school-logo.component';
 
 @Component({
   standalone: true,
   selector: 'app-bowl-scores',
-  imports: [CommonModule],
+  imports: [CommonModule, SchoolLogoComponent],
   providers: [SettingsService],
   templateUrl: './bowl-scores.component.html',
   styleUrls: ['./bowl-scores.component.scss'],
@@ -48,9 +49,7 @@ export class BowlScoresComponent implements OnInit {
 
   public ngOnInit() {
     // Check admin status
-    const userId = this.authService.getCurrentUserId();
-    const userIdStr = userId ? userId.toString() : '';
-    this.isAdmin = userIdStr === '2' || userIdStr === '3';
+    this.isAdmin = this.authService.isAdmin();
 
     this.settings.settings$.subscribe((settings) => {
       this.currentYear = settings.current_year;
