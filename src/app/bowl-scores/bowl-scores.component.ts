@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { BowlService } from '../shared/services/bowl.service';
 import { AuthService } from '../shared/services/auth.service';
-import { PageVisitService } from '../shared/services/page-visit.service';
 import {
   Bowl,
   Game,
@@ -45,32 +44,16 @@ export class BowlScoresComponent implements OnInit {
     private svc: BowlService,
     private flyoutService: SkyFlyoutService,
     private settings: SettingsService,
-    private authService: AuthService,
-    private pageVisitService: PageVisitService
+    private authService: AuthService
   ) {}
 
   public ngOnInit() {
     // Check admin status
     this.isAdmin = this.authService.isAdmin();
 
-    // Log page visit
-    this.logPageVisit();
-
     this.settings.settings$.subscribe((settings) => {
       this.currentYear = settings.current_year;
       this.refresh();
-    });
-  }
-
-  private logPageVisit() {
-    const userId = this.authService.getCurrentUserId();
-    this.pageVisitService.addPageVisit({
-      page: 'Scores',
-      action: 'view',
-      action_date: new Date(),
-      user_id: userId ? parseInt(userId, 10) : undefined,
-    }).subscribe({
-      error: (err) => console.error('Error logging page visit:', err),
     });
   }
 

@@ -9,7 +9,6 @@ import { BowlService } from '../shared/services/bowl.service';
 import { AddPlayoffSchoolComponent } from './add-playoff-school/add-playoff-school.component';
 import { SettingsService } from '../shared/services/settings.service';
 import { AddPlayoffResultComponent } from './add-playoff-result/add-playoff-result.component';
-import { PageVisitsComponent } from './page-visits/page-visits.component';
 
 interface AdminSection {
   id: string;
@@ -29,7 +28,6 @@ interface AdminSection {
     UpdateScoresComponent,
     AddPlayoffResultComponent,
     AddBlogComponent,
-    PageVisitsComponent,
   ],
   providers: [BowlService, SettingsService],
   templateUrl: './admin.component.html',
@@ -43,13 +41,24 @@ export class AdminComponent {
 
   public sections: AdminSection[] = [
     { id: 'blog', title: 'Post Blog', component: AddBlogComponent },
-    { id: 'paid-status', title: 'Update Paid Status', component: PaidStatusComponent },
+    {
+      id: 'paid-status',
+      title: 'Update Paid Status',
+      component: PaidStatusComponent,
+    },
     { id: 'scores', title: 'Update Scores', component: UpdateScoresComponent },
-    { id: 'playoff-result', title: 'Championship Results', component: AddPlayoffResultComponent },
+    {
+      id: 'playoff-result',
+      title: 'Championship Results',
+      component: AddPlayoffResultComponent,
+    },
     { id: 'add-bowl', title: 'Add Bowl', component: AddBowlComponent },
     { id: 'add-game', title: 'Add Bowl Game', component: AddBowlGameComponent },
-    { id: 'add-school', title: 'Add Playoff School', component: AddPlayoffSchoolComponent },
-    { id: 'page-visits', title: 'Page Visits', component: PageVisitsComponent },
+    {
+      id: 'add-school',
+      title: 'Add Playoff School',
+      component: AddPlayoffSchoolComponent,
+    },
   ];
 
   constructor(private settingsSvc: SettingsService) {
@@ -71,6 +80,6 @@ export class AdminComponent {
   }
 
   public getSelectedSection(): AdminSection | undefined {
-    return this.sections.find(s => s.id === this.selectedSection);
+    return this.sections.find((s) => s.id === this.selectedSection);
   }
 }
