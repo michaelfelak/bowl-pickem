@@ -4,7 +4,6 @@ import { RouterModule, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { BowlService } from '../shared/services/bowl.service';
 import { AuthService } from '../shared/services/auth.service';
-import { PageVisitService } from '../shared/services/page-visit.service';
 import { Entry, PickModel, Game } from '../shared/services/bowl.model';
 import { SkyWaitService, SkyAlertModule } from '@skyux/indicators';
 import * as dayjs from 'dayjs';
@@ -40,7 +39,6 @@ export class MyEntriesComponent implements OnInit {
     private titleService: Title,
     private bowlService: BowlService,
     private authService: AuthService,
-    private pageVisitService: PageVisitService,
     private router: Router,
     private waitService: SkyWaitService,
     private settings: SettingsService
@@ -60,23 +58,8 @@ export class MyEntriesComponent implements OnInit {
       return;
     }
 
-    // Log page visit
-    this.logPageVisit();
-
     this.loadUserInfo();
     this.loadData();
-  }
-
-  private logPageVisit() {
-    const userId = this.authService.getCurrentUserId();
-    this.pageVisitService.addPageVisit({
-      page: 'My Entries',
-      action: 'view',
-      action_date: new Date(),
-      user_id: userId ? parseInt(userId, 10) : undefined,
-    }).subscribe({
-      error: (err) => console.error('Error logging page visit:', err),
-    });
   }
 
   private loadUserInfo(): void {

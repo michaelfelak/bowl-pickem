@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { PageVisitService } from '../shared/services/page-visit.service';
-import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   standalone: true,
@@ -23,24 +21,9 @@ export class AboutComponent implements OnInit {
   
   constructor(
     private titleService: Title,
-    private pageVisitService: PageVisitService,
-    private authService: AuthService
   ) {}
   
   public ngOnInit() {
     this.titleService.setTitle("Bowl Pick'em - About");
-    this.logPageVisit();
-  }
-
-  private logPageVisit() {
-    const userId = this.authService.getCurrentUserId();
-    this.pageVisitService.addPageVisit({
-      page: 'About',
-      action: 'view',
-      action_date: new Date(),
-      user_id: userId ? parseInt(userId, 10) : undefined,
-    }).subscribe({
-      error: (err) => console.error('Error logging page visit:', err),
-    });
   }
 }
