@@ -25,6 +25,9 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class StandingsComponent implements OnInit {
   public standings: StandingsEntry[] = [];
+  public userEntries: StandingsEntry[] = [];
+  public currentUserId: string | null = null;
+  public isLoggedIn = false;
   public flyout: SkyFlyoutInstance<any> | undefined;
   public isAdmin = false;
   public currentYear: number = 0;
@@ -50,6 +53,12 @@ export class StandingsComponent implements OnInit {
   ) {
     // Check admin status
     this.isAdmin = this.authService.isAdmin();
+    // Get current user ID if logged in
+    const userId = this.authService.getCurrentUserId();
+    if (userId) {
+      this.currentUserId = userId;
+      this.isLoggedIn = true;
+    }
   }
 
   public ngOnInit() {
@@ -66,6 +75,13 @@ export class StandingsComponent implements OnInit {
 
     this.svc.getStandings(year).subscribe((result: StandingsEntry[]) => {
       this.standings = result;
+      
+      // Filter user entries if logged in and user_id data is available
+      if (this.isLoggedIn && this.currentUserId) {
+        const userIdNum = parseInt(this.currentUserId, 10);
+        this.userEntries = result.filter(entry => entry.user_id === userIdNum);
+      }
+      
       this.assignRank();
       // this.waitSvc.endNonBlockingPageWait();
       return result;

@@ -191,6 +191,28 @@ export class AuthService {
   }
 
   /**
+   * Verify user identity for password reset (check username and email match)
+   */
+  verifyUserForPasswordReset(username: string, email: string): Observable<boolean> {
+    return this.http.post<{ valid: boolean }>(`${this.apiUrl}/verify-password-reset`, { username, email })
+      .pipe(
+        map(response => response.valid),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Reset password for a user
+   */
+  resetPassword(username: string, password: string): Observable<boolean> {
+    return this.http.post<AuthResponse>(`${this.apiUrl}/reset-password`, { username, password })
+      .pipe(
+        map(() => true),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
    * Handle HTTP errors
    */
   private handleError(error: HttpErrorResponse): Observable<never> {

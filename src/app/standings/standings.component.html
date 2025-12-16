@@ -24,6 +24,54 @@
     </div>
   </div>
 
+  <!-- User's Entries Section -->
+  <div *ngIf="isLoggedIn && userEntries && userEntries.length > 0" class="user-entries-section">
+    <h2 class="section-header">Your Entries</h2>
+    <div class="table-wrapper">
+      <table class="standings-table" #userEntriesTable>
+        <thead>
+          <tr>
+            <th class="rank-col">Rank</th>
+            <th class="name-col">Entry Name</th>
+            <th class="points-col">Current<br />Points</th>
+            <th class="points-col">Correct<br />Picks</th>
+            <th class="points-col">Remaining<br />Points</th>
+            <th class="points-col">Possible<br />Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let pick of userEntries; let i = index"
+            [class.alt-row]="i % 2 === 1"
+          >
+            <td class="rank-col" data-label="Rank">{{ pick.rank }}</td>
+            <td class="name-col" data-label="Entry Name">
+              <button
+                class="sky-btn sky-btn-link-inline entry-link"
+                type="button"
+                (click)="onNameClick(pick.entry_id!)"
+              >
+                {{ pick.entry_name }}
+              </button>
+            </td>
+            <td class="points-col" data-label="Current Points">
+              {{ pick.current_points }}
+            </td>
+            <td class="points-col" data-label="Correct Picks">
+              {{ pick.correct_picks }}
+            </td>
+            <td class="points-col" data-label="Remaining Points">
+              {{ pick.remaining_points }}
+            </td>
+            <td class="points-col" data-label="Possible Points">
+              {{ pick.possible_points }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <div class="standings-container">
     <!-- Empty State -->
     <div
@@ -35,6 +83,7 @@
 
     <!-- Standings Table -->
     <div *ngIf="standings && standings.length > 0" class="table-wrapper">
+      <h2 *ngIf="isLoggedIn && userEntries && userEntries.length > 0" class="section-header">All Standings</h2>
       <table class="standings-table" #standingsTable>
         <thead>
           <tr>

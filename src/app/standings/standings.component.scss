@@ -49,6 +49,28 @@ main {
   margin: 20px 0;
 }
 
+.user-entries-section {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: #f0f8f1;
+  border-radius: 8px;
+  border-left: 4px solid #014d0e;
+
+  .section-header {
+    margin: 0 0 20px 0;
+    color: #014d0e;
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.section-header {
+  color: #333;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 25px 0 15px 0;
+}
+
 .empty-state {
   text-align: center;
   padding: 60px 20px;

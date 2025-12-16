@@ -100,6 +100,11 @@
       </button>
     </form>
 
+    <!-- Forgot Password Link (Login Mode Only) -->
+    <div *ngIf="isLoginMode" class="forgot-password">
+      <a routerLink="/reset-password" class="forgot-password-link">Forgot Password?</a>
+    </div>
+
     <!-- Toggle Mode Link -->
     <div class="toggle-mode">
       <span>{{ isLoginMode ? "Don't have an account?" : 'Already have an account?' }}</span>
