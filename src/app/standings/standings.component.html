@@ -49,7 +49,7 @@
               <button
                 class="sky-btn sky-btn-link-inline entry-link"
                 type="button"
-                (click)="onNameClick(pick.entry_id!)"
+                (click)="onNameClick(pick.entry_id!, pick.user_id!)"
               >
                 {{ pick.entry_name }}
               </button>
@@ -125,7 +125,7 @@
               <button
                 class="sky-btn sky-btn-link-inline entry-link"
                 type="button"
-                (click)="onNameClick(pick.entry_id!)"
+                (click)="onNameClick(pick.entry_id!, pick.user_id!)"
               >
                 {{ pick.entry_name }}
               </button>

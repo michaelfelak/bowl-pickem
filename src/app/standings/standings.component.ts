@@ -49,7 +49,7 @@ export class StandingsComponent implements OnInit {
     private flyoutService: SkyFlyoutService,
     private waitSvc: SkyWaitService,
     private settings: SettingsService,
-    private authService: AuthService,
+    private authService: AuthService
   ) {
     // Check admin status
     this.isAdmin = this.authService.isAdmin();
@@ -75,13 +75,15 @@ export class StandingsComponent implements OnInit {
 
     this.svc.getStandings(year).subscribe((result: StandingsEntry[]) => {
       this.standings = result;
-      
+
       // Filter user entries if logged in and user_id data is available
       if (this.isLoggedIn && this.currentUserId) {
         const userIdNum = parseInt(this.currentUserId, 10);
-        this.userEntries = result.filter(entry => entry.user_id === userIdNum);
+        this.userEntries = result.filter(
+          (entry) => entry.user_id === userIdNum
+        );
       }
-      
+
       this.assignRank();
       // this.waitSvc.endNonBlockingPageWait();
       return result;
@@ -121,9 +123,12 @@ export class StandingsComponent implements OnInit {
     }
   }
 
-  public onNameClick(id: number) {
-    const record: StandingsFlyoutContext = new StandingsFlyoutContext();
-    record.entryId = id.toString();
+  public onNameClick(id: number, userId: number) {
+    const record: StandingsFlyoutContext = {
+      entryId: id.toString(),
+      entryUserId: userId,
+    };
+
     const flyoutConfig: SkyFlyoutConfig = {
       providers: [
         {

@@ -28,6 +28,8 @@ export class StandingsFlyoutComponent implements OnInit {
   public points = 0;
   public allBowlGamesPlayed = false;
   public isAdmin = false;
+  public isUserOwnEntry = false;
+  public currentUserId: string | null = null;
 
   constructor(
     public context: StandingsFlyoutContext,
@@ -35,6 +37,7 @@ export class StandingsFlyoutComponent implements OnInit {
     private authService: AuthService
   ) {
     this.isAdmin = this.authService.isAdmin();
+    this.currentUserId = this.authService.getCurrentUserId();
   }
 
   public playoffPicks: PlayoffPickFlyout = {};
@@ -77,8 +80,14 @@ export class StandingsFlyoutComponent implements OnInit {
         this.entry = result;
         this.name = this.entry.entry_name!;
         
-        // For admins, show all picks. For regular users, only show played games
-        if (this.isAdmin) {
+        // Check if entry is owned by the logged-in user
+        if (this.currentUserId && this.context.entryUserId) {
+          const userIdNum = parseInt(this.currentUserId, 10);
+          this.isUserOwnEntry = this.context.entryUserId === userIdNum;
+        }
+        
+        // For admins or entry owner, show all picks. For regular users, only show played games
+        if (this.isAdmin || this.isUserOwnEntry) {
           this.picks = this.entry.picks || [];
         } else {
           // Filter picks to only show those that have already happened

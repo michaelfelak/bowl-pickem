@@ -24,6 +24,23 @@ main {
   z-index: 100;
 }
 
+.my-entry-badge {
+  position: sticky;
+  top: 0;
+  background-color: #e1bee7;
+  color: #6a1b9a;
+  padding: 8px 12px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+  margin-bottom: 12px;
+  margin-left: 8px;
+  z-index: 100;
+}
+
 .flyout-header {
   margin-bottom: 25px;
   padding-bottom: 20px;

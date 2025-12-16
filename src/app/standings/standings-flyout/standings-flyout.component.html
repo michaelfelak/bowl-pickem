@@ -1,5 +1,6 @@
 <main>
   <div *ngIf="isAdmin" class="admin-badge">ADMIN VIEW</div>
+  <div *ngIf="isUserOwnEntry" class="my-entry-badge">MY ENTRY</div>
   
   <div class="flyout-header">
     <h2 class="entry-name">{{ name }}</h2>
@@ -55,7 +56,7 @@
         <tbody>
           <ng-container *ngFor="let pick of picks; let i = index">
             <tr
-              *ngIf="isAdmin || !isGameInFuture(pick.game_time)"
+              *ngIf="isAdmin || isUserOwnEntry || !isGameInFuture(pick.game_time)"
               [class.alt-row]="i % 2 === 1"
             >
               <td class="bowl-col">
