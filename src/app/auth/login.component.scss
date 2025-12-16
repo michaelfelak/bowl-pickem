@@ -85,6 +85,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 10px;
 
   &:hover:not(:disabled) {
     transform: translateY(-2px);
@@ -94,6 +95,24 @@
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+  }
+}
+
+.forgot-password {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+
+  .forgot-password-link {
+    color: #014d0e;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #1a7616;
+      text-decoration: underline;
+    }
   }
 }
 

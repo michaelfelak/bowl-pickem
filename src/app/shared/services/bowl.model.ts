@@ -156,6 +156,7 @@ export interface StandingsEntry {
   rank?: number;
   entry_id?: number;
   entry_name?: string;
+  user_id?: number;
   correct_picks?: number;
   current_points?: number;
   remaining_points?: number;

@@ -9,6 +9,7 @@ import { HomeComponent } from './home.component';
 import { BowlScoresComponent } from './bowl-scores/bowl-scores.component';
 import { ScenarioGeneratorComponent } from './scenario-generator/scenario-generator.component';
 import { LoginComponent } from './auth/login.component';
+import { ResetPasswordComponent } from './auth/reset-password.component';
 import { AuthGuard } from './shared/guards/auth.guard';
 import { MyEntriesComponent } from './my-entries/my-entries.component';
 import { ViewEntryComponent } from './my-entries/view-entry/view-entry.component';
@@ -18,6 +19,10 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'reset-password',
+    component: ResetPasswordComponent
   },
   {
     path: '',
