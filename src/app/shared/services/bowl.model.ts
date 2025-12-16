@@ -166,6 +166,7 @@ export interface StandingsEntry {
 
 export interface CompletedEntry {
   entry_name?: string;
+  user_id?: number;
   picks?: CompletedPick[];
 }
 
