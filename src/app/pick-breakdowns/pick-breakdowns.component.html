@@ -1,0 +1,69 @@
+<main>
+  <h1 class="page-title">Pick Breakdowns</h1>
+
+  <div *ngIf="gameBreakdowns.length === 0" class="empty-state">
+    <p>No completed games yet.</p>
+  </div>
+
+  <div class="breakdowns-grid">
+    <div *ngFor="let game of gameBreakdowns" class="breakdown-card" [class.admin-only]="isAdmin && !game.isCompleted">
+      <div class="admin-indicator" *ngIf="isAdmin && !game.isCompleted">Admin Only</div>
+      <div class="card-header">
+        <h2 class="card-title">{{ game.bowlName }} Bowl</h2>
+        <div class="matchup">
+          <div class="team">
+            <div class="team-logo-wrapper" *ngIf="canShowLogo(game.team1LogoId)">
+              <img [src]="'assets/logos/' + game.team1LogoId + '.png'" class="team-logo" (error)="onLogoError(game.team1LogoId)" />
+            </div>
+            <span class="team-name">{{ game.team1Name }}</span>
+          </div>
+          <span class="vs-text">vs</span>
+          <div class="team">
+            <div class="team-logo-wrapper" *ngIf="canShowLogo(game.team2LogoId)">
+              <img [src]="'assets/logos/' + game.team2LogoId + '.png'" class="team-logo" (error)="onLogoError(game.team2LogoId)" />
+            </div>
+            <span class="team-name">{{ game.team2Name }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Final Score Section -->
+      <div class="final-score" *ngIf="game.isCompleted">
+        <h3 class="final-score-label">Final Score</h3>
+        <p>{{ getFinalScoreText(game) }}</p>
+      </div>
+
+      <!-- Pick Distribution and Point Distribution Section -->
+      <div class="charts-wrapper">
+        <!-- Pick Distribution Card -->
+        <div class="chart-card">
+          <h3 class="chart-title">Team Selections</h3>
+          
+          <div class="chart-container">
+            <div class="pie-chart" [style.background]="'conic-gradient(' + game.team1Color + ' 0deg ' + (game.team1PickPercentage * 3.6) + 'deg, ' + game.team2Color + ' ' + (game.team1PickPercentage * 3.6) + 'deg 360deg)'"></div>
+          </div>
+
+          <div class="legend">
+            <div class="legend-item">
+              <span class="legend-color" [style.background-color]="game.team1Color"></span>
+              <span>{{ game.team1Name }}: {{ game.team1Picks }} ({{ game.team1PickPercentage }}%)</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-color" [style.background-color]="game.team2Color"></span>
+              <span>{{ game.team2Name }}: {{ game.team2Picks }} ({{ game.team2PickPercentage }}%)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Point Distribution Card -->
+        <app-point-breakdown-chart 
+          [data]="{ 
+            team1Name: game.team1Name, 
+            team2Name: game.team2Name, 
+            pointDistributionByTeam: game.pointDistributionByTeam 
+          }">
+        </app-point-breakdown-chart>
+      </div>
+    </div>
+  </div>
+</main>

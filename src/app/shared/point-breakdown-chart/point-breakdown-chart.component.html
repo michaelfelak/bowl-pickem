@@ -1,0 +1,21 @@
+<div class="chart-card" [class.legend-right]="legendPosition === 'right'">
+  <h3 class="chart-title">Point Values</h3>
+
+  <div class="chart-container">
+    <div class="pie-chart" [style.background]="getPointBreakdownGradient()"></div>
+    
+    <div class="legend" *ngIf="legendPosition === 'right'">
+      <div class="legend-item" *ngFor="let item of getPointBreakdownLegend()">
+        <span class="legend-color" [style.background-color]="item.color"></span>
+        <span>{{ item.points }}pt {{ item.teamName }}: {{ item.count }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend" *ngIf="legendPosition === 'below'">
+    <div class="legend-item" *ngFor="let item of getPointBreakdownLegend()">
+      <span class="legend-color" [style.background-color]="item.color"></span>
+      <span>{{ item.points }}pt {{ item.teamName }}: {{ item.count }}</span>
+    </div>
+  </div>
+</div>

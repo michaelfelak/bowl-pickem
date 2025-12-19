@@ -91,8 +91,8 @@ export class AddPlayoffSchoolComponent implements OnInit {
 
     const request: PlayoffSchoolRequest = {
       year: this.currentYear,
-      school_id: this.schoolForm.value.school.ID!,
-      school_name: this.schoolForm.value.school.Name!,
+      school_id: this.schoolForm.value.school.id!,
+      school_name: this.schoolForm.value.school.name!,
       seed_number: this.schoolForm.value.seed,
     };
 

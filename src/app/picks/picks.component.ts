@@ -453,11 +453,11 @@ export class PicksComponent implements OnInit {
             if (pick.team1picked) {
               newPick.picked_school_id = this.getSchoolFromName(
                 pick.team1name
-              ).ID;
+              ).id;
             } else {
               newPick.picked_school_id = this.getSchoolFromName(
                 pick.team2name
-              ).ID;
+              ).id;
             }
             allPicks.push(newPick);
           });
@@ -616,17 +616,17 @@ export class PicksComponent implements OnInit {
 
   public getSchoolFromID(id: string): string {
     const schools = this.schools.filter(function (school) {
-      return school.ID === id;
+      return school.id === id;
     });
     if (schools) {
-      return schools[0]?.Name ?? '';
+      return schools[0]?.name ?? '';
     }
     return '';
   }
 
   public getSchoolFromName(name?: string): School {
     const schools = this.schools.filter(function (school) {
-      return school.Name === name;
+      return school.name === name;
     });
     if (schools) {
       return schools[0];

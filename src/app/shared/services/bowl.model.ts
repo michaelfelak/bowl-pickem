@@ -72,8 +72,8 @@ export interface PickResponse {
 }
 
 export interface School {
-  ID?: string;
-  Name?: string;
+  id?: string;
+  name?: string;
   logo_id?: string;
 }
 

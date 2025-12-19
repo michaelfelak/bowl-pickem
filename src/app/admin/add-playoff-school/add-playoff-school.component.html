@@ -16,7 +16,7 @@
       <select formControlName="school" class="form-select">
         <option [ngValue]="null" disabled selected>Select a school...</option>
         <option [ngValue]="school" *ngFor="let school of schools">
-          {{ school.Name }}
+          {{ school.name }}
         </option>
       </select>
     </div>

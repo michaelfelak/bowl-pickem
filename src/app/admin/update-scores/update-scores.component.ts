@@ -115,7 +115,7 @@ export class UpdateScoresComponent implements OnInit {
   public getSchoolFromID(id: string): School {
     if (this.schools) {
       return this.schools.filter(function (school) {
-        return school.ID === id;
+        return school.id === id;
       })[0];
     }
     return {} as School;
@@ -126,8 +126,8 @@ export class UpdateScoresComponent implements OnInit {
       this.games.forEach((game: Game) => {
         const p = {} as PickModel;
         p.game_id = game.ID;
-        p.team_1_name = this.getSchoolFromID(game.School1ID!).Name;
-        p.team_2_name = this.getSchoolFromID(game.School2ID!).Name;
+        p.team_1_name = this.getSchoolFromID(game.School1ID!).name;
+        p.team_2_name = this.getSchoolFromID(game.School2ID!).name;
         const bowl = this.getBowlFromID(game.BowlID);
         // p.team_1 = false;
         // p.team_2 = false;

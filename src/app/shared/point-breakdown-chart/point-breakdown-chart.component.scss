@@ -1,0 +1,71 @@
+.chart-card {
+  text-align: center;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  &.legend-right {
+    text-align: left;
+  }
+}
+
+.chart-title {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 16px 0;
+  color: #333;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 24px;
+  align-items: flex-start;
+
+  .legend-right & {
+    flex-wrap: wrap;
+  }
+}
+
+.pie-chart {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #000;
+  flex-shrink: 0;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  font-size: 12px;
+
+  .legend-right & {
+    margin-top: 0;
+    justify-content: flex-start;
+  }
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+
+  .legend-right & {
+    justify-content: flex-start;
+  }
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+

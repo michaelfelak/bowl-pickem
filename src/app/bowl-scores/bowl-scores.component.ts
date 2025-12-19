@@ -100,7 +100,7 @@ export class BowlScoresComponent implements OnInit {
   public getSchoolFromID(id: string): School {
     if (this.schools) {
       return this.schools.filter(function (school) {
-        return school.ID === id;
+        return school.id === id;
       })[0];
     }
 

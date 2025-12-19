@@ -2,7 +2,7 @@
   <!-- Today's Games Section -->
   <div class="games-section">
     <h1 class="header">Today's Bowl Games</h1>
-    
+
     <!-- Empty State - No Games Today -->
     <div *ngIf="todaysGames.length === 0" class="empty-state">
       <p>No games scheduled for today.</p>
@@ -21,14 +21,31 @@
         </thead>
         <tbody>
           <tr *ngFor="let bowl of todaysGames" class="today-game">
-            <td class="game-date">{{ bowl.game_time | date:"MMM dd - h:mm a"}}</td>
+            <td class="game-date">
+              {{ bowl.game_time | date : "MMM dd - h:mm a" }}
+            </td>
             <td class="game-bowl">
-              <button class="sky-btn sky-btn-link-inline" type="button" [disabled]="!isAdmin" (click)="onNameClick(bowl.game_id!)">
+              <button
+                class="sky-btn sky-btn-link-inline"
+                type="button"
+                [disabled]="!isAdmin"
+                (click)="onNameClick(bowl.game_id!)"
+              >
                 {{ bowl.bowl_name }}
               </button>
             </td>
-            <td class="game-team"><app-school-logo [schoolName]="bowl.team_1_name!" [logoId]="bowl.team_1_logo_id"></app-school-logo></td>
-            <td class="game-team"><app-school-logo [schoolName]="bowl.team_2_name!" [logoId]="bowl.team_2_logo_id"></app-school-logo></td>
+            <td class="game-team">
+              <app-school-logo
+                [schoolName]="bowl.team_1_name!"
+                [logoId]="bowl.team_1_logo_id"
+              ></app-school-logo>
+            </td>
+            <td class="game-team">
+              <app-school-logo
+                [schoolName]="bowl.team_2_name!"
+                [logoId]="bowl.team_2_logo_id"
+              ></app-school-logo>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -38,7 +55,7 @@
   <!-- Upcoming Games Section -->
   <div class="games-section">
     <h1 class="header">Upcoming Bowl Games</h1>
-    
+
     <!-- Empty State - No Upcoming Games -->
     <div *ngIf="upcomingGames.length === 0" class="empty-state">
       <p>No upcoming games scheduled.</p>
@@ -57,14 +74,31 @@
         </thead>
         <tbody>
           <tr *ngFor="let bowl of upcomingGames">
-            <td class="game-date">{{ bowl.game_time | date:"MMM dd - h:mm a"}}</td>
+            <td class="game-date">
+              {{ bowl.game_time | date : "MMM dd - h:mm a" }}
+            </td>
             <td class="game-bowl">
-              <button class="sky-btn sky-btn-link-inline" type="button" [disabled]="!isAdmin" (click)="onNameClick(bowl.game_id!)">
+              <button
+                class="sky-btn sky-btn-link-inline"
+                type="button"
+                [disabled]="!isAdmin"
+                (click)="onNameClick(bowl.game_id!)"
+              >
                 {{ bowl.bowl_name }}
               </button>
             </td>
-            <td class="game-team"><app-school-logo [schoolName]="bowl.team_1_name!" [logoId]="bowl.team_1_logo_id"></app-school-logo></td>
-            <td class="game-team"><app-school-logo [schoolName]="bowl.team_2_name!" [logoId]="bowl.team_2_logo_id"></app-school-logo></td>
+            <td class="game-team">
+              <app-school-logo
+                [schoolName]="bowl.team_1_name!"
+                [logoId]="bowl.team_1_logo_id"
+              ></app-school-logo>
+            </td>
+            <td class="game-team">
+              <app-school-logo
+                [schoolName]="bowl.team_2_name!"
+                [logoId]="bowl.team_2_logo_id"
+              ></app-school-logo>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -74,7 +108,7 @@
   <!-- Bowl Scores Section -->
   <div class="games-section">
     <h1 class="header">Completed Bowl Games</h1>
-    
+
     <!-- Empty State - No Game Results -->
     <div *ngIf="gameResults.length === 0" class="empty-state">
       <p>No completed games yet.</p>
@@ -95,20 +129,32 @@
         </thead>
         <tbody>
           <tr *ngFor="let bowl of gameResults">
-            <td class="game-date">{{ bowl.game_time | date:"MMM dd - h:mm a"}}</td>
+            <td class="game-date">
+              {{ bowl.game_time | date : "MMM dd - h:mm a" }}
+            </td>
             <td class="game-bowl">
-              <button class="sky-btn sky-btn-link-inline" type="button" (click)="onNameClick(bowl.game_id!)">
+              <button
+                class="sky-btn sky-btn-link-inline"
+                type="button"
+                (click)="onNameClick(bowl.game_id!)"
+              >
                 {{ bowl.bowl_name }}
               </button>
             </td>
             <td [class.winning-team]="teamWon(1, bowl)" class="game-team">
-              <app-school-logo [schoolName]="bowl.team_1_name!" [logoId]="bowl.team_1_logo_id"></app-school-logo>
+              <app-school-logo
+                [schoolName]="bowl.team_1_name!"
+                [logoId]="bowl.team_1_logo_id"
+              ></app-school-logo>
             </td>
             <td [class.winning-score]="teamWon(1, bowl)" class="game-score">
               {{ bowl.score_1 }}
             </td>
             <td [class.winning-team]="teamWon(2, bowl)" class="game-team">
-              <app-school-logo [schoolName]="bowl.team_2_name!" [logoId]="bowl.team_2_logo_id"></app-school-logo>
+              <app-school-logo
+                [schoolName]="bowl.team_2_name!"
+                [logoId]="bowl.team_2_logo_id"
+              ></app-school-logo>
             </td>
             <td [class.winning-score]="teamWon(2, bowl)" class="game-score">
               {{ bowl.score_2 }}
