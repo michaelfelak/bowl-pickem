@@ -10,16 +10,56 @@
 
   <!-- Game Summary Section -->
   <div class="summary-section">
+    <h3 class="section-title">Point Distribution</h3>
+    <div class="summary-content">
+      <span class="summary-stat">
+        <strong>1 Point:</strong> {{ onePointCount }}
+      </span>
+      <span class="summary-stat">
+        <strong>3 Points:</strong> {{ threePointCount }}
+      </span>
+      <span class="summary-stat">
+        <strong>5 Points:</strong> {{ fivePointCount }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Selection Breakdown Section -->
+  <div class="summary-section">
     <h3 class="section-title">Selection Breakdown</h3>
     <div class="summary-content">
       <span class="summary-stat">
-        <app-school-logo [schoolName]="team1name" [logoId]="team1logo_id"></app-school-logo>: <strong>{{ team1picks }}</strong>
+        <app-school-logo [schoolName]="team1name" [logoId]="team1logo_id"></app-school-logo>: <strong>{{ team1picks }}</strong> ({{ team1PickPercentage }}%)
       </span>
       <span class="summary-stat">
-        <app-school-logo [schoolName]="team2name" [logoId]="team2logo_id"></app-school-logo>: <strong>{{ team2picks }}</strong>
+        <app-school-logo [schoolName]="team2name" [logoId]="team2logo_id"></app-school-logo>: <strong>{{ team2picks }}</strong> ({{ team2PickPercentage }}%)
       </span>
     </div>
     
+    <!-- Pie Chart -->
+    <div class="pie-chart-container">
+      <div class="pie-chart" [style.background]="'conic-gradient(' + team1Color + ' 0deg ' + (team1PickPercentage * 3.6) + 'deg, ' + team2Color + ' ' + (team1PickPercentage * 3.6) + 'deg 360deg)'"></div>
+      <div class="pie-legend">
+        <div class="legend-item">
+          <span class="legend-color" [style.background-color]="team1Color"></span>
+          <span>{{ team1name }} ({{ team1PickPercentage }}%)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-color" [style.background-color]="team2Color"></span>
+          <span>{{ team2name }} ({{ team2PickPercentage }}%)</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Point Value Breakdown Chart -->
+    <app-point-breakdown-chart 
+      [data]="{ 
+        team1Name: team1name, 
+        team2Name: team2name, 
+        pointDistributionByTeam: pointDistributionByTeam 
+      }"
+      legendPosition="right">
+    </app-point-breakdown-chart>
     <div *ngIf="gameHasResult" class="final-score">
       <h3 class="section-title">Final Score</h3>
       <div class="summary-content">
@@ -58,7 +98,7 @@
                   [value]="pick.correct1"
                   [showCheck]="pick.team_1_picked"
                 ></app-status-indicator>
-                <app-school-logo [schoolName]="team1name" [logoId]="team1logo_id"></app-school-logo>
+                <app-school-logo [schoolName]="" [logoId]="team1logo_id"></app-school-logo>
               </div>
             </td>
             <td class="pick-col">
@@ -67,7 +107,7 @@
                   [value]="pick.correct2"
                   [showCheck]="pick.team_2_picked"
                 ></app-status-indicator>
-                <app-school-logo [schoolName]="team2name" [logoId]="team2logo_id"></app-school-logo>
+                <app-school-logo [schoolName]="" [logoId]="team2logo_id"></app-school-logo>
               </div>
             </td>
             <td class="points-col">

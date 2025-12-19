@@ -15,11 +15,12 @@ import { CommonModule } from '@angular/common';
 import { SettingsService } from 'src/app/shared/services/settings.service';
 import { StatusIndicatorComponent } from '../../shared/status-indicator/status-indicator.component';
 import { SchoolLogoComponent } from '../../shared/school-logo/school-logo.component';
+import { PointBreakdownChartComponent } from '../../shared/point-breakdown-chart/point-breakdown-chart.component';
 
 @Component({
   standalone: true,
   selector: 'app-bowl-picks-flyout',
-  imports: [CommonModule, StatusIndicatorComponent, SchoolLogoComponent],
+  imports: [CommonModule, StatusIndicatorComponent, SchoolLogoComponent, PointBreakdownChartComponent],
   providers: [SettingsService],
   templateUrl: './bowl-picks-flyout.component.html',
   styleUrls: ['./bowl-picks-flyout.component.scss'],
@@ -46,6 +47,14 @@ export class BowlPicksFlyoutComponent implements OnInit {
 
   public team1picks = 0;
   public team2picks = 0;
+  public onePointCount = 0;
+  public threePointCount = 0;
+  public fivePointCount = 0;
+  public team1PickPercentage = 0;
+  public team2PickPercentage = 0;
+  public team1Color = '#014d0e';
+  public team2Color = '#ff9800';
+  public pointDistributionByTeam: { [points: number]: { team1: number; team2: number } } = {};
   private currentYear: number = 0;
 
   constructor(
@@ -54,16 +63,16 @@ export class BowlPicksFlyoutComponent implements OnInit {
     private authService: AuthService,
     private settings: SettingsService
   ) {
-    this.isAdmin = this.authService.isAdmin();
-    this.settings.settings$.subscribe((settings) => {
-      this.currentYear = settings.current_year;
-    });
   }
 
   public ngOnInit() {
-    this.svc
-      .getStandings(this.currentYear)
+    this.isAdmin = this.authService.isAdmin();
+    this.settings.settings$
       .pipe(
+        mergeMap((settings) => {
+          this.currentYear = settings.current_year;
+          return this.svc.getStandings(this.currentYear);
+        }),
         mergeMap((standings: any) => {
           this.standings = standings;
           return this.svc.getBowlList();
@@ -98,6 +107,7 @@ export class BowlPicksFlyoutComponent implements OnInit {
         this.sortPicks();
         this.assignGameResults();
         this.calculateTotalPicks();
+        this.loadDominantColors();
       });
   }
 
@@ -109,21 +119,53 @@ export class BowlPicksFlyoutComponent implements OnInit {
     this.team2picks = this.picks.filter((pick) => {
       return pick.team_2_picked === true;
     }).length;
+
+    // Calculate point distribution
+    this.onePointCount = this.picks.filter((pick) => pick.points === 1).length;
+    this.threePointCount = this.picks.filter((pick) => pick.points === 3).length;
+    this.fivePointCount = this.picks.filter((pick) => pick.points === 5).length;
+
+    // Calculate point distribution by team
+    this.pointDistributionByTeam = {
+      1: { team1: 0, team2: 0 },
+      3: { team1: 0, team2: 0 },
+      5: { team1: 0, team2: 0 },
+      10: { team1: 0, team2: 0 }
+    };
+
+    this.picks.forEach((pick) => {
+      const points = pick.points as keyof typeof this.pointDistributionByTeam;
+      if (this.pointDistributionByTeam[points]) {
+        if (pick.team_1_picked) {
+          this.pointDistributionByTeam[points].team1++;
+        }
+        if (pick.team_2_picked) {
+          this.pointDistributionByTeam[points].team2++;
+        }
+      }
+    });
+
+    // Calculate percentages
+    const totalPicks = this.team1picks + this.team2picks;
+    if (totalPicks > 0) {
+      this.team1PickPercentage = Math.round((this.team1picks / totalPicks) * 100);
+      this.team2PickPercentage = Math.round((this.team2picks / totalPicks) * 100);
+    }
   }
 
   private getSchoolById(schoolId: string): string {
     const school = this.schoolList.find((school) => {
-      return school.ID === schoolId;
+      return school.id?.toString() === schoolId.toString();
     });
     if (school) {
-      return school.Name!;
+      return school.name!;
     }
     return '';
   }
 
   private getSchoolLogoById(schoolId: string): string {
     const school = this.schoolList.find((school) => {
-      return school.ID === schoolId;
+      return school.id === schoolId;
     });
     if (school && school.logo_id) {
       return school.logo_id;
@@ -199,4 +241,100 @@ export class BowlPicksFlyoutComponent implements OnInit {
       }
     });
   }
+
+  private extractDominantColor(logoId: string): Promise<string> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = `assets/logos/${logoId}.png`;
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve('#014d0e');
+          return;
+        }
+
+        ctx.drawImage(img, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+
+        const colorMap: { [key: string]: number } = {};
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          const a = data[i + 3];
+
+          // Skip transparent or near-white pixels
+          if (a < 128 || (r > 240 && g > 240 && b > 240)) {
+            continue;
+          }
+
+          const hex = '#' + [r, g, b].map(x => {
+            const hex = x.toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+          }).join('').toUpperCase();
+
+          colorMap[hex] = (colorMap[hex] || 0) + 1;
+        }
+
+        const dominantColor = Object.keys(colorMap).reduce((a, b) =>
+          colorMap[a] > colorMap[b] ? a : b
+        );
+
+        resolve(dominantColor || '#014d0e');
+      };
+
+      img.onerror = () => {
+        resolve('#014d0e');
+      };
+    });
+  }
+
+  private async loadDominantColors(): Promise<void> {
+    if (this.team1logo_id) {
+      this.team1Color = await this.extractDominantColor(this.team1logo_id);
+    }
+    if (this.team2logo_id) {
+      this.team2Color = await this.extractDominantColor(this.team2logo_id);
+    }
+
+    // If colors are too similar, use white for team 2
+    if (this.areColorsSimilar(this.team1Color, this.team2Color)) {
+      this.team2Color = '#FFFFFF';
+    }
+  }
+
+  private areColorsSimilar(color1: string, color2: string): boolean {
+    const rgb1 = this.hexToRgb(color1);
+    const rgb2 = this.hexToRgb(color2);
+
+    if (!rgb1 || !rgb2) return false;
+
+    // Calculate color distance using Euclidean distance in RGB space
+    const distance = Math.sqrt(
+      Math.pow(rgb1.r - rgb2.r, 2) +
+      Math.pow(rgb1.g - rgb2.g, 2) +
+      Math.pow(rgb1.b - rgb2.b, 2)
+    );
+
+    // If distance is less than 100, consider them similar
+    return distance < 100;
+  }
+
+  private hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16),
+        }
+      : null;
+  }
 }
+

@@ -113,8 +113,8 @@ export class AddBowlGameComponent implements OnInit {
     this.addMessage = '';
     const game: Game = {};
     game.BowlID = this.selectedBowl.id;
-    game.School1ID = this.selectedSchool1.ID;
-    game.School2ID = this.selectedSchool2.ID;
+    game.School1ID = this.selectedSchool1.id;
+    game.School2ID = this.selectedSchool2.id;
     game.Year = this.year;
     game.GameTime = new Date(
       this.formGroup.value.year as number,
@@ -147,7 +147,7 @@ export class AddBowlGameComponent implements OnInit {
     if (this.schools) {
       if (this.schools) {
         return this.schools.filter(function (school) {
-          return school.ID === id;
+          return school.id === id;
         })[0];
       }
     }

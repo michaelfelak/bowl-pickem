@@ -14,6 +14,7 @@ import { AuthGuard } from './shared/guards/auth.guard';
 import { MyEntriesComponent } from './my-entries/my-entries.component';
 import { ViewEntryComponent } from './my-entries/view-entry/view-entry.component';
 import { EditEntryComponent } from './my-entries/edit-entry/edit-entry.component';
+import { PickBreakdownsComponent } from './pick-breakdowns/pick-breakdowns.component';
 
 const routes: Routes = [
   {
@@ -69,6 +70,10 @@ const routes: Routes = [
   {
     path: 'scenario-generator',
     component: ScenarioGeneratorComponent
+  },
+  {
+    path: 'pick-breakdowns',
+    component: PickBreakdownsComponent
   }
 ];
 

@@ -1,0 +1,313 @@
+:host {
+  display: block;
+}
+
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Titillium Web', sans-serif;
+}
+
+.page-title {
+  color: #333;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 16px;
+}
+
+.breakdowns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 30px;
+}
+
+.breakdown-card {
+  background: white;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.card-title {
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #014d0e;
+}
+
+.breakdown-card {
+  background: white;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+  position: relative;
+
+  &.admin-only {
+    background: #fef5e7;
+  }
+}
+
+.admin-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #014d0e;
+  color: white;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 0 0 6px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-title {
+  color: #333;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-header {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #014d0e;
+  text-align: center;
+
+  .card-title {
+    margin-bottom: 12px;
+  }
+
+  .matchup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #555;
+
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .team-logo-wrapper {
+        position: relative;
+        width: 32px;
+        height: 32px;
+
+        .team-logo {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+
+        .team-initial {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-color: #014d0e;
+          color: white;
+          font-size: 16px;
+          font-weight: 600;
+          border-radius: 3px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+
+    .vs-text {
+      font-weight: 600;
+      color: #999;
+      margin: 0 4px;
+    }
+
+    .team-name {
+      font-weight: 500;
+      font-size: 14px;
+    }
+  }
+}
+
+.final-score {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+
+  .final-score-label {
+    color: #333;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    margin-top: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.charts-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.chart-card {
+  background: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  text-align: center;
+
+  .chart-title {
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+}
+
+.bar-chart-container {
+  margin-bottom: 15px;
+}
+
+.bar-chart {
+  width: 100%;
+  height: auto;
+  min-height: 200px;
+}
+
+.breakdown-section {
+  margin-bottom: 30px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .section-title {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 15px;
+  }
+}
+
+.team-info {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+
+  .team-logo-wrapper {
+    position: relative;
+    width: 45px;
+    height: 45px;
+
+    .team-logo {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .team-initial {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #014d0e;
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+.pie-chart {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #000000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.points-chart {
+  background: conic-gradient(#1976d2 0deg, #f57c00 120deg, #388e3c 240deg) !important;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #555;
+
+    .legend-color {
+      min-width: 12px;
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .breakdowns-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .breakdown-card {
+    padding: 20px;
+  }
+
+  .charts-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .page-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+}

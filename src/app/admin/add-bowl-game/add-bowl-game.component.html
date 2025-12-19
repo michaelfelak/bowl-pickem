@@ -29,11 +29,11 @@
     <div class="form-group">
       <label class="form-label">School 1</label>
       <sky-dropdown class="form-dropdown">
-        <sky-dropdown-button>{{ selectedSchool1.Name }}</sky-dropdown-button>
+        <sky-dropdown-button>{{ selectedSchool1.name }}</sky-dropdown-button>
         <sky-dropdown-menu>
           <sky-dropdown-item *ngFor="let school of schools">
-            <button type="button" (click)="setSchool(school.ID!, 1)" class="dropdown-item-btn">
-              {{ school.Name }}
+            <button type="button" (click)="setSchool(school.id!, 1)" class="dropdown-item-btn">
+              {{ school.name }}
             </button>
           </sky-dropdown-item>
         </sky-dropdown-menu>
@@ -44,11 +44,11 @@
     <div class="form-group">
       <label class="form-label">School 2</label>
       <sky-dropdown class="form-dropdown">
-        <sky-dropdown-button>{{ selectedSchool2.Name }}</sky-dropdown-button>
+        <sky-dropdown-button>{{ selectedSchool2.name }}</sky-dropdown-button>
         <sky-dropdown-menu>
           <sky-dropdown-item *ngFor="let school of schools">
-            <button type="button" (click)="setSchool(school.ID!, 2)" class="dropdown-item-btn">
-              {{ school.Name }}
+            <button type="button" (click)="setSchool(school.id!, 2)" class="dropdown-item-btn">
+              {{ school.name }}
             </button>
           </sky-dropdown-item>
         </sky-dropdown-menu>
