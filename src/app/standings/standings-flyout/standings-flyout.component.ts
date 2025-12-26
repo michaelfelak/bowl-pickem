@@ -47,7 +47,7 @@ export class StandingsFlyoutComponent implements OnInit {
       return false; // Show picks without game_time
     }
     // Add 4 hours to current time to account for timezone offset
-    const now = dayjs().add(4, 'hours');
+    const now = dayjs().add(1, 'hours');
     const gameDate = dayjs(gameTime);
     return gameDate.isAfter(now);
   }
@@ -58,7 +58,7 @@ export class StandingsFlyoutComponent implements OnInit {
     }
     
     // Check if all picks have been played (no future games)
-    const now = dayjs().add(4, 'hours');
+    const now = dayjs().add(1, 'hours');
     const allPlayed = this.entry.picks.every((pick: CompletedPick) => {
       const gameTime = pick.game_time ? dayjs(pick.game_time) : null;
       return gameTime ? gameTime.isBefore(now) || gameTime.isSame(now, 'minute') : true;
@@ -91,7 +91,7 @@ export class StandingsFlyoutComponent implements OnInit {
           this.picks = this.entry.picks || [];
         } else {
           // Filter picks to only show those that have already happened
-          const now = dayjs().add(4, 'hours');
+          const now = dayjs().add(1, 'hours');
           this.picks = this.entry.picks!.filter((pick: CompletedPick) => {
             const gameTime = pick.game_time ? dayjs(pick.game_time) : null;
             return gameTime ? gameTime.isBefore(now) || gameTime.isSame(now, 'minute') : true; // Show picks with no game_time as fallback
