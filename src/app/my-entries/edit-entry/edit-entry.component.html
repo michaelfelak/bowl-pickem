@@ -60,8 +60,11 @@
             <td class="game-cell">
               <div class="bowl-name">{{ pickControl.get('gameLabel')?.value }}</div>
               <div class="game-teams">{{ pickControl.get('team_1_name')?.value }} vs {{ pickControl.get('team_2_name')?.value }}</div>
-              <div class="game-time" *ngIf="pickControl.get('gameTime')?.value">{{ pickControl.get('gameTime')?.value }}</div>
-              <div *ngIf="!pickControl.get('isEditable')?.value" class="status-badge">Game Started</div>
+              <div class="game-time" *ngIf="pickControl.get('gameTime')?.value">
+                <div><strong>Game Time:</strong> {{ pickControl.get('gameTime')?.value }}</div>
+                <div><strong>Locks:</strong> {{ pickControl.get('gameTime')?.value }}</div>
+              </div>
+              <div *ngIf="!pickControl.get('isEditable')?.value" class="status-badge" [class.finished]="pickControl.get('isFinished')?.value">{{ pickControl.get('isFinished')?.value ? 'Game Finished' : 'Game Started' }}</div>
             </td>
             
             <!-- Team 1 Selection -->

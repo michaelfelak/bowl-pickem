@@ -31,6 +31,7 @@ interface EditablePick extends PickModel {
   isPicked?: boolean;
   isEditable?: boolean;
   hasStarted?: boolean;
+  isFinished?: boolean;
 }
 
 @Component({
@@ -202,11 +203,14 @@ export class EditEntryComponent implements OnInit {
       const gameTimeStr = game?.GameTime || pick.game_time;
       const gameTime = gameTimeStr ? dayjs(gameTimeStr) : null;
       // Add 4 hours to current time to account for timezone offset
-      const now = dayjs().add(4, 'hours');
+      const now = dayjs().add(1, 'hours');
       const hasStarted = gameTime ? now.isAfter(gameTime) : false;
 
       // Allow editing only if game time is in the future
       const isEditable = !hasStarted;
+      
+      // Game is finished if both scores are entered (non-zero or non-undefined)
+      const isFinished = hasStarted && (pick.score_1 !== undefined && pick.score_1 !== null && pick.score_2 !== undefined && pick.score_2 !== null);
 
       return {
         ...pick,
@@ -215,6 +219,7 @@ export class EditEntryComponent implements OnInit {
         isPicked: !!(pick.team_1_picked || pick.team_2_picked),
         isEditable: isEditable,
         hasStarted: hasStarted,
+        isFinished: isFinished,
       };
     });
   }
@@ -245,6 +250,7 @@ export class EditEntryComponent implements OnInit {
           gameTime: new FormControl(pick.gameTime),
           isEditable: new FormControl(pick.isEditable),
           hasStarted: new FormControl(pick.hasStarted),
+          isFinished: new FormControl(pick.isFinished),
         })
       );
     });
