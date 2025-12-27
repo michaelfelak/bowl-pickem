@@ -28,7 +28,7 @@
               <button
                 class="sky-btn sky-btn-link-inline"
                 type="button"
-                [disabled]="!isAdmin"
+                [disabled]="!isAdmin && !hasGameStarted(bowl)"
                 (click)="onNameClick(bowl.game_id!)"
               >
                 {{ bowl.bowl_name }}
@@ -81,7 +81,7 @@
               <button
                 class="sky-btn sky-btn-link-inline"
                 type="button"
-                [disabled]="!isAdmin"
+                [disabled]="!isAdmin && !hasGameStarted(bowl)"
                 (click)="onNameClick(bowl.game_id!)"
               >
                 {{ bowl.bowl_name }}

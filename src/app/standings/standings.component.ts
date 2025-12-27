@@ -150,6 +150,15 @@ export class StandingsComponent implements OnInit {
 
   public updateYear(year: number) {
     this.currentYear = year;
+    // Reset sort state when changing years
+    this.sortCurrentPoints = false;
+    this.sortRemainingPoints = false;
+    this.sortPossiblePoints = false;
+    this.sortCorrectPicks = false;
+    this.currentPointsDesc = false;
+    this.remainingPointsDesc = false;
+    this.possiblePointsDesc = false;
+    this.correctPicksDesc = false;
     this.retrieveStandings(year);
   }
 
