@@ -81,10 +81,10 @@ export class PickBreakdownsComponent implements OnInit {
     
     this.svc.getGameResults(this.currentYear).pipe(
       mergeMap((gameResults: GameResultModel[]) => {
-        // Filter based on admin status
+        // Filter based on admin status and game start time
         let gamesToProcess = isAdmin 
           ? gameResults  // Show all games for admins
-          : gameResults.filter((game) => game.score_1! + game.score_2! > 0);  // Show only completed for non-admins
+          : gameResults.filter((game) => this.hasGameStarted(game));  // Show only started games for non-admins
         
         // For each game, we need to get bowl picks
         const breakdownPromises = gamesToProcess.map((game) => {
@@ -98,6 +98,15 @@ export class PickBreakdownsComponent implements OnInit {
     ).subscribe((breakdowns: GameBreakdown[]) => {
       this.gameBreakdowns = breakdowns;
     });
+  }
+
+  private hasGameStarted(game: GameResultModel): boolean {
+    if (!game.game_time) {
+      return false;
+    }
+    // Game has started if the game time is in the past
+    const gameTime = new Date(game.game_time);
+    return gameTime < new Date();
   }
 
   private async createGameBreakdown(game: GameResultModel, picks: any[]): Promise<GameBreakdown> {

@@ -130,6 +130,14 @@ export class BowlScoresComponent implements OnInit {
     return gameResult.score_2! > gameResult.score_1!;
   }
 
+  public hasGameStarted(game: GameResultModel): boolean {
+    if (!game.game_time) {
+      return false;
+    }
+    const gameTime = new Date(game.game_time);
+    return gameTime < new Date();
+  }
+
   public onNameClick(id: string) {
     const record: BowlPicksFlyoutContext = new BowlPicksFlyoutContext();
     record.gameId = id;
