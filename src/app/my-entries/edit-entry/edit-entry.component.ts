@@ -416,6 +416,31 @@ export class EditEntryComponent implements OnInit {
     // Get all picks from form
     const picksFromForm = this.pickFormArray.value as PickModel[];
 
+    // Check if any games being edited have now started
+    const now = dayjs().add(1, 'hours');
+    const gamesWithChanges = picksFromForm.map((pick, index) => {
+      const original = this.picks[index];
+      const hasChanged =
+        original.team_1_picked !== pick.team_1_picked ||
+        original.team_2_picked !== pick.team_2_picked ||
+        (original.points || 1) !== (pick.points || 1);
+      return { pick, original, hasChanged, index };
+    });
+
+    // Check if any games with changes have started
+    const startedGamesBeingEdited = gamesWithChanges.filter(({ original, hasChanged }) => {
+      if (!hasChanged) return false;
+      const gameTime = original.gameTime ? dayjs(original.gameTime) : null;
+      return gameTime ? now.isAfter(gameTime) : false;
+    });
+
+    if (startedGamesBeingEdited.length > 0) {
+      this.handleError(
+        'One or more games you are editing have already started. Please refresh the page and try again.'
+      );
+      return;
+    }
+
     // Track changes between original and current state
     const changes: EditChange[] = [];
     picksFromForm.forEach((pick, index) => {
@@ -498,6 +523,22 @@ export class EditEntryComponent implements OnInit {
     this.isSaving = true;
     this.showError = false;
     this.showSuccess = false;
+
+    // Check current time against game times one more time before saving
+    const now = dayjs().add(1, 'hours');
+    const startedGames = this.picks.filter((pick) => {
+      const gameTime = pick.gameTime ? dayjs(pick.gameTime) : null;
+      return gameTime ? now.isAfter(gameTime) : false;
+    });
+
+    // If any games have started, show error and prevent save
+    if (startedGames.length > 0) {
+      this.isSaving = false;
+      this.handleError(
+        'One or more games have started. Please refresh the page before submitting again.'
+      );
+      return;
+    }
 
     // Filter to only editable picks for the payload
     const editablePicks = picksFromForm.filter(

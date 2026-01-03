@@ -15,6 +15,7 @@ import { MyEntriesComponent } from './my-entries/my-entries.component';
 import { ViewEntryComponent } from './my-entries/view-entry/view-entry.component';
 import { EditEntryComponent } from './my-entries/edit-entry/edit-entry.component';
 import { PickBreakdownsComponent } from './pick-breakdowns/pick-breakdowns.component';
+import { TimelineComponent } from './timeline/timeline.component';
 
 const routes: Routes = [
   {
@@ -74,6 +75,10 @@ const routes: Routes = [
   {
     path: 'pick-breakdowns',
     component: PickBreakdownsComponent
+  },
+  {
+    path: 'timeline',
+    component: TimelineComponent
   }
 ];
 

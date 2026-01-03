@@ -45,14 +45,13 @@ export class AddPlayoffResultComponent implements OnInit {
       school2: new FormControl(0),
       champion: new FormControl(0),
     });
-
-    this.settings.settings$.subscribe((settings) => {
-      this.currentYear = settings.current_year;
-    });
   }
 
   public ngOnInit(): void {
-    this.loadPlayoffSchools();
+    this.settings.settings$.subscribe((settings) => {
+      this.currentYear = settings.current_year;
+      this.loadPlayoffSchools();
+    });
   }
 
   private loadPlayoffSchools(): void {
