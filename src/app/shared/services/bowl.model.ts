@@ -220,6 +220,7 @@ export interface BlogEntry {
   created_date?: string;
   posted_by?: string;
   year?: number;
+  contest_type?: number; // 1 = Bowl Pick'em, 2 = Bracket Challenge
 }
 
 export interface BowlPick {

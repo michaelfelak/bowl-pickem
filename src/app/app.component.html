@@ -1,5 +1,10 @@
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
+  <!-- Platform App Switcher -->
+  <app-platform-switcher></app-platform-switcher>
+
+  <p>Bowl Pick'em <span *ngIf="isAdmin" class="admin-badge">Admin</span></p>
+
   <!-- Hamburger Menu -->
   <button
     class="hamburger"
@@ -11,8 +16,6 @@
     <span></span>
     <span></span>
   </button>
-
-  <p>Bowl Pick'em <span *ngIf="isAdmin" class="admin-badge">Admin</span></p>
 
   <!-- Desktop Navigation -->
   <nav class="nav-menu">
