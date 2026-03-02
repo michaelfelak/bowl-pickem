@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { SettingsService } from './shared/services/settings.service';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { SecurityInterceptor } from './shared/interceptors/security.interceptor';
+import { PlatformSwitcherComponent } from './shared/components/platform-switcher.component';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { SecurityInterceptor } from './shared/interceptors/security.interceptor'
     CommonModule,
     HttpClientModule,
     FooterComponent,
+    PlatformSwitcherComponent,
   ],
   providers: [
     BowlService,

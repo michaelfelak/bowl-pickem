@@ -30,6 +30,7 @@ import {
 @Injectable()
 export class BowlService {
   private baseUrl: string = API_CONSTANTS.BOWL_API_URL;
+  private readonly CONTEST_TYPE = 1; // 1 = Bowl Pick'em
 
   constructor(private http: HttpClient) {}
 
@@ -323,7 +324,7 @@ export class BowlService {
    * Get blog entries for a specific year
    */
   public getBlogEntries(year: number): Observable<BlogEntry[]> {
-    return this.http.get<BlogEntry[]>(`${this.baseUrl}blogentry/list/${year}`);
+    return this.http.get<BlogEntry[]>(`${this.baseUrl}blogentry/list/${year}/${this.CONTEST_TYPE}`);
   }
 
   /**
@@ -335,7 +336,7 @@ export class BowlService {
   ): Observable<BlogEntry> {
     return this.http.post<BlogEntry>(
       `${this.baseUrl}blogentry/create/${year}`,
-      blogEntry
+      { ...blogEntry, contest_type: this.CONTEST_TYPE }
     );
   }
 

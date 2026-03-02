@@ -8,14 +8,7 @@ export class AdminRouteGuard implements CanActivate {
   constructor(private authService: AuthService) {}
 
   public canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-    // Check if user is logged in as userid = 2 or 3
-    const userId = this.authService.getCurrentUserId();
-    const userIdStr = userId ? userId.toString() : null;
-
-    if (userIdStr === '2' || userIdStr === '3') {
-      return of(true);
-    }
-    return of(false);
+    return of(this.authService.isAdmin());
   }
 }
 

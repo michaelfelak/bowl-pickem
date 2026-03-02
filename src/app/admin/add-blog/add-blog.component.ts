@@ -25,6 +25,7 @@ export class AddBlogComponent implements OnInit {
   public errorMessage = '';
 
   private currentYear: number = 0;
+  private readonly CONTEST_TYPE = 1; // 1 = Bowl Pick'em
 
   constructor(
     private fb: FormBuilder,
@@ -65,6 +66,7 @@ export class AddBlogComponent implements OnInit {
       posted_by: this.blogForm.get('postedBy')?.value,
       created_date: new Date().toISOString(),
       id: '', // Will be assigned by backend
+      contest_type: this.CONTEST_TYPE,
     };
 
     this.bowlService.addBlogEntry(blogEntry, this.currentYear).subscribe({
